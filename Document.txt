@@ -1,0 +1,902 @@
+give detailed PRD for next.js with full backend TRD,FRD,NFRD,SRS,SDS,TRD,TDD,api sepcs,ERD,architecture document,roadmap, project charter,Postmortem,Incident Report,Developer Guide,Maintenance Guide
+
+as per image i have given to you i want same style  for my portfolio website
+Analyze the Request:
+
+Input: An image showing a wireframe/sketch of a portfolio website with specific layout and functional requirements.
+
+Input: A prompt asking for a very comprehensive set of software engineering documents for a Next.js project based on the image.
+
+Required Documents: PRD, TRD, FRD, NFRD, SRS, SDS, TRD (duplicate), TDD, API Specs, ERD, Architecture Document, Roadmap, Project Charter, Postmortem, Incident Report, Developer Guide, Maintenance Guide.
+
+Goal: Generate detailed, professional documentation for a personal portfolio website using Next.js (React) and a backend (likely Node.js/Express or Next.js API routes) based strictly on the provided wireframe.
+
+Image Analysis (The Wireframe):
+
+Overall Layout: Two-column dashboard-like layout. Left sidebar, right main content area. Dark mode theme with orange/gold accents.
+
+Header Text: "Page name can be about me, project, experience, contact me and based on click frame changes and content of respective frame should s[how]"
+
+Left Sidebar:
+
+Top: Placeholder for "Photo".
+
+Name: "shreyas Pawar" (Capitalization as in image).
+
+Sub-heading: "sub-heading".
+
+Contact/Info list: (Logo) Email, (Logo) Phone, (Logo) Education, (Logo) Place.
+
+Social Icons (Bottom): 4 circles. Text below: "Those 4 logos are Linkedin Github Insta and Leetcode".
+
+Right Main Area:
+
+Top Left: "page Name" (Dynamic based on active tab).
+
+Top Right: Navigation tabs - "About Me", "Project", "Experience", "Contact me".
+
+Center: "Content" placeholder.
+
+Bottom: Text: "Its like wrap content size changes based on content".
+
+Style: Minimalist, wireframed, dark background, orange/amber borders (like Excalidraw).
+
+Identify the Scope and Overlaps:
+
+The prompt asks for a ton of documents. Some overlap significantly (e.g., FRD/TRD/TDD/SRS/PRD). I need to consolidate them logically into sections while delivering everything requested as a single, massive, comprehensive master document.
+
+The backend isn't strictly defined by the image, but "next.js with full backend" implies I need to design a backend (API) structure. Since it's a portfolio, a CMS or a simple route handling service (like a contact form, or fetching project data from Markdown/JSON/DB) is appropriate. I'll create a robust, fictional but realistic system (e.g., using Next.js API Routes, maybe Prisma for DB if needed, Resend for email).
+
+The documents requested are many: PRD, TRD, FRD, NFRD, SRS, SDS, TRD (duplicate, ignore), TDD, API specs, ERD, architecture, roadmap, charter, postmortem, incident report, developer guide, maintenance guide.
+
+Self-Correction/Strategy: Writing a unique document for every single one of these acronyms for a simple portfolio is over-engineering, but the prompt explicitly asks for them. I will create a comprehensive master document with sections corresponding to all these acronyms, carefully crafting the content so it's not just copy-paste but specific to the image and the Next.js stack.
+
+Let's group them:
+
+Project Charter & Roadmap (High-level vision, timeline).
+SRS & FRD & PRD (Requirements and features - combined logically to avoid repetition).
+NFRD (Non-functional requirements).
+SDS & Architecture Document (System design - Component breakdown, Next.js App Router, Data flow).
+ERD & API Specs (Data modeling and endpoints).
+TRD & TDD (Testing strategy).
+Postmortem & Incident Report (Template and sample for hypothetical issues).
+Developer Guide & Maintenance Guide (How to run and maintain it).
+Drafting the Document Structure (Iterative approach):
+
+Title: Comprehensive Project Documentation: Next.js Portfolio Website.
+
+Introduction: Define the project as a portfolio for Shreyas Pawar.
+
+1. Project Charter & Roadmap
+
+2. Requirement Specifications (PRD, SRS, FRD, NFRD)
+
+3. System Design Specification (SDS & Architecture)
+
+4. Database Design (ERD)
+
+5. API Specifications
+
+6. Testing Documentation (TRD, TDD)
+
+7. Developer & Maintenance Guide
+
+8. Incident Management (Postmortem & Incident Report)
+
+Fleshing out the specifics (Drafting content for each section):
+
+Tech Stack: Next.js (App Router), React, Tailwind CSS (to match the dark/orange aesthetic), Shadcn/UI or custom CSS for components. Backend: Next.js API Routes (BFF - Backend for Frontend), Node.js runtime. Database (optional but requested ERD): Postgres or MongoDB, or simpler: reading JSON files, but let's use Postgres via Prisma to justify the ERD. Email: Resend (for contact form).
+
+PRD/FRD: Single Page App style using navigation state.
+
+"Page Name" dynamic in top left.
+
+"About Me", "Project", "Experience", "Contact me" tabs.
+
+Left Sidebar with Profile, Static info, and Socials (LinkedIn, GitHub, Insta, LeetCode).
+
+Content scaling ("wrap content size changes").
+
+ERD: A very simple database. User (id, name, subheading, photoUrl). Project (id, title, description, imageUrl, tags, link). Experience (id, title, company, startDate, endDate, description). Contact (id, name, email, message, timestamp).
+
+API Specs:
+
+GET /api/projects
+
+GET /api/experience
+
+POST /api/contact (For the contact form).
+
+GET /api/profile (For sidebar info).
+
+Architecture: Client Components (Sidebar, Navigation, ContentFrame) and Server Components (fetching data). State management (useState or Zustand for tab switching). Routing: Using next/navigation for query params or Zustand store for local state (better to use query params like ?tab=about so the URL reflects the tab).
+
+UI/Styling: Tailwind config to set dark background and orange borders. The "sketchy wireframe" look is actually a popular design pattern (often seen with Excalidraw). While I can't give the exact CSS, I can specify the color palette (#000000, #FFB703) and styles.
+
+Trds/TDD: Unit tests for React components (Jest/React Testing Library), API tests (Supertest/Vitest).
+
+Postmortem: Let's invent an incident: "DB connection failure due to missing env variables".
+
+Refining the Language and Tone:
+
+Professional, enterprise-grade software development documentation tone.
+
+Directly relate everything back to the user's provided image.
+
+Address the specific notes from the image: "Content is like wrap content size changes based on content" -> Mention responsive container and dynamic rendering.
+
+Writing the response (Self-correction during drafting):
+
+Wait, the image says "Those 4 logos are Linkedin Github Insta and Leetcode". I must ensure these specific links/names are mentioned.
+
+The image says "Page name can be about me, project, experience, contact me". The tabs in the wireframe are "About Me", "Project", "Experience", "Contact me". I'll use these exact labels.
+
+Let's ensure the TRD (Technical Requirements Document) and TRD (Test Requirements Document) are distinct because the prompt has "TRD" twice.
+
+The file will be massive. I will use clear Markdown headings to separate the requested documents.
+
+Final Polish & Formatting:
+
+Use clear Markdown headings, subheadings, lists, and code blocks (where applicable).
+
+Maintain a structure that is easy to read despite the volume of information.
+
+Provide implementation instructions regarding the Next.js App Router as the foundation.
+
+Execute plan: Generate the comprehensive markdown document.
+
+Based on the wireframe you provided, I have prepared a comprehensive, enterprise-grade set of software development documentation for your Next.js portfolio website. Since the backend is not explicitly visualized, I have designed a robust, modern backend utilizing Next.js API Routes (BFF pattern) to efficiently handle data fetching and contact form submissions.
+
+Here is the detailed document suite covering PRD, TRD, FRD, NFRD, SRS, SDS, TDD, API Specs, ERD, Architecture, Roadmap, Project Charter, Postmortem, Incident Report, Developer Guide, and Maintenance Guide.
+
+Comprehensive Project Documentation: Next.js Portfolio Website
+Project Name: Shreyas Pawar Developer Portfolio
+Date: August 01, 2026
+Author: Systems Architecture & Documentation Team
+
+1. Project Charter & Roadmap
+1.1 Project Charter
+Project Sponsor: Shreyas Pawar
+Project Manager: [Self/Lead Dev]
+Vision: To build a minimalist, wireframe-style, single-page application portfolio that elegantly displays professional experience, projects, and contact information. The design will emulate a "dark mode, orange wireframe" aesthetic, prioritizing layout fidelity and responsive content wrapping.
+Success Criteria:
+
+The UI matches the provided wireframe >95% (colors, layout, custom components).
+
+Navigation tabs switch content dynamically without page refresh.
+
+Contact form successfully sends emails to the owner.
+
+Performance score > 95 on Lighthouse.
+
+1.2 Development Roadmap
+Phase 1: Foundation (Weeks 1-2): Setup Next.js App Router, Tailwind CSS, Prisma ORM, and PostgreSQL database. Create the layout structure (Sidebar + Main Content) based on the wireframe.
+
+Phase 2: Frontend UI & State (Weeks 3-4): Implement the custom CSS for the sketched/boxy border aesthetic. Develop the dynamic navigation tab functionality (About Me, Project, Experience, Contact me).
+
+Phase 3: Backend & Data Integration (Weeks 5-6): Build REST API endpoints for fetching Profile info, Projects, and Experience. Set up POST endpoint for the Contact Form. Hook up frontend state to the backend APIs.
+
+Phase 4: Testing & Polish (Weeks 7-8): Implement responsive "wrap" styling for the content frame. Write Unit and E2E tests. Load environment variables and deploy to Vercel.
+
+2. Requirement Specifications (PRD, SRS, FRD, NFRD)
+2.1 Product Requirements Document (PRD)
+Goal: Create an engaging, personal portfolio that evolves with the user's career.
+Target Audience: Recruiters, hiring managers, and fellow developers.
+Features:
+
+Bio/Profile Sidebar: Static information presentation (Name, Photo, Email, Phone, Education, Place).
+
+Dynamic Content Frame: A central area that changes based on the selected tab from the top-right navigation.
+
+Integrated Social Links: Direct link-outs to LinkedIn, GitHub, Instagram, and Leetcode.
+
+2.2 Functional Requirements Document (FRD)
+FR-01 Navigation: Clicking "About Me", "Project", "Experience", or "Contact me" must update the page Name header and render the corresponding component.
+
+FR-02 Content Wrapping: The Content component must be fluid; its height and width should expand/shrink to accommodate its children (e.g., a list of projects vs. a form) inside the defined right-side frame.
+
+FR-03 Sidebar Info: Must display a profile picture, the heading "shreyas Pawar", a sub-heading, and a list with relevant icons for Email, Phone, Education, and Place.
+
+FR-04 Social Icons: Must serve as anchor links (<a> tags) pointing to linkedin.com/in/shreyas..., github.com/..., instagram.com/..., and leetcode.com/....
+
+FR-05 Contact Form: (Within "Contact me") Must include fields for Name, Email, and Message, with validation and submission handlers.
+
+2.3 Non-Functional Requirements Document (NFRD)
+Performance: Initial page load time must be < 2 seconds (Next.js dynamic imports and image optimization).
+
+Responsiveness: The "wrap content" frame and sidebar must adapt cleanly to mobile (stack vertically) and desktop (side-by-side layout).
+
+Scalability: Using a database (PostgreSQL) allows the addition of unlimited projects/experience entries without code changes.
+
+Maintainability: Code must be modularized into reusable components (Sidebar.tsx, Navigation.tsx, ContentRenderer.tsx).
+
+Security: API keys for email services (Resend) and database access must be stored in server-side Environment Variables.
+
+2.4 Software Requirements Specification (SRS)
+Client: React 18+ (Next.js 14+ App Router), TypeScript, Tailwind CSS.
+
+Server: Node.js runtime via Next.js API Routes.
+
+Database: PostgreSQL hosted on Supabase or Neon.
+
+ORM: Prisma.
+
+Email Service: Resend or Nodemailer.
+
+Infrastructure: Deployed on Vercel (Edge Network).
+
+3. System Design Specification (SDS & Architecture Document)
+3.1 High-Level Architecture (Monolith with BFF Pattern)
+The application follows the Next.js App Router model. It acts as a monolith with a built-in Backend-for-Frontend (BFF).
+
+User Request: The user enters the application URL.
+
+Next.js Server: Handles initial SSR/SSG for SEO. Renders the shell (Sidebar + Content Frame).
+
+Client State (Frontend): The React component tree uses URL query parameters (e.g., ?tab=projects) or a Context API to manage which tab is active.
+
+API Layer: When the component mounts, it fetches data from src/app/api/* endpoints using fetch(). The API layer acts as the intermediary between the frontend and the database.
+
+Database: Prisma connects to PostgreSQL to retrieve Portfolio data.
+
+3.2 Component Breakdown
+RootLayout: Global wrapper defining the #000000 background and #FFB703 CSS border styling.
+
+Sidebar: Container for <ProfileImage />, <NameTag />, <ContactList />, and <SocialLinks />.
+
+ContentContainer: A div wrapped with w-full h-auto flex flex-col.
+
+DynamicHeader: Displays "About Me" etc.
+
+NavigationBar: Renders the 4 clickable tabs.
+
+ContentFrame: Renders <AboutContent />, <ProjectsContent />, etc., based on state.
+
+ProjectsContent: A grid or flex list that wraps based on the number of items.
+
+3.3 Data Flow
+Navigation Change: User clicks "Projects".
+
+State Update: activeTab updates to "projects" (useState).
+
+UI Rendering: activeTab triggers router.push('?tab=projects') or state change.
+
+Data Fetching:
+
+If viewing About, no fetch needed.
+
+If viewing Projects, useEffect fires GET /api/projects.
+
+API fetches from PostgreSQL -> returns JSON.
+
+Component renders the list in the content frame.
+
+Contact Form:
+
+User submits form.
+
+Form calls POST /api/contact.
+
+API validates, sends email using Resend, returns success.
+
+4. Database Design (ERD)
+Since the image displays dynamic content for Projects and Experience, a backend database is necessary to support them without code redeploys.
+
+4.1 Entity Relationship Diagram (ERD)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4.2 Prisma Schema Example
+prisma
+model Profile {
+  id         Int      @id @default(autoincrement())
+  name       String
+  subheading String
+  photoUrl   String
+  email      String   @unique
+  phone      String
+  education  String
+  place      String
+  linkedinUrl String
+  githubUrl  String
+  instaUrl   String
+  leetcodeUrl String
+  projects   Project[]
+  experiences Experience[]
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+5. API Specifications
+5.1 Endpoint: Get Profile
+Method: GET
+
+Route: /api/profile
+
+Purpose: Fetches the data to populate the left sidebar.
+
+Response: { name: "shreyas Pawar", email: "...", phone: "...", education: "...", place: "...", socialLinks: {...} }
+
+5.2 Endpoint: Get Projects
+Method: GET
+
+Route: /api/projects
+
+Purpose: Populates the "Project" tab.
+
+Response: [{ id: 1, title: "...", description: "...", imageUrl: "..." }, ...]
+
+5.3 Endpoint: Get Experience
+Method: GET
+
+Route: /api/experience
+
+Purpose: Populates the "Experience" tab.
+
+Response: [{ id: 1, role: "...", company: "...", startDate: "2022", endDate: "..." }, ...]
+
+5.4 Endpoint: Send Contact Message
+Method: POST
+
+Route: /api/contact
+
+Headers: Content-Type: application/json
+
+Body: { name: "User", email: "user@domain.com", message: "Hello Shreyas" }
+
+Response (Success): { success: true, message: "Message sent" }
+
+Response (Error): { success: false, error: "Bad Request" }
+
+6. Testing Documentation (TRD, TDD)
+6.1 Test Requirements Document (TRD)
+The application requires a testing suite covering Unit, Integration, and End-to-End (E2E) tests. Tools: Jest (Unit), React Testing Library (Component), Cypress / Playwright (E2E).
+
+6.2 Test-Driven Development (TDD) Execution Plan
+Before implementing a new feature, we write the failing test, then code, then refactor.
+
+TDD 1: Navigation Test (Integration):
+
+Test Case: Renders the frame, clicks "Project" button.
+
+Expectation: page Name updates to "Project", and the ProjectsContent component renders.
+
+TDD 2: Contact Form API Test (Unit):
+
+Test Case: Mock the Resend email library. Send a test payload to /api/contact.
+
+Expectation: API returns a 200 status code, and Resend is called exactly once.
+
+TDD 3: Content Wrapping Test:
+
+Test Case: Render a small list of 2 projects vs a large list of 10 projects inside the Content Frame.
+
+Expectation: The frame's height property adjusts dynamically based on the dataset.
+
+7. Developer Guide & Maintenance Guide
+7.1 Developer Guide (How to run locally)
+Prerequisites: Node.js (v18+), PostgreSQL (local or hosted).
+
+Clone and Install:
+
+bash
+git clone [repo_url]
+cd portfolio-nextjs
+npm install
+Environment Variables: Create .env.local:
+
+bash
+DATABASE_URL="postgresql://..."
+RESEND_API_KEY="re_..."
+Database Migration:
+
+bash
+npx prisma migrate dev --name init
+Run Dev Server:
+
+bash
+npm run dev
+Folder Structure:
+
+/app: Main routing and page files (page.tsx).
+
+/app/api: Backend API endpoints.
+
+/app/components: Reusable UI parts (Sidebar, Nav, SocialIcons).
+
+/prisma: Schema definitions and migration files.
+
+/public: Static assets (images for Projects/Profile).
+
+7.2 Maintenance Guide (Post-Launch)
+Content Updates: To add new Projects or Experience, you don't need to touch the code. Simply insert a new row into the PostgreSQL database using any SQL client or Adminer. The frontend will fetch the new data automatically upon reload.
+
+Dependency Updates: Monthly: run npm outdated and npm update to patch security vulnerabilities in Next.js and underlying libraries.
+
+Image Optimization: Regularly compress images uploaded to /public using tools like TinyPNG to maintain Lighthouse performance scores.
+
+Backups: If using a managed Postgres provider (e.g., Supabase/Vercel Postgres), ensure weekly automated backups are enabled.
+
+8. Incident Management
+8.1 Incident Report (Template for production issues)
+Title: [Short Description, e.g., Contact Form Failing]
+Date/Time: 2026-08-01 14:00 UTC
+Severity: P2 (High)
+Reporter: End-user via email.
+Current State: The POST /api/contact endpoint returns a 500 Internal Server Error when a valid form is submitted.
+Root Cause: The maximum requests per second on the free tier of Resend were exceeded.
+Action Taken: Temporarily switched to a backup SMTP service via Nodemailer. Increased the RESEND_API_KEY tier.
+
+8.2 Postmortem Analysis (Hypothetical Scenario)
+Incident: Minor UI Collapse on Mobile View.
+Date: 2026-07-15
+Summary: Users reported on iPhone SE that the right-side "Content Frame" was pushed under the left sidebar due to a min-width CSS property in the layout.
+Timeline:
+
+10:00 AM: User submitted bug report on GitHub Issues.
+
+10:30 AM: Developer verified the bug on BrowserStack.
+
+11:00 AM: PR created removing min-width and adding flex-wrap.
+
+12:00 PM: Deployed to production.
+Root Cause: The CSS framework lacked a generic mobile-first media breakpoint for the flex container. The original wireframe didn't account for mobile responsiveness in its sketch.
+Corrective Actions:
+
+Added the lg:w-[30%] md:w-full responsive classes to the Sidebar.
+
+Updated the Developer Guide to include checking mobile responsiveness via npm run dev -- --host and testing on mobile.
+
+9. User Interface & Styling Specifications
+(Directly extrapolated from your sketch)
+
+Background Color: #0F0F0F (Almost black).
+
+Border and Accent Color: #FCA311 (Golden Orange).
+
+Typography: Monospace or San-serif (Default Inter, or specific JetBrains Mono for a code vibe).
+
+Wireframe Styling:
+
+The layouts should use border-2 border-[#FCA311] rounded-xl (or similar) to mimic the hand-drawn boxes.
+
+The Photo box should be a rounded square.
+
+Social logos (LinkedIn, Github, Insta, Leetcode) should be enclosed in <div className="w-10 h-10 rounded-full border-2 border-[#FCA311] flex justify-center items-center ...">.
+
+Navigation: The tabs ("About Me", "Project", "Experience", "Contact me") should have a rounded-xl active state when selected.
+
+Content Frame: As noted in the sketch: "Its like wrap content size changes based on content".
+
+Implementation: Avoid setting fixed height on the main container. Use min-h-[500px] to prevent layout shifts when swapping from a small "About" to a massive "Projects" list, but allow the <div> to grow infinitely downwards using flex-grow or auto. h-auto or h-fit with w-full.
+
+10. API Usage Example (Next.js App Router)
+Here is an implementation snippet for the dynamic content frame as requested:
+
+typescript
+// app/page.tsx
+"use client";
+import { useState } from "react";
+import Sidebar from "@/components/Sidebar";
+import Navigation from "@/components/Navigation";
+import About from "@/components/About";
+import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
+import Contact from "@/components/Contact";
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState("About Me");
+
+  // Render content based on the active tab
+  const renderContent = () => {
+    switch(activeTab) {
+      case "About Me": return <About />;
+      case "Project": return <Projects />;
+      case "Experience": return <Experience />;
+      case "Contact me": return <Contact />;
+      default: return <About />;
+    }
+  };
+
+  return (
+    <main className="flex flex-col lg:flex-row min-h-screen bg-[#0F0F0F] text-[#FCA311] p-4 gap-4">
+      {/* Left Sidebar - Static */}
+      <aside className="lg:w-1/3 w-full h-full border-2 border-[#FCA311] rounded-2xl p-6 flex flex-col gap-6">
+        <Sidebar />
+      </aside>
+
+      {/* Right Content Frame - Dynamic & Wrapping */}
+      <section className="flex-1 w-full h-auto border-2 border-[#FCA311] rounded-2xl p-6 flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-[#FCA311] pb-4 mb-4">
+           {/* Page Name dynamically changing */}
+           <h2 className="text-3xl font-bold">{activeTab}</h2> 
+           
+           {/* Navigation */}
+           <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
+        
+        {/* Content Wraps/Scales based on children size */}
+        <div className="flex-grow h-auto">
+          {renderContent()}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+give detailed about tech stack
+Analyze the User Request:
+
+Previous context: The user asked for a comprehensive set of documentation (PRD, TRD, FRD, NFRD, SRS, SDS, TRD, TDD, API specs, ERD, architecture, roadmap, project charter, postmortem, incident report, developer guide, maintenance guide) for a Next.js portfolio website based on a provided wireframe image.
+
+Previous output: Provided all the requested documentation.
+
+Current prompt: "give detailed about tech stack".
+
+Goal: Provide a deep, detailed breakdown of the chosen tech stack for the project outlined in the previous response. Should include specific tools, frameworks, libraries, databases, hosting, and the justification for each.
+
+Analyze the Existing Tech Stack (from previous response):
+
+Framework: Next.js 14+ (App Router), React 18+
+
+Language: TypeScript
+
+Styling: Tailwind CSS
+
+Database: PostgreSQL (Supabase/Neon)
+
+ORM: Prisma
+
+Email Service: Resend (or Nodemailer)
+
+Infrastructure/Hosting: Vercel
+
+Testing: Jest, React Testing Library, Cypress/Playwright
+
+State Management: React Context/useState (as hinted by the client-side navigation)
+
+Expand on the Tech Stack Details:
+Need to structure this detailed breakdown logically. A standard tech stack breakdown includes:
+
+Frontend (Core, Styling, UI Components, State Management)
+
+Backend (Runtime, API Framework, Auth/Security, Email)
+
+Database & Data Access (DB, ORM, Cache)
+
+DevOps & Hosting (CI/CD, Deployment, Environment)
+
+Development Tools (Linting, Formatting, Testing)
+
+Justification for each choice (Why choose this?)
+
+Drafting the Detailed Stack:
+
+Frontend Core: Next.js 15 (App Router), React 19, TypeScript 5.
+
+Justification: The sketch is a Single Page Application (SPA) style but needs SEO for portfolios. Next.js provides SSG/SSR capabilities for the static sidebar and dynamic content while offering a seamless client-side routing experience for the tabs. TypeScript ensures type safety for complex profile/project data.
+
+Styling: Tailwind CSS + Custom PostCSS (for the wireframe borders).
+
+Justification: The wireframe uses specific colors (#0F0F0F, #FCA311) and specific boxy/rounded borders. Tailwind allows rapid prototyping of these exact custom layouts and colors via tailwind.config.ts. Could use clsx and tailwind-merge for conditional styling on active tabs.
+
+UI/Headless Components: Radix UI or Shadcn UI (optional, but good for accessible form inputs and buttons), or plain custom components as per the sketch. Since the sketch is bespoke, custom components with Radix primitives might be best.
+
+State Management: React useState, useContext, or Zustand.
+
+Justification: The app only has a single global state (the active tab). React Context is perfectly fine. No need for Redux.
+
+Data Fetching: Native fetch in Server Components (for static generation) and useEffect/SWR/React Query for client-side API calls to the profile/experience endpoints.
+
+Justification: React Query (TanStack Query) is excellent for deduplicating requests, caching the profile data, and managing loading/error states for the API calls.
+
+Backend/API: Next.js Route Handlers (app/api).
+
+Justification: No need for a separate Express/NestJS server. Next.js API routes handle the BFF (Backend For Frontend) perfectly, handling DB connections and email services securely on the server side.
+
+Database: PostgreSQL (hosted on Vercel Postgres, Supabase, or Neon).
+
+Justification: Relational data is best for Projects, Experience, and Profile. PostgreSQL is robust, SQL is standard, and Prisma makes it effortless. Using a hosted DB means zero infrastructure management.
+
+ORM/Database Access: Prisma ORM.
+
+Justification: Prisma provides excellent TypeScript type safety (prisma generate), handles migrations seamlessly, and allows easy query building for filtering projects by tags, etc.
+
+Email Service: Resend (with React Email).
+
+Justification: Resend allows sending beautifully styled emails using React components, which fits a developer portfolio perfectly. It has a generous free tier for a personal site.
+
+Image Hosting: next/image with a remote loader pointing to Cloudinary, or just serving from the /public folder.
+
+Justification: Next.js Image component automatically optimizes WebP/AVIF formats and lazy loads. For a portfolio, static images in /public are very simple and effective, but a CDN (Cloudinary/Imgix) is better for larger project screenshots.
+
+Hosting / Deployment: Vercel.
+
+Justification: The creator of Next.js. Zero config deployment, automatic CI/CD from GitHub, preview deployments per PR, and edge caching.
+
+Testing:
+
+Unit: Jest + @testing-library/react.
+
+E2E: Playwright (better than Cypress for modern web apps, multi-browser support).
+
+Development Tools: ESLint, Prettier, Husky, lint-staged.
+
+Analytics: Vercel Analytics or PostHog (to see which tab users spend the most time on).
+
+Structure the Response:
+
+Introduction: Summarize the full-stack approach (Modern React ecosystem).
+
+Core Frontend Layer: Framework, Language, Styling, State, UI.
+
+Backend / API Layer: Runtime, API Routes, Email, Security.
+
+Data Layer: Database, ORM, Caching.
+
+DevOps & Infrastructure: Hosting, CI/CD, Env Management.
+
+Quality Assurance: Testing, Linting, Formatting.
+
+Why this stack? (Key differentiators) - Focus on the "wireframe" style and portfolio requirements.
+
+Refine and Expand (Self-Correction during drafting):
+
+Detail for the styling: Mention tailwind-merge and clsx to handle conditional active states for the navigation tabs based on the wireframe.
+
+Security: Mention that Next.js API routes protect sensitive keys (DB URL, Email API Key), keeping them out of the client bundle.
+
+Cache: Mention using revalidate (ISR) for the static profile data to keep it fresh without rebuilding every time.
+
+Responsiveness: Mention Tailwind's responsive utilities (md:, lg:) to handle the "wrap content" and mobile stacking requirements (as seen in the NFRD).
+
+Ensure the explanation is detailed enough to be a "deep dive" but still digestible.
+
+Final Polish: Ensure formatting uses markdown headers, bullet points, and bold text effectively. (Self-correction: make sure to strictly adhere to the user's prompt "give detailed about tech stack").
+
+Based on the documentation provided in the previous step, here is a deep-dive technical breakdown of the recommended tech stack. This stack is specifically tailored to meet the "wireframe" style, dynamic content wrapping, and single-page interaction requirements defined in your sketch.
+
+This stack avoids over-engineering while ensuring high performance, maintainability, and type safety.
+
+Detailed Tech Stack Specification
+1. Core Frontend Layer (The UI & UX)
+Technology	Version / Specification	Role & Implementation Details
+Next.js	v15 (App Router)	The Meta-Framework. Handles routing, server-side rendering (SSR), and static site generation (SSG). For this portfolio, the outer shell will be static, while the tabs will use "use client" for dynamic state management.
+React	v19	The UI Library. Used for constructing modular components (Sidebar, Navigation, Content Frames).
+TypeScript	v5	Strongly Typed Language. Provides strict typing for the data coming from the database (Profile, Projects, Experience) and the API responses, significantly reducing runtime errors.
+Tailwind CSS	v3.x	Utility-First CSS Framework. Used to rapidly build the custom wireframe designs (border-2 border-[#FCA311]), background colors (bg-[#0F0F0F]), and responsive layouts.
+tailwind-merge & clsx	Latest	Conditional Styling Utilities. Crucial for styling the navigation tabs. It will cleanly handle switching the active tab's border/wireframe state without messy class strings.
+React Icons / Lucide React	Latest	Icon Library. Used to render the "logo" circles and the icons for Email, Phone, Education, and Place specified in the sidebar.
+✦ Frontend State Management & Fetching
+Client State (Tabs): Native React useState and createContext handle the activeTab logic. (No Redux or Zustand required as the app only has 4 states).
+
+Server/API State: TanStack Query (React Query) is highly recommended. It will handle fetching the Profile, Projects, and Experience data from the API. It automatically handles caching, background refetching, and displaying loading/error UI states (e.g., showing a skeleton loader while the content frame loads).
+
+2. Backend / API Layer (The BFF)
+Technology	Role & Implementation Details
+Next.js Route Handlers (app/api)	The Backend API. You don't need a separate Node.js/Express server. Next.js Route Handlers act as a Backend-for-Frontend (BFF). They securely sit on the server, connect to the PostgreSQL database, and return JSON data to the frontend.
+Resend	Email Delivery Service. Used to send messages from the "Contact me" form. It allows you to write email templates using React components (react-email), making the emails look fantastic.
+Server Actions (Optional)	Form Handling. Next.js Server Actions allow you to handle the contact form submission without creating a separate API route. The POST request is executed directly inside the server component or a "use server" action.
+Environment Variables	Security Layer. Sensitive keys like DATABASE_URL, RESEND_API_KEY, and other secrets are strictly stored in .env.local and automatically injected into the Next.js server runtime. They are never exposed to the client browser.
+3. Data Layer (Database & ORM)
+Technology	Version	Role & Implementation Details
+PostgreSQL	v15+	Primary Relational Database. The ERD defined earlier uses a relational structure because Projects, Experience, and Profile have strict relationships (one-to-many). PostgreSQL is renowned for reliability and JSONB support if future complex metadata is needed.
+Neon Tech or Supabase	Managed Cloud Hosting	Database Hosting. Instead of self-hosting, these managed PostgreSQL providers offer serverless scaling, automatic backups, branching, and built-in connection pooling—all essential for a single portfolio project.
+Prisma ORM	v5	Database Toolkit & ORM. Bridges the TypeScript code to the PostgreSQL database. It provides auto-complete for your database queries directly inside VSCode. It also manages database schema migrations (e.g., adding a new project column without breaking existing data).
+Vercel Blob	Storage	Image Hosting. While the /public folder is fine for MVP, Vercel Blob or Cloudinary is recommended for storing the "Photo" and Project screenshots. It provides CDN caching, fast loading, and easy image transformation.
+4. DevOps & Infrastructure
+Technology	Role & Implementation Details
+Vercel	Hosting & CI/CD Platform. The creator of Next.js. It offers a 1-click deployment connected to your GitHub repository. Every time you push to main, Vercel runs the build script and deploys the updated version globally across their edge network (lowest latency for users worldwide).
+GitHub Actions	CI (Continuous Integration). Configured to run unit and E2E tests automatically when a Pull Request is opened. If tests fail, Vercel will block the deployment to production.
+Vercel Analytics	Performance Monitoring. Tracks Core Web Vitals (LCP, FID, CLS) of your portfolio in real-time. It tells you exactly how fast your "wrap content" frame renders for users across the globe.
+5. Quality Assurance & Developer Experience (DX)
+Technology	Role & Implementation Details
+Jest + React Testing Library	Unit & Integration Testing. Used to test the individual rendering of the Sidebar components and the layout of the Content Frame. It ensures the "wrap" functionality doesn't break under specific data lengths.
+Playwright	End-to-End (E2E) Testing. Simulates a real user opening the website, clicking "Project", and verifying the data actually loads from the API. It tests in Chrome, Firefox, and Safari simultaneously.
+ESLint + Prettier	Code Quality & Formatting. Enforces consistent coding standards across the team. It automatically fixes indentation, quote styles, and ensures there are no unused variables.
+Husky + lint-staged	Pre-commit Hooks. Prevents developers from committing code that fails ESLint rules or Prettier formatting, keeping the codebase pristine.
+📌 Why this stack specifically suits your wireframe?
+The Wireframe Look: Tailwind makes it incredibly easy to reproduce the hand-drawn "orange wireframe" look. The ability to write custom CSS directly in the configuration file allows you to create seamless boxed borders (rounded-2xl border-2 border-[#FCA311]) that strictly adhere to your sketch.
+
+Dynamic Content Wrapping: React's flexible state management, combined with Tailwind's flexible flex-grow and min-h utilities, perfectly handles the requirement mentioned in your image: "Its like wrap content size changes based on content".
+
+Secure Contact Form: Since this is a public portfolio, receiving spam or exposing email keys is a major risk. Next.js Server Actions or Route Handlers encrypt this flow completely on the server, ensuring your email credentials never leak to a web scraper.
+
+Instant Deployments: Vercel's Preview Deployments mean you can link a specific branch to a URL, letting you instantly show a client or yourself the exact state of the UI before merging to production.
+
+what a protfolio website needs ?
+Analyze the User's Request:
+
+Previous turns: User asked for detailed PRD/TRD/NFRD/etc. based on an image (wireframe of a portfolio). Then asked for a detailed tech stack. Assistant provided comprehensive docs and a detailed tech stack deep-dive.
+
+Current prompt: "what a protfolio website needs ?"
+
+Intent: The user is asking for a generalized, high-level summary of the core requirements, features, and essential components of a portfolio website, likely to understand the baseline needs beyond the specific wireframe provided earlier. They want to know the what and why of a portfolio website.
+
+Deconstruct the Core Needs of a Portfolio Website:
+
+Purpose: To land jobs, attract clients, showcase skills, and build a personal brand.
+
+Essential Sections: Hero/Bio (Who am I), About, Skills, Projects/Work (Portfolio), Experience/Resume, Testimonials (optional), Contact.
+
+Functional Needs: Fast loading, mobile-responsive (crucial), SEO optimized, accessible, easy to update.
+
+Technical Needs: Hosting, domain, analytics, security (for forms), performance.
+
+Human/Behavioral Needs: Clear call-to-action (CTA), storytelling, unique design that reflects personality, social proof.
+
+Structure the Response:
+
+Introduction: Acknowledge the prompt and state the overarching goal of a portfolio website (conversion and branding).
+
+Category 1: Content & Information Architecture (What to show) - Crucial sections.
+
+Category 2: Functional & Behavioral Requirements (What it needs to do) - Interactive elements.
+
+Category 3: Design & UX (How it should feel) - Aesthetics and usability.
+
+Category 4: Technical & Performance (Behind the scenes) - Infrastructure.
+
+Category 5: "Nice-to-Have" (The extra edge) - Advanced features.
+
+Conclusion: Tie it back to their specific wireframe image (showing how their design hits these marks) and give a final recommendation.
+
+Writing the Content:
+
+Content: Intro, About, Skills (tech stack), Projects (with images, links, tech used), Experience, Contact (form, socials).
+
+Functional: Navigation (smooth), CTA (Hire me / Download CV), Form submission (server-side), Dynamic routing (if SPA or multi-page).
+
+Design: Responsive (mobile-first), Accessibility (Alt tags, contrast), Loading speed (optimized images).
+
+Technical: Domain, SSL, Hosting, CDN, Analytics (Google/Plausible).
+
+Nice-to-have: Blog, Dark/Light mode, Animation, CMS (like Sanity/Supabase for non-devs).
+
+Refining the output:
+
+Ensure clear formatting (bullet points, bold text).
+
+Relate back to the user's specific wireframe (the image showed: Name, photo, contact info, socials, dynamic tabs for About/Project/Experience/Contact - which is a perfect MVP of the core needs).
+
+Make it actionable and clear.
+
+A portfolio website isn't just a digital resume; its ultimate goal is conversion—convincing a recruiter or client that you are the right person to hire.
+
+To achieve that, a portfolio needs a blend of content, functionality, design, and technical reliability. Here is the definitive breakdown of what a portfolio website truly needs:
+
+1. Content & Information Architecture (The "What")
+These are the non-negotiable sections that answer the fundamental questions a visitor has.
+
+A Strong Bio / "Hero" Section: A clear, punchy one-liner stating who you are and what you do (e.g., "Full Stack Developer specializing in React and Next.js") alongside your photo.
+
+Your Projects (The Core): This is the proof of your work. Each project needs a title, a short description, the technologies used (tech stack tags), and a link to a live demo or GitHub repository. Screenshots are vital—people trust visual evidence over text.
+
+Skills & Tech Stack: A visual list of your tools (languages, frameworks, databases). This helps recruiters quickly scan if you match their job description.
+
+Professional Experience: A condensed, chronological list of your past job roles, companies, and key achievements.
+
+Contact Information & Call-to-Action (CTA): The most important part. A contact form, your email, and links to your social profiles (LinkedIn, GitHub). Crucially, it needs a clear CTA button, like "Hire Me", "Download My CV", or "Let's Connect".
+
+2. Functional Requirements (The "What it does")
+Smooth, Intuitive Navigation: As shown in your wireframe, visitors must instantly know how to move between sections. The navigation should be clearly visible and change state (highlighting the active tab) to tell the user where they are.
+
+Functional Contact Form: The form must actually work. It needs client-side validation (making sure the email format is correct) and, most importantly, server-side handling to securely send the message to your inbox without exposing your email credentials to web scrapers.
+
+Clickable Social & External Links: All your social icons must be anchor tags (<a href="...">) that open in a new tab (target="_blank"), allowing recruiters to easily cross-reference your profiles.
+
+3. Design, UX, & Accessibility (The "How it feels")
+Mobile Responsiveness: Over 50% of recruiters browse on their phones. Your content frame must "wrap" and stack vertically for mobile screens, exactly as you mentioned in your sketch.
+
+Performance & Speed: A portfolio that takes 5 seconds to load will lose 50% of its visitors. Images must be compressed and lazy-loaded.
+
+Visual Hierarchy & Branding: The colors, fonts, and layout must reflect your personality (e.g., your dark-mode wireframe with orange outlines is a fantastic, instantly recognizable "brand").
+
+Accessibility (a11y): Good color contrast, keyboard-navigable menus, and alt text on images. A recruiter with a screen reader should still be able to navigate your site.
+
+4. Technical & Infrastructure Needs (The "Under the hood")
+A Custom Domain: yourname.com looks infinitely more professional than yourname.github.io or yourname.wixsite.com.
+
+SSL/HTTPS: Security encryption is mandatory (most modern hosters provide this for free).
+
+Analytics: You need to know which projects are attracting attention and where your traffic is coming from. Google Analytics 4 or privacy-friendly tools like Plausible or Umami are essential.
+
+SEO (Search Engine Optimization): Proper meta titles, descriptions, and semantic HTML (<h1>, <h2>, etc.) so that when someone Googles your name, your portfolio shows up at the top.
+
+5. The "Nice-to-Haves" (The extra edge)
+A Blog: Writing articles about your tech stack (e.g., "How I built my portfolio with Next.js") proves your expertise and dramatically boosts your SEO.
+
+Resume Download: A button that automatically downloads your PDF resume.
+
+Dark/Light Mode: While your provided wireframe is dark-only, offering a toggle shows advanced frontend proficiency.
+
+Subtle Animations: Micro-interactions (like hover effects on projects or a subtle fade-in when tabs change) make the site feel polished and premium.
+
+💡 How your specific wireframe matches these needs perfectly:
+The sketch you provided is an ideal MVP of these requirements:
+
+Left Sidebar: Handles the Bio, Contact Info, and Socials permanently. This ensures a recruiter can find your email/GitHub immediately, no matter which tab they are looking at.
+
+Right Frame: The dynamic, wrapping content (About, Project, Experience, Contact) perfectly keeps the UI clean while delivering all the core information.
+
+Final Advice: Do not get stuck trying to build a massive, complex website. Your wireframe is highly efficient. Use the tech stack I recommended earlier (Next.js + Tailwind + Prisma), build exactly what is in your sketch, and deploy it. A simple, highly polished portfolio is infinitely better than a bloated, slow, half-finished one.
+
