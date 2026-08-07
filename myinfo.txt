@@ -1,0 +1,708 @@
+
+
+
+Shreyas Pawar
+He/Him
+
+Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases
+
+Thane, Maharashtra, India
+
+·
+
+Contact info
+
+
+A. P. Shah Institute of Technology, Thane
+
+500+ connections
+
+
+Open to
+Add section
+
+Enhance profile
+
+Open to work
+
+Add titles and locations that you are open to
+
+Show details
+
+
+Analytics
+Private to you
+
+43 profile views
+
+Discover who’s viewed your profile.
+
+649 post impressions
+
+Check out who’s engaging with your posts.
+
+Past 7 days
+
+35 search appearances
+
+See how often you appear in search results.
+
+Show all
+About
+I began my journey in technology at the start of my Diploma in Information Technology after 10th.
+During this time, I built a strong foundation in programming languages such as C, C++, Java, Python, Kotlin, HTML, CSS, JavaScript, and ReactJS and MySQL.
+
+Currently, I am pursuing a B.Tech in Computer Engineering at A.P. Shah Institute of Technology. Over the years, I have gained hands-on experience in Android development (Java & Kotlin), Flutter app development through an internship during my diploma, and Data Science projects.
+
+I have a solid grasp of Java, Kotlin, and Python, and I am actively enhancing my problem-solving and algorithmic skills by learning Data Structures and Algorithms in Python. My goal is to leverage my programming expertise to create impactful, real-world applications and continue growing in modern technologies.
+
+Featured
+
+Link
+
+
+Github - ShreyasP10 
+
+GitHub
+
+Activity
+637 followers
+
+Create a post
+
+Posts
+
+Comments
+
+Videos
+
+Images
+View Shreyas Pawar’s profile
+Shreyas Pawar
+
+  • You
+
+Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases
+
+2d • 
+
+
+⟡ I thought building a real-time chat application would mostly be a frontend project.
+
+But I was wrong.
+
+The moment Mahajan Atharva and I decided that every message should be encrypted before it reached the database, almost every feature had to be redesigned.
+
+Replies.
+
+Read receipts.
+
+File sharing.
+
+Message reactions.
+
+Voice calls.
+
+None of them were particularly difficult on their own.
+
+The real challenge was making them all work without the server ever understanding the message content.
+
+That's how Chatrixz slowly stopped being "just another chat app" and became one of the most technically challenging projects I've worked on.
+
+
+⟡ One architectural decision changed everything
+
+Most messaging platforms allow the backend to understand message contents.
+
+We deliberately chose a different approach.
+
+Messages are encrypted on the client using AES-256-GCM before they're uploaded.
+
+Firestore stores only ciphertext—not plain text.
+
+At first, that sounded like a small design decision.
+
+It wasn't.
+
+Once the server could no longer understand message contents, features that normally feel straightforward suddenly became architectural problems.
+
+How should replies work?
+
+How should metadata be handled?
+
+What belongs on the client?
+
+What belongs on the server?
+
+Those questions shaped almost every part of the application.
+
+
+⟡ What Chatrixz became
+
+Instead of simply building a messaging platform, we ended up exploring several areas of modern web development.
+
+› Client-side Cryptography
+
+› Real-time Synchronization
+
+› WebRTC Peer-to-Peer Communication
+
+› Progressive Web Apps (PWA)
+
+› Browser Storage & Offline Support
+
+› Modern Frontend Architecture
+
+Looking back, the biggest lesson wasn't about React or Firebase.
+
+It was learning how one architectural decision can influence an entire system.
+
+A huge thanks to Mahajan Atharva for building this project with me. Looking forward to building even more together.
+
+
+⟡ I'd Love Your Perspective
+
+If you were designing an encrypted messaging platform today,
+
+would you accept additional architectural complexity to ensure the server never sees a single plain-text message?
+
+Or would you choose a simpler architecture that gives the backend more responsibility?
+
+What would you give up for stronger privacy?
+
+Server-side search?
+
+Simpler debugging?
+
+Faster development?
+
+I'd love to hear your thoughts.
+
+My GitHub: https://lnkd.in/dkTkYPXD
+
+Mahajan Atharva's GitHub: https://lnkd.in/dQRfJ4zp
+
+
+⟡ GitHub Repository
+
+Project: https://lnkd.in/dJq5GuC4
+
+
+⟡ Live Demo
+
+https://lnkd.in/dJyeR7xy
+
+
+#React #WebDevelopment #WebRTC #Chatrixz… more
+
+
+Veer Shah and 11 others reactedVeer Shah and 11 others
+
+1 comment1 comment
+
+
+Like
+
+Comment
+
+Repost
+Send
+412 impressions
+
+View analyticsView analytics
+
+View Shreyas Pawar’s profile
+Shreyas Pawar
+
+  • You
+
+Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases
+
+1w • Edited • 
+
+
+⟡ What if we could extract more detail from thermal satellite imagery without launching a new satellite?
+That's the idea behind Kepler-404, a prototype I built for the ISRO Space Applications Centre (SAC) – BAH 2026 Hackathon.
+Landsat 9 Thermal Infrared (TIR) imagery plays an important role in applications such as urban heat island analysis, wildfire monitoring, volcanic activity observation, and environmental research. However, its 200m spatial resolution can limit detailed analysis.
+Instead of treating this as just an image processing problem, I wanted to explore how an AI-powered workflow could enhance thermal imagery while preserving the geospatial information required for real-world GIS applications.
+
+⟡ What Kepler-404 demonstrates
+› Super-resolves Landsat 9 Thermal Infrared imagery from 200m → 100m
+› Colorizes grayscale thermal imagery into physically consistent RGB visualizations
+› Preserves CRS and affine transformations for compatibility with GIS platforms like QGIS and ArcGIS
+› Provides an interactive web interface with before/after comparison and GeoTIFF export
+
+⟡ Tech Stack
+› Python & Flask
+› PyTorch
+› OpenCV
+› Rasterio & GDAL
+› NumPy
+› HTML • CSS • JavaScript
+› Designed to support ESRGAN, SwinIR, Pix2Pix, and Diffusion Models
+
+⟡ Current Status
+Kepler-404 is currently a prototype that validates the complete end-to-end workflow using a mock inference layer.
+The objective was to build a modular foundation that allows production-ready AI models to be integrated without redesigning the frontend or backend architecture.
+Working on this project gave me a deeper appreciation for the intersection of AI, Computer Vision, Remote Sensing, and Geospatial Computing. There's still plenty to improve, and I'm looking forward to continuing its development.
+
+⟡ I'd Love Your Thoughts
+Whether you're working in AI, Remote Sensing, Geospatial Technologies, or Computer Vision, I'd love to hear your perspective.
+› Where do you see the biggest opportunity for AI in satellite imagery?
+› Which super-resolution approach would you explore next?
+
+⟡ Live Prototype
+https://lnkd.in/dqCGB8a6
+
+#ISRO #RemoteSensing #ArtificialIntelligence #ComputerVision… more
+
+View image
+1/4
+
+Veer Shah and 8 others reactedVeer Shah and 8 others
+
+
+Like
+
+Comment
+
+Repost
+Send
+603 impressions
+
+View analyticsView analytics
+
+View Shreyas Pawar’s profile
+Shreyas Pawar reposted this
+
+
+View Veer Shah’s profile
+Veer Shah
+
+  • 1st
+
+Completed my diploma in pravin patil college of engineering and technology 
+
+2w • 
+
+Proud to share Camptel AI — built with Shreyas Pawar & Mahajan Atharva for the Gen AI Academy APAC Edition (Google Cloud Hackathon 2026).
+
+We built a campus decision-intelligence platform that transforms raw campus data into actionable decisions using Google BigQuery, Gemini AI, and NVIDIA RAPIDS cuDF.
+◉ Academic Risk Panel — flags at-risk students with real-time risk scoring
+◉ Placement Readiness — ranks candidates across branches with readiness tiers
+◉ Classroom Utilization — live heatmap + conflict alerts for over-capacity rooms
+◉ AI Assistant — ask questions in plain English, Gemini converts to SQL and returns answers
+◉ GPU Acceleration — 11x speedup using NVIDIA cuDF over Pandas (45s → 4.1s on 1.2M records)
+Built with Next.js 14, TypeScript, Tailwind CSS, deployed on Vercel.
+🔗 Live demo: https://lnkd.in/dEmHK6FR
+📁 GitHub: https://lnkd.in/dGuu-8Yw
+Shreyas Pawar — https://lnkd.in/dhCPW79C
+Mahajan Atharva — https://lnkd.in/dMEzTZ8y
+#GoogleCloud #GeminiAI #BigQuery #NVIDIA #RAPIDS #NextJS #Vercel #GenAIAcademy #CampusTech #EdTech #Hackathon… more
+
+View image
+1/4
+
+Veer Shah and 7 others reactedVeer Shah and 7 others
+
+1 comment1 comment
+
+•
+
+1 repost1 repost
+
+
+Like
+
+Comment
+
+Repost
+Send
+View Shreyas Pawar’s profile
+Shreyas Pawar
+
+  • You
+
+Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases
+
+2mo • 
+
+
+🚀 Excited to introduce the CropIQ Android App 🌱
+
+What started as an idea to make crop disease detection easier has now become an AI-powered Android application designed to help users identify crop diseases quickly and efficiently.
+
+🌾 Introducing CropIQ – AI-Powered Crop Disease Detection
+
+📱 What CropIQ Can Do
+🔹 Detect crop diseases using AI image recognition
+🔹 Upload crop images for disease detection
+🔹 Get disease insights & information
+🔹 Clean and user-friendly experience
+🔹 Real-time updates & notifications
+
+🛠 Built With
+🔹 Android: Java + Kotlin
+🔹 AI/ML: TensorFlow Lite (TFLite)
+🔹 Backend: Firebase
+🔹 Database: Firestore + Realtime Database
+🔹 Notifications: Firebase Cloud Messaging (FCM)
+
+This project gave me hands-on experience in Android Development, AI/ML Integration, Firebase, Authentication, Security, and Real-Time Systems.
+
+🚀 CropIQ will continue improving with better AI accuracy, new features, and regular updates.
+
+👇 Swipe through the screenshots to explore the CropIQ Android App
+🌍 Website: https://lnkd.in/g2h7Bpuy
+
+📲 You can download the latest CropIQ APK directly from the website and try it yourself!
+
+Feedback and suggestions are always welcome 🌱
+
+#CropIQ #AndroidDevelopment #MachineLearning #TensorFlowLite #Firebase #AI #MobileDevelopment #ComputerEngineering #StudentDeveloper
+… more
+
+View image
+1/7
+
+
+Veer Shah and 4 others reactedVeer Shah and 4 others
+
+1 comment1 comment
+
+
+Like
+
+Comment
+
+Repost
+Send
+607 impressions
+
+View analyticsView analytics
+
+View Shreyas Pawar’s profile
+Shreyas Pawar reposted this
+
+
+View Soham Sonar’s profile, open to work
+Soham Sonar
+
+  • 1st
+
+APSIT’28 • DSA • AI/ML • Full Stack Developer • GSSoC’26 Contributor • Problem Solver
+
+4mo • Edited • 
+
+🚀 Excited to share my project built for the AWS AI for Bharat Hackathon!
+Introducing AI for Learning & Developer Productivity — an AI-powered platform that brings learning, coding, and productivity into one unified experience.
+👥 Built with: Shreyas Pawar
+💡 What it does:
+• AI Tutor
+• Personalized Study Buddy with smart learning paths
+• AI Interview Prep (role-based questions)
+• Smart Summarizer for notes & content
+• Multilingual Translation (Indian languages)
+• Quiz & Flashcard Generator
+• AI Code Analyzer + Interactive Code Playground
+• Multimodal AI (OCR, diagram analysis, math solving)
+• Progress Tracking + Notes + Collaboration
+🎯 Goal:
+To simplify and enhance the learning journey by combining multiple AI tools into one platform.
+🔗 Live Demo: https://lnkd.in/daTdbkqU
+🔗 GitHub: https://lnkd.in/d8APh9rG
+Looking forward to feedback! 🙌
+
+#AWS #Hackathon #AI #EdTech #Productivity #Developers #Hack2Skill… more
+
+View celebration image
+Launching a project
+
+13 reactions13
+
+1 repost1 repost
+
+
+Like
+
+Comment
+
+Repost
+Send
+
+Show all
+Experience
+
+New Age Solutions & Technologies (NASTECH) logo
+Internship – Mobile Application Development using Dart & Flutter
+
+New Age Solutions & Technologies (NASTECH) · Internship
+
+Jun 2025 - Jul 2025 · 2 mos
+
+Completed a 6-week industrial training program on Mobile Application Development using Dart & Flutter at New Age Solutions Technologies (NASTECH), organized in collaboration with Muchhala Polytechnic. During the internship, I gained hands-on experience in developing cross-platform mobile applications, learning the Flutter framework, Dart programming language, and best practices for app UI/UX design.
+
+Key learnings and contributions included:
+◉ Building interactive and responsive mobile applications using Flutter.
+◉ Understanding state management, widgets, and navigation in Flutter apps.
+◉ Applying real-world development workflows, debugging, and testing techniques.
+◉ Collaborating in a professional environment to complete project-based assignments.
+
+This internship strengthened my Flutter app development skills, enhanced my understanding of mobile app architecture, and provided exposure to industry-standard development practices.
+
+Thumbnail for Certificate of Internship
+Certificate of Internship
+
+ Flutter and Dart
+
+Maharashtra State Board of Technical Education (MSBTE) logo
+CropIQ – Crop Disease Identifier Application
+
+Maharashtra State Board of Technical Education (MSBTE)
+
+Mar 2025 · 1 mo
+
+I participated in the MSBTE State Level Project Competition 2025 (Mumbai Region) held in March 2025, representing Muchhala Polytechnic, Thane. During the competition, I presented my project titled CropIQ – Crop Disease Identifier Application at Shivajirao S. Jondhle Polytechnic, Asangaon.
+
+CropIQ is an AI-powered Android application designed to detect diseases in various crops such as apple, banana, and others using Computer Vision and Deep Learning. The application is developed using Java and Kotlin, with a Convolutional Neural Network (CNN) implemented through TensorFlow to analyze crop images and accurately identify diseases. In addition to detection, the app also provides recommended solutions and preventive measures for each identified disease, helping users take timely and informed action. Firebase is used for backend services including data storage and application management.
+
+The project focuses on early disease detection and actionable guidance, helping farmers and agricultural stakeholders reduce crop losses and improve productivity. Participating in this state-level competition provided valuable exposure, expert feedback, and peer learning, and marks a key milestone in my journey from an IT Diploma student to pursuing B.Tech in Computer Engineering, motivating me to continue building impactful, real-world AI-driven solutions.
+
+Thumbnail for Certificate of Participation
+Certificate of Participation
+
+ Android Development, Java and +6 skills
+
+Education
+A. P. Shah Institute of Technology, Thane logo
+A. P. Shah Institute of Technology, Thane
+
+Bachelor of Technology - BTech, Computer Engineering
+
+2025 – 2028
+
+Muchhala Polytechnic Thane 
+
+Diploma in Technology , Information Technology
+
+Aug 2022 – May 2025
+
+Licenses & certifications
+Data Science Master Virtual Internship
+
+Siemens
+
+Issued Apr 2026 · Expired Jun 2026
+
+Credential ID 4b4f893de3a068b03cd4
+
+ Machine Learning, Matplotlib and +3 skills
+
+Thumbnail for Data Science Master Virtual Internship Certificate
+Data Science Master Virtual Internship Certificate
+
+The Ultimate Job Ready Data Science Course
+
+CodeWithHarry
+
+Issued Mar 2026
+
+Credential ID CWH-THE-ULTIMATE-JOB-READY-DATA-SCIENCE-COURSE-WVSTWTFL
+
+ Seaborn, Web Scraping and +5 skills
+
+Thumbnail for Shreyas Dinesh Pawar - Data Science Course By CWH.pdf
+Shreyas Dinesh Pawar - Data Science Course By CWH.pdf
+
+Completed a comprehensive Data Science course covering Python, data analysis, machine learning basics, and data visualization through practical projects and real-world examples.
+
+Projects
+Kepler-404
+
+Jul 2026 – Present
+
+Kepler‑404 is a full‑stack prototype that enhances Thermal Infrared (TIR satellite imagery captured by the Landsat 9 TIRS sensor. Thermal bands (Band 10) are captured at a coarse 100m native resolution limiting fine‑grained analysis of urban heat islands, volcanic activity, ocean fronts, and wildfire dynamics.
+
+ Flask, PyTorch and +2 skills
+
+Thumbnail for Hero Section
+Thumbnail for Input Section
+Thumbnail for Result Section
+Thumbnail for Comparison Section
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Apr 2025 – Present
+
+
+Associated with Maharashtra State Board of Technical Education (MSBTE)
+
+CropIQ is an AI-powered crop disease detection platform designed to help users identify crop diseases quickly and efficiently using image-based Artificial Intelligence. The platform includes an Android application, web portal, and admin dashboard for disease detection, updates, APK management, analytics, notifications, and community interaction.
+
+ Android Development, Java and +9 skills
+
+Thumbnail for Logo
+Thumbnail for DetectionActivity
+Thumbnail for DetectActivity
+Thumbnail for CommunityAndSettingActivity
+Thumbnail for SettingAndHistoryActivity
+Thumbnail for Login&RegistrationActivity
++7
+
+Skills (33)
+PyTorch
+
+Kepler-404
+
+Rasterio
+
+Kepler-404
+
+PyTorch
+
+Kepler-404
+
+Rasterio
+
+Kepler-404
+
+Deep Learning
+
+Data Science Master Virtual Internship
+
+TypeScript
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+TensorFlow Lite (TFLite)
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Vercel V0
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Next.js
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Tailwind CSS
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Machine Learning
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Data Science Master Virtual Internship
+
+Firebase
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+XML
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+Back-End Web Development
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+Firewalls
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+SQLAlchemy
+
+FastAPI
+
+React.js
+
+Seaborn
+
+The Ultimate Job Ready Data Science Course
+
+Web Scraping
+
+The Ultimate Job Ready Data Science Course
+
+Data Science Master Virtual Internship
+
+Scikit-Learn
+
+The Ultimate Job Ready Data Science Course
+
+Data Science Master Virtual Internship
+
+Flask
+
+Kepler-404
+
+The Ultimate Job Ready Data Science Course
+
+Pandas
+
+The Ultimate Job Ready Data Science Course
+
+NumPy
+
+Matplotlib
+
+The Ultimate Job Ready Data Science Course
+
+Data Science Master Virtual Internship
+
+OpenCV
+
+Kepler-404
+
+The Ultimate Job Ready Data Science Course
+
+Flutter
+
+
+Internship – Mobile Application Development using Dart & Flutter at New Age Solutions & Technologies (NASTECH)
+
+Dart
+
+
+Internship – Mobile Application Development using Dart & Flutter at New Age Solutions & Technologies (NASTECH)
+
+TensorFlow
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+Python (Programming Language)
+
+Android Development
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Java
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+Kotlin
+
+
+CropIQ – Crop Disease Identifier Application at Maharashtra State Board of Technical Education (MSBTE)
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+JavaScript
+
+CropIQ – AI-Powered Crop Disease Detection Platform
+
+MySQL
