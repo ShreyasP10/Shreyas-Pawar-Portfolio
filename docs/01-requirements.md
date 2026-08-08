@@ -46,7 +46,7 @@ Scrolling down/up must cycle views sequentially, **without wrapping**:
 `door → entry → wall → overview → tv → laptop → tablet → phone` (reverse on scroll up). Arrow keys cycle with wrap-around. Esc closes open device panels/settings.
 
 ### FR-02a Door entry
-The initial camera view must sit **outside the room's door** on the west wall (aligned with the doorway, z −4.175…−3.025). The door shows the owner's name (gold "SHREYAS PAWAR" nameplate). ~1.6 s after the loading screen clears the door opens automatically (leaf swings inward to 109°) and the camera flies **through the doorway** to the entry view. A manual "OPEN THE DOOR" CTA on the door overlay triggers the same sequence. The west wall must have a real doorway gap so the camera path never clips geometry.
+The initial camera view must sit **outside the room's door** on the south wall, SE corner (aligned with the doorway, x 3.2…4.85). The door shows the owner's name (gold "SHREYAS PAWAR" nameplate). ~1.6 s after the loading screen clears the door opens automatically (leaf swings inward, rot.y −1.9 ≈ −109°) and the camera flies **through the doorway** to the entry view. A manual "OPEN THE DOOR" CTA on the door overlay triggers the same sequence. The south wall must have a real doorway gap so the camera path never clips geometry.
 
 ### FR-03 Camera choreography
 Each device view positions the camera along that device's **screen face-normal**, ~3.3–4.2 m from the screen center, so the screen is front-and-center while 20–30% of the room (desk, LED strip, chair, shelf) remains visible. LOOK targets must equal the exact computed screen center of each device.

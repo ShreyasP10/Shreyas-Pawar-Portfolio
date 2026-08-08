@@ -78,8 +78,8 @@ export function LandingOverlay() {
 
   return (
     <div
-      className={`fixed inset-0 z-[55] flex flex-col items-center justify-end pb-[16vh] transition-all duration-1000 ${
-        visible ? "opacity-100" : "pointer-events-none opacity-0"
+      className={`pointer-events-none fixed inset-0 z-[55] flex flex-col items-center justify-end pb-[16vh] transition-all duration-1000 ${
+        visible ? "opacity-100" : "opacity-0"
       }`}
     >
       <div className="px-6 text-center">
@@ -95,7 +95,7 @@ export function LandingOverlay() {
               openDoor();
               go("entry");
             }}
-            className="group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
+            className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
           >
             OPEN THE DOOR
             <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -103,7 +103,7 @@ export function LandingOverlay() {
         ) : (
           <button
             onClick={() => go("wall")}
-            className="group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
+            className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
           >
             VIEW INTRODUCTION
             <span className="transition-transform group-hover:translate-x-1">→</span>
@@ -124,34 +124,41 @@ export function LandingOverlay() {
 export function HUD() {
   const target = useWorkspace((s) => s.target);
   const loading = useWorkspace((s) => s.loading);
+  const freeCam = useWorkspace((s) => s.freeCam);
 
   return (
     <div
       className={`pointer-events-none fixed inset-x-0 top-0 z-[50] flex items-center justify-between px-5 py-4 transition-opacity duration-700 ${
-        loading || target === "wall" ? "opacity-0" : "opacity-100"
+        loading ? "opacity-0" : "opacity-100"
       }`}
     >
       <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.3em] text-[#ffd700] backdrop-blur-xl">
         {VIEW_LABELS[target] ?? target.toUpperCase()}
       </div>
-      <div className="hidden rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] text-[#8f8c99] backdrop-blur-xl sm:block">
-        SP·3D
+      <div className="hidden flex items-center gap-2 sm:flex">
+        <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] text-[#8f8c99] backdrop-blur-xl">
+          SP·3D
+        </div>
+        {freeCam && (
+          <div className="rounded-full border border-[#ffd700]/40 bg-[#ffd700]/10 px-3 py-1.5 font-mono text-[8px] tracking-[0.2em] text-[#ffd700] backdrop-blur-xl">
+            FREE LOOK (F)
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export function HelpBar() {
-  const target = useWorkspace((s) => s.target);
   const activeDevice = useWorkspace((s) => s.activeDevice);
   const loading = useWorkspace((s) => s.loading);
 
-  if (loading || target === "wall") return null;
+  if (loading) return null;
 
   return (
     <div className="pointer-events-none fixed bottom-4 right-5 z-[50] hidden items-center gap-3 sm:flex">
       <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.2em] text-[#8f8c99] backdrop-blur-xl">
-        SCROLL TO EXPLORE · ← → DEVICES · DRAG TO LOOK
+        SCROLL TO EXPLORE · ← → DEVICES · DRAG TO LOOK · F: FREE LOOK
       </div>
       {activeDevice && (
         <div className="rounded-full border border-[#ffd700]/40 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.2em] text-[#ffd700] backdrop-blur-xl">

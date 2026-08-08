@@ -14,7 +14,7 @@ function makeCanvas(w: number, h: number): HTMLCanvasElement {
 function toTexture(c: HTMLCanvasElement, repeat?: [number, number]): THREE.CanvasTexture {
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 8;
+  tex.anisotropy = 4;
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
   if (repeat) tex.repeat.set(repeat[0], repeat[1]);
@@ -194,10 +194,169 @@ export const woodTextureRepeat = (r: [number, number]) => get("wood", woodCanvas
 export const brushedTexture = () => get("brushed", brushedCanvas);
 export const brushedTextureRepeat = (r: [number, number]) => get("brushed", brushedCanvas, r);
 export const fabricTexture = (base: string) => get(`fabric:${base}`, () => fabricCanvas(base));
-export const speckleTexture = (base: string, light: string, dark: string) =>
-  get(`speckle:${base}:${light}:${dark}`, () => speckleCanvas(base, light, dark));
+
+// Shared speckle palette (reused across surfaces to limit texture units)
+const speckleDark = () => get("speckle:dark", () => speckleCanvas("#101014", "#1c1c24", "#07070a"));
+const speckleMid = () => get("speckle:mid", () => speckleCanvas("#14141a", "#1d1d26", "#0a0a0e"));
+const speckleWarm = () => get("speckle:warm", () => speckleCanvas("#1a1610", "#2a2218", "#0f0a07"));
+const speckleCool = () => get("speckle:cool", () => speckleCanvas("#10141a", "#181e2a", "#080b10"));
+const speckleTrim = () => get("speckle:trim", () => speckleCanvas("#101014", "#18181e", "#08080b"));
+const speckleCarpet = () => get("speckle:carpet", () => speckleCanvas("#1a2028", "#232b36", "#0e1218"));
+
+export const speckleTexture = (_base: string, _light: string, _dark: string) => speckleDark();
+export const speckleTextureDark = speckleDark;
+export const speckleTextureMid = speckleMid;
+export const speckleTextureWarm = speckleWarm;
+export const speckleTextureCool = speckleCool;
+export const speckleTextureTrim = speckleTrim;
+export const speckleTextureCarpet = speckleCarpet;
+
 export const plasterTexture = () => get("plaster", plasterCanvas);
 export const plasterTextureRepeat = (r: [number, number]) => get("plaster", plasterCanvas, r);
 export const floorTexture = () => get("floor", floorCanvas);
 export const floorTextureRepeat = (r: [number, number]) => get("floor", floorCanvas, r);
 export const cityNightTexture = () => get("cityNight", cityNightCanvas);
+
+function wallBoardCanvas(): HTMLCanvasElement {
+  const c = makeCanvas(1024, 320);
+  const g = c.getContext("2d")!;
+  const grad = g.createLinearGradient(0, 0, 0, 320);
+  grad.addColorStop(0, "#1a1521");
+  grad.addColorStop(1, "#0f0c15");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 1024, 320);
+  noise(g, 1024, 320, 420, "#ffffff", "#000000", 0.015, 0.035);
+
+  g.strokeStyle = "rgba(255,215,0,0.55)";
+  g.lineWidth = 3;
+  g.strokeRect(16, 16, 992, 288);
+
+  const g2 = g as CanvasRenderingContext2D & { letterSpacing?: string };
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.shadowColor = "rgba(255,215,0,0.4)";
+  g.shadowBlur = 22;
+
+  g.fillStyle = "#ffd700";
+  g.font = "900 116px 'Segoe UI', Arial, sans-serif";
+  g2.letterSpacing = "24px";
+  g.fillText("SHREYAS", 512, 92);
+  g.fillText("PAWAR", 512, 188);
+  g2.letterSpacing = "0px";
+
+  g.fillStyle = "#7dd3fc";
+  g.font = "600 19px 'Courier New', monospace";
+  g.shadowColor = "rgba(125,211,252,0.6)";
+  g.shadowBlur = 10;
+  g2.letterSpacing = "5px";
+  g.fillText("SOFTWARE ENGINEER · AI DEVELOPER · FULL STACK DEVELOPER · INNOVATOR", 512, 236);
+  g2.letterSpacing = "0px";
+
+  g.shadowBlur = 0;
+  g.font = "600 21px 'Courier New', monospace";
+  const tags = ["PROBLEM SOLVER", "TECH ENTHUSIAST", "LIFELONG LEARNER", "OPEN SOURCE"];
+  const tagW = tags.map((t) => g.measureText(t).width + 34);
+  const totalW = tagW.reduce((a, b) => a + b, 0) + 14 * (tags.length - 1);
+  let x = 512 - totalW / 2;
+  tags.forEach((t, i) => {
+    g.fillStyle = "rgba(255,215,0,0.12)";
+    const w = tagW[i];
+    const h = 40;
+    const y = 264;
+    const r = 20;
+    g.beginPath();
+    g.roundRect(x, y - h / 2, w, h, r);
+    g.fill();
+    g.strokeStyle = "rgba(255,215,0,0.5)";
+    g.lineWidth = 1.5;
+    g.stroke();
+    g.fillStyle = "#ffd700";
+    g.fillText(t, x + w / 2, y + 1);
+    x += w + 14;
+  });
+  return c;
+}
+
+export const wallBoardTexture = () => get("wallBoard", wallBoardCanvas);
+
+function asusLidCanvas(): HTMLCanvasElement {
+  const c = makeCanvas(1024, 640);
+  const g = c.getContext("2d")!;
+  const grad = g.createLinearGradient(0, 0, 0, 640);
+  grad.addColorStop(0, "#2b2d33");
+  grad.addColorStop(0.5, "#3a3d46");
+  grad.addColorStop(1, "#25272d");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 1024, 640);
+  for (let i = 0; i < 900; i++) {
+    g.globalAlpha = 0.02 + Math.random() * 0.045;
+    g.fillStyle = Math.random() < 0.5 ? "#ffffff" : "#000000";
+    g.fillRect(Math.random() * 1024, 0, 1, 640);
+  }
+  g.globalAlpha = 1;
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.fillStyle = "#e6e4e0";
+  g.font = "italic 800 200px 'Segoe UI', Arial, sans-serif";
+  g.fillText("ASUS", 512, 262);
+  g.strokeStyle = "rgba(230,228,224,0.35)";
+  g.lineWidth = 2;
+  g.strokeText("ASUS", 512, 262);
+  g.fillStyle = "#c9c6cd";
+  g.font = "600 52px 'Segoe UI', Arial, sans-serif";
+  g.fillText("VIVOBOOK", 512, 420);
+  g.fillStyle = "#8f8c99";
+  g.font = "600 34px 'Segoe UI', Arial, sans-serif";
+  g.fillText("16X", 512, 476);
+  return c;
+}
+
+export const asusLidTexture = () => get("asusLid", asusLidCanvas);
+
+function asusChinCanvas(): HTMLCanvasElement {
+  const c = makeCanvas(512, 96);
+  const g = c.getContext("2d")!;
+  g.clearRect(0, 0, 512, 96);
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.fillStyle = "#d8d6d2";
+  g.font = "600 42px 'Segoe UI', Arial, sans-serif";
+  g.fillText("VIVOBOOK 16X", 256, 48);
+  return c;
+}
+
+export const asusChinTexture = () => get("asusChin", asusChinCanvas);
+
+function mugTextCanvas(): HTMLCanvasElement {
+  const c = makeCanvas(1024, 256);
+  const g = c.getContext("2d")!;
+  const grad = g.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0, "#2b2b32");
+  grad.addColorStop(0.5, "#1d1d23");
+  grad.addColorStop(1, "#27272e");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 1024, 256);
+  noise(g, 1024, 256, 260, "#ffffff", "#000000", 0.02, 0.05);
+
+  g.strokeStyle = "rgba(255,215,0,0.55)";
+  g.lineWidth = 4;
+  g.beginPath();
+  g.moveTo(0, 46);
+  g.lineTo(1024, 46);
+  g.stroke();
+  g.beginPath();
+  g.moveTo(0, 210);
+  g.lineTo(1024, 210);
+  g.stroke();
+
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.fillStyle = "#ffd700";
+  g.font = "700 66px 'Courier New', monospace";
+  g.shadowColor = "rgba(255,215,0,0.55)";
+  g.shadowBlur = 20;
+  g.fillText("CODE · BUILD · REPEAT", 512, 128);
+  return c;
+}
+
+export const mugTextTexture = () => get("mugText", mugTextCanvas);

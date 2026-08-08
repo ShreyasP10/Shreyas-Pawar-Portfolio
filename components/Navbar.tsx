@@ -79,7 +79,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <a
-            href="/resume/Shreyas_Pawar_Resume.pdf"
+            href="/resume/Shreyas%20Pawar%20Resume.pdf"
             download
             className="hidden rounded-full border border-accent bg-accent/10 px-4 py-1.5 font-mono text-xs font-semibold tracking-wide text-accent transition-all hover:bg-accent hover:text-black hover:shadow-[0_0_24px_rgba(255,215,0,0.35)] sm:inline-flex"
           >
@@ -131,7 +131,7 @@ export function Navbar() {
             ))}
             <li>
               <a
-                href="/resume/Shreyas_Pawar_Resume.pdf"
+                href="/resume/Shreyas%20Pawar%20Resume.pdf"
                 download
                 className="block rounded-lg border border-accent bg-accent/10 px-3 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-black"
               >

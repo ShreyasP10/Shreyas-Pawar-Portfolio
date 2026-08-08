@@ -1,29 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useWorkspace, type DeviceId } from "./store";
 import { LaptopScreen, TabletScreen, PhoneScreen, TvScreen } from "./Screens";
-import { brushedTexture, speckleTexture } from "./materials";
+import { brushedTexture, speckleTextureDark, asusLidTexture, asusChinTexture } from "./materials";
 
-const SCREEN_DARK = "#0b0b10";
+const SCREEN_DARK = "#101018";
 
 const BRUSHED = brushedTexture();
-const DECK = speckleTexture("#101014", "#1a1a22", "#060609");
+const DECK = speckleTextureDark();
 
 interface HoverableProps {
   device?: DeviceId;
   label: string;
   position?: [number, number, number];
+  rotation?: [number, number, number];
   floorOffset?: number;
   showRing?: boolean;
   glowZ?: number;
   children: React.ReactNode;
 }
 
-function Hoverable({ device, label, position, floorOffset = 0, showRing = true, glowZ = 0.7, children }: HoverableProps) {
+function Hoverable({ device, label, position, rotation, floorOffset = 0, showRing = true, glowZ = 0.7, children }: HoverableProps) {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
   const targetScale = useRef(1);
@@ -52,6 +53,7 @@ function Hoverable({ device, label, position, floorOffset = 0, showRing = true, 
     <group
       ref={groupRef}
       position={position}
+      rotation={rotation}
       onClick={(e) => {
         e.stopPropagation();
         if (device) openDevice(device);
@@ -106,7 +108,7 @@ export function Devices() {
         <LaptopModel />
         {activeDevice === "laptop" && (
           <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
-            <Html transform position={[0, 0.55, 0.02]} distanceFactor={2} zIndexRange={[40, 0]}>
+            <Html transform position={[0, 0.55, 0.024]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
               <LaptopScreen />
             </Html>
           </group>
@@ -117,7 +119,7 @@ export function Devices() {
         <TabletModel />
         {activeDevice === "tablet" && (
           <group position={[0, 0.33, 0.024]} rotation={[-0.24, -Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.003]} distanceFactor={2} zIndexRange={[40, 0]}>
+            <Html transform position={[0, 0, 0.032]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
               <TabletScreen />
             </Html>
           </group>
@@ -128,14 +130,14 @@ export function Devices() {
         <PhoneModel />
         {activeDevice === "phone" && (
           <group position={[0, 0.33, 0.02]} rotation={[-0.22, Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.002]} distanceFactor={2} zIndexRange={[40, 0]}>
+            <Html transform position={[0, 0, 0.022]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
               <PhoneScreen active />
             </Html>
           </group>
         )}
         {activeDevice !== "phone" && (
           <group position={[0, 0.33, 0.02]} rotation={[-0.22, Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.002]} distanceFactor={2} zIndexRange={[30, 0]}>
+            <Html transform position={[0, 0, 0.022]} distanceFactor={2} zIndexRange={[30, 0]} occlude>
               <PhoneScreen active={false} />
             </Html>
           </group>
@@ -170,31 +172,24 @@ function TvWall() {
       <Hoverable
         device="tv"
         label={tvFullscreen ? "EXIT FULLSCREEN" : "TV — SHOWCASE"}
-        position={[0, 1.9, -0.6]}
+        position={[4.8, 1.9, -4.5]}
+        rotation={[0, -Math.PI / 2, 0]}
         showRing={false}
-        glowZ={-0.7}
+        glowZ={0.7}
       >
         <TvModel onClick={handleTvClick} />
       </Hoverable>
       {activeDevice === "tv" && !tvFullscreen && (
-        <group position={[0, 1.9, -0.6]}>
-          <Html
-            transform
-            position={[0, 0, 0.053]}
-            rotation={[0, Math.PI, 0]}
-            distanceFactor={2}
-            zIndexRange={[40, 0]}
-          >
-            <div style={{ transform: "scaleX(-1)" }}>
-              <TvScreen />
-            </div>
+        <group position={[4.8, 1.9, -4.5]} rotation={[0, -Math.PI / 2, 0]}>
+          <Html transform position={[0, 0, 0.064]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
+            <TvScreen />
           </Html>
         </group>
       )}
       {tvFullscreen && (
         <Html
           center
-          position={[0, 1.5, -0.5]}
+          position={[4.8, 1.5, -4.0]}
           distanceFactor={1.8}
           zIndexRange={[100, 0]}
           onClick={handleFullscreenClick}
@@ -231,15 +226,15 @@ function TvModel({ }: { onClick?: () => void }) {
         <boxGeometry args={[2.5, 1.45, 0.06]} />
         <meshStandardMaterial color="#08080c" roughness={0.4} metalness={0.7} />
       </mesh>
-      <mesh position={[0, 0, 0.055]}>
-        <boxGeometry args={[2.4, 1.35, 0.008]} />
-        <meshStandardMaterial
-          color={SCREEN_DARK}
-          emissive="#0d0d18"
-          emissiveIntensity={0.7}
-          roughness={0.2}
-        />
-      </mesh>
+        <mesh position={[0, 0, 0.055]}>
+          <boxGeometry args={[2.4, 1.35, 0.008]} />
+          <meshStandardMaterial
+            color={SCREEN_DARK}
+            emissive="#0d0d18"
+            emissiveIntensity={0.18}
+            roughness={0.45}
+          />
+        </mesh>
       <mesh position={[0, -0.7, 0.06]}>
         <boxGeometry args={[2.3, 0.02, 0.02]} />
         <meshStandardMaterial color="#ffd700" emissive="#ffd700" emissiveIntensity={0.9} roughness={0.4} />
@@ -278,19 +273,42 @@ function TvModel({ }: { onClick?: () => void }) {
           <meshStandardMaterial color="#8a7355" roughness={0.6} />
         </mesh>
       </group>
-      <pointLight position={[0, 0.45, -1.2]} intensity={1.2} distance={4.5} decay={2} color="#ffb347" />
-      <pointLight position={[0, 1.9, -1.2]} intensity={0.6} distance={5} decay={2} color="#7dd3fc" />
+      <pointLight position={[0, 0.45, 1.2]} intensity={1.2} distance={4.5} decay={2} color="#ffb347" />
+      <pointLight position={[0, 1.9, 1.2]} intensity={0.6} distance={5} decay={2} color="#7dd3fc" />
     </group>
   );
 }
 
 function LaptopModel() {
+  const keyMat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#16161c", roughness: 0.45, metalness: 0.35 }),
+    []
+  );
+  const accentMat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: "#3c4048", roughness: 0.4, metalness: 0.55 }),
+    []
+  );
+  const lidTex = asusLidTexture();
+  const chinTex = asusChinTexture();
+
+  const keyRows: number[] = [-0.4, -0.315, -0.23, -0.145];
+  const bottomKeys: number[] = [-0.66, -0.55, -0.44, -0.33, -0.22, 0.26, 0.37, 0.48, 0.59, 0.7];
+
   return (
     <group>
+      {/* Base chassis — silver aluminum */}
       <mesh castShadow receiveShadow position={[0, -0.015, 0]}>
         <boxGeometry args={[1.7, 0.03, 1.05]} />
         <meshStandardMaterial map={BRUSHED} color="#ffffff" roughness={0.35} metalness={0.7} />
       </mesh>
+      {/* ErgoLift hinge barrels */}
+      {[-0.79, 0.79].map((x) => (
+        <mesh key={x} position={[x, 0.0, -0.51]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.028, 0.028, 0.05, 12]} />
+          <meshStandardMaterial map={BRUSHED} color="#ffffff" roughness={0.3} metalness={0.8} />
+        </mesh>
+      ))}
+      {/* Keyboard deck */}
       <mesh castShadow position={[0, 0.005, -0.15]}>
         <boxGeometry args={[1.55, 0.015, 0.62]} />
         <meshStandardMaterial map={DECK} color="#ffffff" roughness={0.55} />
@@ -300,27 +318,65 @@ function LaptopModel() {
         <meshStandardMaterial map={DECK} color="#ffffff" roughness={0.3} />
       </mesh>
 
+      {/* Scissor keys — 4 rows + spacebar row */}
+      {keyRows.map((z, r) =>
+        Array.from({ length: 12 }).map((_, k) => {
+          const x = -0.66 + k * 0.11;
+          const accent = (r === 0 && k === 0) || (r === 2 && k >= 9) || (r === 3 && k >= 10);
+          return (
+            <mesh key={`${r}-${k}`} position={[x, 0.0185, z]} material={accent ? accentMat : keyMat}>
+              <boxGeometry args={[0.098, 0.012, 0.032]} />
+            </mesh>
+          );
+        })
+      )}
+      <mesh position={[0.02, 0.0185, -0.06]} material={keyMat}>
+        <boxGeometry args={[0.5, 0.012, 0.035]} />
+      </mesh>
+      {bottomKeys.map((x, i) => (
+        <mesh key={`b${i}`} position={[x, 0.0185, -0.06]} material={keyMat}>
+          <boxGeometry args={[0.098, 0.012, 0.032]} />
+        </mesh>
+      ))}
+      {/* Touchpad */}
+      <mesh position={[0, 0.016, 0.1]}>
+        <boxGeometry args={[0.42, 0.007, 0.24]} />
+        <meshStandardMaterial color="#1b1b22" roughness={0.35} metalness={0.5} />
+      </mesh>
+
+      {/* 16:10 display lid */}
       <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
         <mesh castShadow position={[0, 0.55, 0]}>
           <boxGeometry args={[1.7, 1.1, 0.024]} />
-          <meshStandardMaterial map={BRUSHED} color="#ffffff" roughness={0.35} metalness={0.7} />
+          <meshStandardMaterial color="#23252b" roughness={0.3} metalness={0.65} />
         </mesh>
         <mesh position={[0, 0.55, 0.013]}>
           <boxGeometry args={[1.62, 1.02, 0.008]} />
           <meshStandardMaterial
             color={SCREEN_DARK}
             emissive="#0e0d18"
-            emissiveIntensity={0.6}
-            roughness={0.25}
+            emissiveIntensity={0.16}
+            roughness={0.45}
           />
         </mesh>
-        <mesh position={[0, 1.07, 0]}>
-          <boxGeometry args={[0.32, 0.012, 0.012]} />
-          <meshStandardMaterial map={DECK} color="#ffffff" roughness={0.3} />
+        {/* Bottom chin branding — visible from the desk view */}
+        <mesh position={[0, 0.02, 0.0145]}>
+          <planeGeometry args={[0.95, 0.05]} />
+          <meshStandardMaterial map={chinTex} transparent roughness={0.3} metalness={0.4} />
         </mesh>
-        <mesh position={[-0.79, 0.55, 0]}>
-          <boxGeometry args={[0.012, 1.05, 0.012]} />
-          <meshStandardMaterial color="#ffd700" emissive="#ffd700" emissiveIntensity={1.2} />
+        {/* Camera bump */}
+        <mesh position={[0, 1.095, 0.011]}>
+          <boxGeometry args={[0.3, 0.012, 0.008]} />
+          <meshStandardMaterial color="#141418" roughness={0.4} metalness={0.7} />
+        </mesh>
+        <mesh position={[0, 1.097, 0.0155]}>
+          <sphereGeometry args={[0.007, 8, 8]} />
+          <meshStandardMaterial color="#0a0a0e" roughness={0.3} />
+        </mesh>
+        {/* ASUS logo on the lid back */}
+        <mesh position={[0, 0.62, -0.014]} rotation={[0, Math.PI, 0]}>
+          <planeGeometry args={[1.42, 0.89]} />
+          <meshStandardMaterial map={lidTex} roughness={0.25} metalness={0.7} />
         </mesh>
       </group>
     </group>
@@ -339,8 +395,8 @@ function TabletModel() {
         <meshStandardMaterial
           color={SCREEN_DARK}
           emissive="#0d0d18"
-          emissiveIntensity={0.6}
-          roughness={0.25}
+          emissiveIntensity={0.15}
+          roughness={0.45}
         />
       </mesh>
       <mesh position={[0, 0.33, -0.025]}>
@@ -377,8 +433,8 @@ function PhoneModel() {
         <meshStandardMaterial
           color={SCREEN_DARK}
           emissive="#0d0d18"
-          emissiveIntensity={0.7}
-          roughness={0.25}
+          emissiveIntensity={0.15}
+          roughness={0.45}
         />
       </mesh>
       <mesh position={[0.12, 0.56, 0.012]}>

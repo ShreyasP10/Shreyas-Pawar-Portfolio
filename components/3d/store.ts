@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import { playTone } from "./sound";
+import { playTone, playPositionalTone, DEVICE_SOUND_POS } from "./sound";
 
 export type NavTarget =
   | "door"
@@ -15,33 +15,11 @@ export type NavTarget =
 
 export type DeviceId = "laptop" | "tablet" | "phone" | "tv";
 
-export type LaptopTab =
-  | "home"
-  | "about"
-  | "experience"
-  | "projects"
-  | "skills"
-  | "achievements"
-  | "education"
-  | "open-source"
-  | "blog"
-  | "contact";
+export type LaptopTab = "home" | "skills" | "certifications";
 
-export type TabletTab =
-  | "experience"
-  | "education"
-  | "certifications"
-  | "journey"
-  | "research";
+export type TabletTab = "projects" | "journey";
 
-export type TvTab =
-  | "showcase"
-  | "projects"
-  | "experience"
-  | "skills"
-  | "open-source"
-  | "certs"
-  | "contact";
+export type TvTab = "hackathons" | "achievements" | "experience" | "open-source" | "certs";
 
 interface WorkspaceState {
   target: NavTarget;
@@ -60,11 +38,13 @@ interface WorkspaceState {
   doorOpen: boolean;
   go: (target: NavTarget) => void;
   openDoor: () => void;
+  closeDoor: () => void;
   navigateTab: (device: DeviceId, tab: LaptopTab | TabletTab | TvTab) => void;
   openDevice: (device: DeviceId, tab?: LaptopTab | TabletTab | TvTab) => void;
   closePanels: () => void;
   setTvFullscreen: (value: boolean) => void;
   setFreeCam: (value: boolean) => void;
+  toggleFreeCam: () => void;
   setSound: (value: boolean) => void;
   setParticles: (value: boolean) => void;
   setReducedMotion: (value: boolean) => void;
@@ -77,8 +57,8 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   target: "door",
   activeDevice: null,
   laptopTab: "home",
-  tabletTab: "experience",
-  tvTab: "projects",
+  tabletTab: "projects",
+  tvTab: "hackathons",
   tvFullscreen: false,
   freeCam: false,
   soundOn: true,
@@ -99,8 +79,13 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
     set({ doorOpen: true });
   },
 
+  closeDoor: () => {
+    if (get().soundOn) playTone(300, 0.22);
+    set({ doorOpen: false });
+  },
+
   navigateTab: (device, tab) => {
-    if (get().soundOn) playTone(600, 0.035);
+    if (get().soundOn) playPositionalTone(600, 0.035, 0.025, DEVICE_SOUND_POS[device]);
     set((state) => ({
       lastInteraction: Date.now(),
       laptopTab: device === "laptop" ? (tab as LaptopTab) : state.laptopTab,
@@ -110,7 +95,7 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   },
 
   openDevice: (device, tab) => {
-    if (get().soundOn) playTone(680, 0.05);
+    if (get().soundOn) playPositionalTone(680, 0.05, 0.035, DEVICE_SOUND_POS[device]);
     set((state) => ({
       target: device,
       activeDevice: device,
@@ -134,6 +119,7 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   },
 
   setFreeCam: (value) => set({ freeCam: value }),
+  toggleFreeCam: () => set((state) => ({ freeCam: !state.freeCam })),
 
   setSound: (value) => {
     if (value) playTone(880, 0.04);
