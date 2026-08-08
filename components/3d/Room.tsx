@@ -10,35 +10,40 @@ import {
   woodTextureRepeat,
   brushedTexture,
   fabricTexture,
-  speckleTexture,
+  speckleTextureDark,
+  speckleTextureMid,
+  speckleTextureWarm,
+  speckleTextureCool,
+  speckleTextureTrim,
+  speckleTextureCarpet,
   plasterTextureRepeat,
   floorTextureRepeat,
   cityNightTexture,
+  wallBoardTexture,
+  mugTextTexture,
 } from "./materials";
 
 type RoomTextures = Record<string, THREE.Texture | null>;
 
 export function Room() {
-  const target = useWorkspace((s) => s.target);
-
   const tex = useMemo(
     () => ({
       floor: floorTextureRepeat([5, 4]),
       wall: plasterTextureRepeat([4, 2]),
       desk: woodTextureRepeat([3, 1.5]),
       leg: woodTextureRepeat([1, 2]),
-      mat: speckleTexture("#1b1410", "#241b12", "#0f0a07"),
-      matTop: speckleTexture("#201812", "#2a2118", "#120d09"),
+      mat: speckleTextureWarm(),
+      matTop: speckleTextureMid(),
       lampShade: brushedTexture(),
       shelfWood: woodTextureRepeat([1, 2]),
-      rubber: speckleTexture("#101014", "#1c1c24", "#07070a"),
-      paper: speckleTexture("#14141a", "#1d1d26", "#0a0a0e"),
-      cover: speckleTexture("#3a2f08", "#4a3d0f", "#241c05"),
-      pegboard: speckleTexture("#16161c", "#20202a", "#0c0c11"),
-      pot: speckleTexture("#1d2a24", "#2a3b33", "#0f1713"),
-      trim: speckleTexture("#101014", "#18181e", "#08080b"),
+      rubber: speckleTextureDark(),
+      paper: speckleTextureMid(),
+      cover: speckleTextureWarm(),
+      pegboard: speckleTextureCool(),
+      pot: speckleTextureCool(),
+      trim: speckleTextureTrim(),
       doorWood: woodTextureRepeat([1, 2.5]),
-      carpet: speckleTexture("#1a2028", "#232b36", "#0e1218"),
+      carpet: speckleTextureCarpet(),
     }),
     []
   );
@@ -55,15 +60,15 @@ export function Room() {
         <meshStandardMaterial map={tex.wall} color="#ffffff" roughness={0.95} />
       </mesh>
       <mesh position={[0, 3, 0.05]}>
-        <boxGeometry args={[10, 6, 0.1]} />
+        <boxGeometry args={[8.2, 6, 0.1]} />
         <meshStandardMaterial map={tex.wall} color="#ffffff" roughness={0.95} />
       </mesh>
-      <mesh position={[-5.05, 3, -6.5875]}>
-        <boxGeometry args={[0.1, 6, 4.825]} />
+      <mesh position={[4.925, 3, 0.05]}>
+        <boxGeometry args={[0.15, 6, 0.1]} />
         <meshStandardMaterial map={tex.wall} color="#ffffff" roughness={0.95} />
       </mesh>
-      <mesh position={[-5.05, 3, -1.5125]}>
-        <boxGeometry args={[0.1, 6, 3.025]} />
+      <mesh position={[-5.05, 3, -4.5]}>
+        <boxGeometry args={[0.1, 6, 9]} />
         <meshStandardMaterial map={tex.wall} color="#ffffff" roughness={0.95} />
       </mesh>
       <mesh position={[5.05, 3, -4.5]}>
@@ -89,7 +94,8 @@ export function Room() {
 
       {[
         [0, 0.095, -8.94, [10, 0.09, 0.06]],
-        [0, 0.095, 0.06, [10, 0.09, 0.06]],
+        [-0.9, 0.095, 0.06, [8.2, 0.09, 0.06]],
+        [4.925, 0.095, 0.06, [0.15, 0.09, 0.06]],
         [4.94, 0.095, -4.5, [0.06, 0.09, 9]],
         [-4.94, 0.095, -4.5, [0.06, 0.09, 9]],
       ].map((p, i) => (
@@ -116,12 +122,12 @@ export function Room() {
       {/* Ceiling spotlights for accent lighting */}
       <CeilingSpotlights />
 
-      <mesh position={[-6.0, 0, -3.6]} receiveShadow>
-        <boxGeometry args={[2, 0.1, 3]} />
+      <mesh position={[3.6, 0, 1.4]} receiveShadow>
+        <boxGeometry args={[3, 0.1, 2]} />
         <meshStandardMaterial map={tex.floor} color="#ffffff" roughness={0.85} />
       </mesh>
 
-      <WallName target={target} />
+      <WallName />
 
       <Window />
 
@@ -201,23 +207,15 @@ export function Room() {
         <BreathingDot />
       </group>
 
-      <group position={[2.35, 0.88, -8.0]}>
-        <mesh castShadow>
+      <group position={[2.4, 0.88, -6.95]}>
+        <mesh castShadow rotation={[0, Math.PI, 0]}>
           <cylinderGeometry args={[0.075, 0.06, 0.1, 20]} />
-          <meshStandardMaterial map={tex.rubber} color="#ffffff" roughness={0.55} />
+          <meshStandardMaterial map={mugTextTexture()} color="#ffffff" roughness={0.45} metalness={0.3} />
         </mesh>
         <mesh position={[0, 0.08, 0]}>
           <cylinderGeometry args={[0.078, 0.078, 0.018, 20]} />
           <meshStandardMaterial map={tex.mat} color="#ffffff" roughness={0.9} />
         </mesh>
-        <Html transform position={[0, 0.09, 0.062]} distanceFactor={12} zIndexRange={[15, 0]}>
-          <div
-            className="whitespace-nowrap font-mono font-bold tracking-[0.2em] text-white/90"
-            style={{ fontSize: "8px" }}
-          >
-            CODE·BUILD·REPEAT
-          </div>
-        </Html>
       </group>
 
       <MugSteam />
@@ -324,13 +322,13 @@ function Chair() {
     () => ({
       fabric: fabricTexture("#1c1c22"),
       metal: brushedTexture(),
-      caster: speckleTexture("#1c1c22", "#26262e", "#101014"),
+      caster: speckleTextureDark(),
     }),
     []
   );
 
   return (
-    <group ref={chairRef} position={[-0.9, 0, -6.2]}>
+    <group ref={chairRef} position={[0, 0, -5.9]}>
       <mesh position={[0, 0.08, 0]} castShadow>
         <cylinderGeometry args={[0.26, 0.3, 0.05, 16]} />
         <meshStandardMaterial map={tex.metal} color="#ffffff" roughness={0.45} metalness={0.55} />
@@ -372,7 +370,8 @@ function Chair() {
   );
 }
 
-function WallName({ target }: { target: string }) {
+function WallName() {
+  const tex = wallBoardTexture();
   return (
     <group position={[0, 3.1, -8.95]}>
       <mesh>
@@ -389,56 +388,10 @@ function WallName({ target }: { target: string }) {
           roughness={0.25}
         />
       </mesh>
-      <Html center position={[0, 0, 0.12]} distanceFactor={5.45} zIndexRange={[30, 0]}>
-        <div
-          className="pointer-events-none select-none"
-          style={{
-            width: 720,
-            height: 240,
-            opacity: target === "wall" ? 1 : 0,
-            transition: "opacity 700ms ease",
-          }}
-        >
-          <div className="flex h-full flex-col items-center justify-center text-center">
-            <div
-              className="font-black tracking-[0.3em] text-[#ffd700]"
-              style={{ fontSize: 48, lineHeight: 1.05, textShadow: "0 0 32px rgba(255,215,0,0.45)" }}
-            >
-              SHREYAS
-            </div>
-            <div
-              className="font-black tracking-[0.3em] text-[#ffd700]"
-              style={{ fontSize: 48, lineHeight: 1.05, textShadow: "0 0 32px rgba(255,215,0,0.45)" }}
-            >
-              PAWAR
-            </div>
-            <div
-              className="mt-2 whitespace-nowrap font-mono tracking-[0.22em] text-[#7dd3fc]"
-              style={{ fontSize: 10.5, textShadow: "0 0 18px rgba(125,211,252,0.65)" }}
-            >
-              SOFTWARE ENGINEER · AI DEVELOPER · FULL STACK DEVELOPER · INNOVATOR
-            </div>
-            <p
-              className="mx-auto mt-2 leading-relaxed text-[#c9c6d0]"
-              style={{ fontSize: 10.5, width: 560, lineHeight: 1.5 }}
-            >
-              Building intelligent software that solves real-world problems using AI, Cloud and
-              Modern Web Technologies.
-            </p>
-            <div className="mt-3 flex items-center justify-center gap-1.5">
-              {["PROBLEM SOLVER", "TECH ENTHUSIAST", "LIFELONG LEARNER", "OPEN SOURCE"].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[#ffd700]/40 bg-[#ffd700]/10 px-2.5 py-0.5 font-mono text-[#ffd700]"
-                  style={{ fontSize: 8.5, letterSpacing: "0.12em" }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Html>
+      <mesh position={[0, 0, 0.032]}>
+        <planeGeometry args={[6.28, 1.94]} />
+        <meshStandardMaterial map={tex} emissive="#ffffff" emissiveIntensity={0.5} roughness={0.5} />
+      </mesh>
     </group>
   );
 }
@@ -606,7 +559,7 @@ function MugSteam() {
   });
 
   return (
-    <group position={[2.35, 0.97, -8.0]}>
+    <group position={[2.4, 0.97, -6.95]}>
       {Array.from({ length: 6 }).map((_, i) => (
         <mesh
           key={i}
@@ -622,9 +575,9 @@ function MugSteam() {
   );
 }
 
-const DOOR_OPEN_ANGLE = 1.9;
-const DOOR_Z_HINGE = -4.175;
-const DOOR_Z_EDGE = -3.025;
+const DOOR_OPEN_ANGLE = -1.9;
+const DOOR_X_HINGE = 4.175;
+const DOOR_X_EDGE = 3.025;
 const DOOR_Y_TOP = 2.25;
 
 function Door({ tex }: { tex: RoomTextures }) {
@@ -645,50 +598,49 @@ function Door({ tex }: { tex: RoomTextures }) {
 
   return (
     <group>
-      <mesh position={[-5.02, 1.125, DOOR_Z_HINGE]} castShadow>
-        <boxGeometry args={[0.14, DOOR_Y_TOP + 0.06, 0.09]} />
+      <mesh position={[DOOR_X_HINGE, 1.125, 0.05]} castShadow>
+        <boxGeometry args={[0.09, DOOR_Y_TOP + 0.06, 0.14]} />
         {jambMat}
       </mesh>
-      <mesh position={[-5.02, 1.125, DOOR_Z_EDGE]} castShadow>
-        <boxGeometry args={[0.14, DOOR_Y_TOP + 0.06, 0.09]} />
+      <mesh position={[DOOR_X_EDGE, 1.125, 0.05]} castShadow>
+        <boxGeometry args={[0.09, DOOR_Y_TOP + 0.06, 0.14]} />
         {jambMat}
       </mesh>
-      <mesh position={[-5.02, DOOR_Y_TOP + 0.03, -3.6]} castShadow>
-        <boxGeometry args={[0.14, 0.09, 1.23]} />
+      <mesh position={[3.6, DOOR_Y_TOP + 0.03, 0.05]} castShadow>
+        <boxGeometry args={[1.23, 0.09, 0.14]} />
         {jambMat}
       </mesh>
 
-      <group ref={hingeRef} position={[-5.0, 0, DOOR_Z_HINGE]}>
-        <mesh castShadow position={[0, 1.125, 0.575]}>
-          <boxGeometry args={[0.06, DOOR_Y_TOP, 1.15]} />
+      <group ref={hingeRef} position={[DOOR_X_HINGE, 0, 0.05]}>
+        <mesh castShadow position={[-0.575, 1.125, 0]}>
+          <boxGeometry args={[1.15, DOOR_Y_TOP, 0.06]} />
           <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.55} />
         </mesh>
-        <mesh position={[0.02, 1.35, 1.08]} castShadow>
+        <mesh position={[-1.08, 1.35, 0.02]} rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[0.015, 0.015, 0.14, 10]} />
           <meshStandardMaterial color="#141414" roughness={0.35} metalness={0.8} />
         </mesh>
+        <Html position={[-0.575, 1.5, 0.05]} distanceFactor={1.6} zIndexRange={[15, 0]}>
+          <div
+            className="flex flex-col items-center justify-center rounded-md border border-[#ffd700]/50 bg-black/85 shadow-[0_0_30px_rgba(255,215,0,0.25)] backdrop-blur"
+            style={{ width: 200, height: 64 }}
+          >
+            <div className="font-black tracking-[0.28em] text-[#ffd700]" style={{ fontSize: 17 }}>
+              SHREYAS PAWAR
+            </div>
+            <div className="mt-1 font-mono tracking-[0.4em] text-[#7dd3fc]" style={{ fontSize: 8 }}>
+              SOFTWARE STUDIO
+            </div>
+          </div>
+        </Html>
       </group>
-
-      <Html position={[-5.02, 1.6, -3.6]} distanceFactor={1.6} zIndexRange={[15, 0]}>
-        <div
-          className="flex flex-col items-center justify-center rounded-md border border-[#ffd700]/50 bg-black/85 shadow-[0_0_30px_rgba(255,215,0,0.25)] backdrop-blur"
-          style={{ width: 200, height: 64 }}
-        >
-          <div className="font-black tracking-[0.28em] text-[#ffd700]" style={{ fontSize: 17 }}>
-            SHREYAS PAWAR
-          </div>
-          <div className="mt-1 font-mono tracking-[0.4em] text-[#7dd3fc]" style={{ fontSize: 8 }}>
-            SOFTWARE STUDIO
-          </div>
-        </div>
-      </Html>
     </group>
   );
 }
 
 function Pegboard({ tex }: { tex: RoomTextures }) {
   return (
-    <group position={[-4.95, 3.0, -6.4]}>
+    <group position={[4.2, 3.0, -8.95]} rotation={[0, Math.PI, 0]}>
       <mesh>
         <boxGeometry args={[0.05, 1.4, 1.7]} />
         <meshStandardMaterial map={tex.pegboard} color="#ffffff" roughness={0.9} />
@@ -738,7 +690,7 @@ function PlantSway({ tex }: { tex: RoomTextures }) {
   });
 
   return (
-    <group ref={ref} position={[0.05, 0.02, 0.62]}>
+    <group ref={ref} position={[0.05, 0.02, -0.62]}>
       <mesh position={[0, 0.05, 0]}>
         <cylinderGeometry args={[0.06, 0.045, 0.09, 12]} />
         <meshStandardMaterial map={tex.pot} color="#ffffff" roughness={0.8} />
@@ -952,15 +904,15 @@ const NOTE_COLORS = [
 function StickyNotes() {
   const positions: [number, number][] = [
     [-4.68, 3.32],
-    [-5.12, 3.32],
+    [-4.24, 3.32],
     [-4.68, 2.82],
-    [-5.12, 2.82],
+    [-4.24, 2.82],
     [-4.68, 2.32],
-    [-5.12, 2.32],
+    [-4.24, 2.32],
     [-4.68, 1.82],
-    [-5.12, 1.82],
+    [-4.24, 1.82],
     [-4.68, 1.32],
-    [-5.12, 1.32],
+    [-4.24, 1.32],
     [-4.68, 0.82],
   ];
   return (
@@ -970,7 +922,7 @@ function StickyNotes() {
           key={title}
           title={title}
           color={NOTE_COLORS[i]}
-          position={[-4.96, positions[i][1], positions[i][0]]}
+          position={[positions[i][0], positions[i][1], 0.05]}
           rotation={((i % 3) - 1) * 0.06}
         />
       ))}
@@ -999,7 +951,7 @@ function StickyNote({
         onMouseLeave={() => setHovered(false)}
         onClick={(e) => {
           e.stopPropagation();
-          openDevice("laptop", "blog");
+          openDevice("laptop", "home");
         }}
         className="select-none cursor-pointer"
         style={{ width: 92, height: 92, transform: `rotate(${rotation}rad)`, zIndex: hovered ? 40 : 10 }}
@@ -1042,7 +994,7 @@ function CertsWall() {
       {certs.map((c, i) => (
         <Html
           key={c.id ?? i}
-          position={[4.94, 2.35 + i * 0.85, -3.4 - i * 2.4]}
+          position={[4.94, 2.62, -6.3 + i * 3.6]}
           distanceFactor={1.7}
           zIndexRange={[15, 0]}
         >
@@ -1059,7 +1011,7 @@ function CertsWall() {
           </div>
         </Html>
       ))}
-      <mesh position={[4.97, 2.7, -2.5]}>
+      <mesh position={[4.97, 2.7, -3.1]}>
         <boxGeometry args={[0.02, 3, 0.02]} />
         <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={1.8} roughness={0.4} />
       </mesh>
@@ -1083,12 +1035,16 @@ function Window() {
 
   return (
     <group>
-      <mesh position={[-4.0, 1.6, -8.98]}>
-        <planeGeometry args={[1.2, 2.1]} />
+      <mesh position={[-4.93, 1.6, -5.0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[1.1, 2.1]} />
         <meshBasicMaterial map={cityNightTexture()} toneMapped={false} />
       </mesh>
-      <mesh position={[-4.0, 1.6, -8.91]}>
-        <planeGeometry args={[1.2, 2.1]} />
+      <mesh position={[-4.93, 1.6, -3.6]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[1.1, 2.1]} />
+        <meshBasicMaterial map={cityNightTexture()} toneMapped={false} />
+      </mesh>
+      <mesh position={[-4.86, 1.6, -5.0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[1.1, 2.1]} />
         <meshStandardMaterial
           color="#9db4d8"
           transparent
@@ -1098,45 +1054,56 @@ function Window() {
           side={THREE.DoubleSide}
         />
       </mesh>
-      <mesh position={[-4.63, 1.6, -8.95]}>
+      <mesh position={[-4.86, 1.6, -3.6]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[1.1, 2.1]} />
+        <meshStandardMaterial
+          color="#9db4d8"
+          transparent
+          opacity={0.26}
+          roughness={0.08}
+          metalness={0.35}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      <mesh position={[-4.95, 1.6, -5.55]}>
         <boxGeometry args={[0.06, 2.16, 0.06]} />
         {frameMat}
       </mesh>
-      <mesh position={[-3.37, 1.6, -8.95]}>
+      <mesh position={[-4.95, 1.6, -4.3]}>
         <boxGeometry args={[0.06, 2.16, 0.06]} />
         {frameMat}
       </mesh>
-      <mesh position={[-4.0, 2.68, -8.95]}>
-        <boxGeometry args={[1.32, 0.06, 0.06]} />
+      <mesh position={[-4.95, 1.6, -3.05]}>
+        <boxGeometry args={[0.06, 2.16, 0.06]} />
         {frameMat}
       </mesh>
-      <mesh position={[-4.0, 0.52, -8.95]}>
-        <boxGeometry args={[1.32, 0.06, 0.06]} />
+      <mesh position={[-4.95, 2.68, -4.3]}>
+        <boxGeometry args={[0.06, 0.06, 2.62]} />
         {frameMat}
       </mesh>
-      <mesh position={[-4.0, 1.6, -8.94]}>
-        <boxGeometry args={[0.04, 2.0, 0.04]} />
+      <mesh position={[-4.95, 0.52, -4.3]}>
+        <boxGeometry args={[0.06, 0.06, 2.62]} />
         {frameMat}
       </mesh>
-      <mesh position={[-4.0, 0.44, -8.9]}>
-        <boxGeometry args={[1.45, 0.05, 0.3]} />
+      <mesh position={[-4.95, 0.44, -4.3]}>
+        <boxGeometry args={[2.65, 0.05, 0.3]} />
         {frameMat}
       </mesh>
 
-      <mesh ref={leftRef} position={[-4.55, 1.6, -8.88]} castShadow>
-        <boxGeometry args={[0.42, 2.15, 0.03]} />
+      <mesh ref={leftRef} position={[-4.82, 1.6, -6.6]} castShadow>
+        <boxGeometry args={[0.55, 2.15, 0.03]} />
         <meshStandardMaterial map={fabricTexture("#23232b")} color="#ffffff" roughness={0.95} />
       </mesh>
-      <mesh ref={rightRef} position={[-3.45, 1.6, -8.88]} castShadow>
-        <boxGeometry args={[0.42, 2.15, 0.03]} />
+      <mesh ref={rightRef} position={[-4.82, 1.6, -2.2]} castShadow>
+        <boxGeometry args={[0.55, 2.15, 0.03]} />
         <meshStandardMaterial map={fabricTexture("#23232b")} color="#ffffff" roughness={0.95} />
       </mesh>
-      <mesh position={[-4.0, 2.74, -8.9]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.015, 0.015, 1.5, 10]} />
+      <mesh position={[-4.82, 2.74, -4.4]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.015, 0.015, 4.6, 10]} />
         <meshStandardMaterial color="#1c1c22" roughness={0.4} metalness={0.7} />
       </mesh>
 
-      <pointLight position={[0, 2.3, -8.35]} intensity={0.45} distance={7} decay={2} color="#8fa8ff" />
+      <pointLight position={[-4.4, 2.3, -4.3]} intensity={0.45} distance={7} decay={2} color="#8fa8ff" />
     </group>
   );
 }

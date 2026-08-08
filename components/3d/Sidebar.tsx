@@ -125,6 +125,8 @@ export function Sidebar() {
   const target = useWorkspace((s) => s.target);
   const activeDevice = useWorkspace((s) => s.activeDevice);
   const laptopTab = useWorkspace((s) => s.laptopTab);
+  const tabletTab = useWorkspace((s) => s.tabletTab);
+  const tvTab = useWorkspace((s) => s.tvTab);
   const settingsOpen = useWorkspace((s) => s.settingsOpen);
   const setSettingsOpen = useWorkspace((s) => s.setSettingsOpen);
   const go = useWorkspace((s) => s.go);
@@ -139,74 +141,81 @@ export function Sidebar() {
       onClick: () => go("wall"),
     },
     {
-      id: "about-me",
-      label: "About Me",
+      id: "hero",
+      label: "Hero",
       icon: "user",
-      active: activeDevice === "laptop" && laptopTab === "about",
-      onClick: () => openDevice("laptop", "about"),
+      active: activeDevice === "laptop" && laptopTab === "home",
+      onClick: () => openDevice("laptop", "home"),
     },
     {
-      id: "experience",
-      label: "Experience",
-      icon: "briefcase",
-      active: activeDevice === "laptop" && laptopTab === "experience",
-      onClick: () => openDevice("laptop", "experience"),
-    },
-    {
-      id: "projects",
-      label: "Projects",
-      icon: "code",
-      active: activeDevice === "laptop" && laptopTab === "projects",
-      onClick: () => openDevice("laptop", "projects"),
-    },
-    {
-      id: "skills",
+      id: "laptop-skills",
       label: "Skills",
       icon: "layers",
       active: activeDevice === "laptop" && laptopTab === "skills",
       onClick: () => openDevice("laptop", "skills"),
     },
     {
+      id: "laptop-certs",
+      label: "Certs",
+      icon: "grad",
+      active: activeDevice === "laptop" && laptopTab === "certifications",
+      onClick: () => openDevice("laptop", "certifications"),
+    },
+    {
+      id: "featured",
+      label: "Featured",
+      icon: "code",
+      active: activeDevice === "tablet" && tabletTab === "projects",
+      onClick: () => openDevice("tablet", "projects"),
+    },
+    {
+      id: "journey",
+      label: "Journey",
+      icon: "blog",
+      active: activeDevice === "tablet" && tabletTab === "journey",
+      onClick: () => openDevice("tablet", "journey"),
+    },
+    {
+      id: "hackathons",
+      label: "Hackathons",
+      icon: "trophy",
+      active: activeDevice === "tv" && tvTab === "hackathons",
+      onClick: () => openDevice("tv", "hackathons"),
+    },
+    {
       id: "achievements",
       label: "Achievements",
       icon: "trophy",
-      active: activeDevice === "laptop" && laptopTab === "achievements",
-      onClick: () => openDevice("laptop", "achievements"),
+      active: activeDevice === "tv" && tvTab === "achievements",
+      onClick: () => openDevice("tv", "achievements"),
     },
     {
-      id: "education",
-      label: "Education",
-      icon: "grad",
-      active: activeDevice === "laptop" && laptopTab === "education",
-      onClick: () => openDevice("laptop", "education"),
+      id: "experience",
+      label: "Experience",
+      icon: "briefcase",
+      active: activeDevice === "tv" && tvTab === "experience",
+      onClick: () => openDevice("tv", "experience"),
     },
     {
       id: "open-source",
       label: "Open Source",
       icon: "git",
-      active: activeDevice === "laptop" && laptopTab === "open-source",
-      onClick: () => openDevice("laptop", "open-source"),
+      active: activeDevice === "tv" && tvTab === "open-source",
+      onClick: () => openDevice("tv", "open-source"),
     },
     {
-      id: "showcase",
-      label: "Showcase",
-      icon: "tv",
-      active: activeDevice === "tv",
-      onClick: () => openDevice("tv", "showcase"),
-    },
-    {
-      id: "blog",
-      label: "Blog",
-      icon: "blog",
-      active: activeDevice === "laptop" && laptopTab === "blog",
-      onClick: () => openDevice("laptop", "blog"),
+      id: "tv-certs",
+      label: "Certifications",
+      icon: "grad",
+      active: activeDevice === "tv" && tvTab === "certs",
+      onClick: () => openDevice("tv", "certs"),
     },
     {
       id: "contact",
       label: "Contact",
       icon: "contact",
-      active: activeDevice === "phone" || (activeDevice === "laptop" && laptopTab === "contact"),
-      onClick: () => openDevice("laptop", "contact"),
+      active: activeDevice === "phone",
+      onClick: () => openDevice("phone"),
     },
   ];
 

@@ -31,7 +31,7 @@ export function DownloadResume() {
                 always in sync with the projects and experience on this site.
               </p>
               <a
-                href="/resume/Shreyas_Pawar_Resume.pdf"
+                href="/resume/Shreyas%20Pawar%20Resume.pdf"
                 download
                 className="group mt-8 inline-flex items-center gap-3 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
               >

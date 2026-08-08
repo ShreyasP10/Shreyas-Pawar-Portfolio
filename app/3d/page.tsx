@@ -19,6 +19,7 @@ export default function WorkspacePage() {
   const go = useWorkspace((s) => s.go);
   const openDevice = useWorkspace((s) => s.openDevice);
   const closePanels = useWorkspace((s) => s.closePanels);
+  const toggleFreeCam = useWorkspace((s) => s.toggleFreeCam);
   const target = useWorkspace((s) => s.target);
   const loading = useWorkspace((s) => s.loading);
   const doorOpen = useWorkspace((s) => s.doorOpen);
@@ -27,7 +28,8 @@ export default function WorkspacePage() {
   const lastNav = useRef(0);
 
   useEffect(() => {
-    if (loading || doorOpen) return;
+    if (loading) return;
+    if (doorOpen || target !== "door") return;
     const t1 = setTimeout(() => openDoor(), 1600);
     const t2 = setTimeout(() => {
       if (useWorkspace.getState().target === "door") go("entry");
@@ -36,7 +38,7 @@ export default function WorkspacePage() {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, [loading, doorOpen, go, openDoor]);
+  }, [loading, doorOpen, target, go, openDoor]);
 
   useEffect(() => {
     document.title = "Shreyas Pawar — 3D Workspace";
@@ -52,6 +54,10 @@ export default function WorkspacePage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closePanels();
+        return;
+      }
+      if (e.key === "f" || e.key === "F") {
+        toggleFreeCam();
         return;
       }
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {

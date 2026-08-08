@@ -8,7 +8,6 @@ import {
   skillGroups,
   hackathons,
   experience,
-  education,
   certifications,
   milestones,
   techStack,
@@ -16,38 +15,14 @@ import {
 import { useWorkspace, type LaptopTab, type TabletTab, type TvTab } from "./store";
 
 const LAPTOP_TABS: { id: LaptopTab; label: string }[] = [
-  { id: "home", label: "HOME" },
-  { id: "about", label: "ABOUT" },
-  { id: "experience", label: "EXPERIENCE" },
-  { id: "projects", label: "PROJECTS" },
+  { id: "home", label: "HERO" },
   { id: "skills", label: "SKILLS" },
-  { id: "achievements", label: "ACHIEVEMENTS" },
-  { id: "education", label: "EDUCATION" },
-  { id: "open-source", label: "OPEN SOURCE" },
-  { id: "blog", label: "BLOG" },
-  { id: "contact", label: "CONTACT" },
+  { id: "certifications", label: "CERTS" },
 ];
 
 const TABLET_TABS: { id: TabletTab; label: string }[] = [
-  { id: "experience", label: "WORK" },
-  { id: "education", label: "EDU" },
-  { id: "certifications", label: "CERTS" },
+  { id: "projects", label: "FEATURED" },
   { id: "journey", label: "JOURNEY" },
-  { id: "research", label: "R&D" },
-];
-
-const BLOG_POSTS: { title: string; excerpt: string }[] = [
-  { title: "Building Camptel AI", excerpt: "From a hackathon idea to a working AI prototype — the full build log." },
-  { title: "Google Cloud Notes", excerpt: "Cloud functions, pub/sub and the billing gotchas I hit along the way." },
-  { title: "Firebase Tips", excerpt: "Realtime rules, security gotchas and offline-first patterns." },
-  { title: "Next.js Tricks", excerpt: "App router patterns, streaming and edge rendering notes." },
-  { title: "Three.js Guide", excerpt: "The math behind this very workspace — cameras, rays and springs." },
-  { title: "React Performance", excerpt: "Re-renders, memoization and why it usually doesn't matter." },
-  { title: "System Design", excerpt: "Scaling small services: queues, caching and idempotency." },
-  { title: "Docker", excerpt: "Multi-stage builds and slim images that actually deploy." },
-  { title: "Kubernetes", excerpt: "Deployments, probes and the first time a pod crashed at 3 AM." },
-  { title: "AI Notes", excerpt: "Prompts, fine-tuning and evaluating small LLM pipelines." },
-  { title: "Clean Code", excerpt: "Naming, boundaries and refactoring without breaking things." },
 ];
 
 function Dock({ items }: { items: { id: string; label: string }[] }) {
@@ -131,6 +106,7 @@ export function LaptopScreen() {
 
 function LaptopContent({ tab }: { tab: LaptopTab }) {
   const navigateTab = useWorkspace((s) => s.navigateTab);
+  const openDevice = useWorkspace((s) => s.openDevice);
 
   switch (tab) {
     case "home":
@@ -149,13 +125,13 @@ function LaptopContent({ tab }: { tab: LaptopTab }) {
           <IsometricMark />
           <div className="flex gap-1 pt-0.5">
             <button
-              onClick={() => navigateTab("laptop", "projects")}
+              onClick={() => navigateTab("laptop", "skills")}
               className="rounded-full bg-[#ffd700] px-2 py-0.5 font-mono text-[6px] font-bold tracking-[0.15em] text-black hover:brightness-110"
             >
-              VIEW PROJECTS →
+              VIEW SKILLS →
             </button>
             <button
-              onClick={() => navigateTab("laptop", "contact")}
+              onClick={() => openDevice("phone")}
               className="rounded-full border border-[#7dd3fc]/60 px-2 py-0.5 font-mono text-[6px] font-bold tracking-[0.15em] text-[#7dd3fc] hover:bg-[#7dd3fc] hover:text-black"
             >
               GET IN TOUCH
@@ -171,71 +147,6 @@ function LaptopContent({ tab }: { tab: LaptopTab }) {
               </span>
             ))}
           </div>
-        </div>
-      );
-    case "about":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">ABOUT ME</div>
-          <p className="text-[7px] leading-snug text-[#a8a5b0]">{profile.bio}</p>
-          <div className="rounded border border-white/10 bg-white/5 p-1.5">
-            <div className="font-mono text-[6px] tracking-[0.2em] text-[#ffd700]/80">BASE</div>
-            <div className="mt-0.5 font-mono text-[6.5px] text-[#8f8c99]">{profile.place}</div>
-          </div>
-          <div className="font-mono text-[5.5px] leading-relaxed tracking-wide text-[#8f8c99]">
-            AI · CLOUD · FULL STACK — building software that ships.
-          </div>
-        </div>
-      );
-    case "experience":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">EXPERIENCE</div>
-          {experience.map((e) => (
-            <div key={e.id} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <div className="flex items-baseline justify-between gap-1">
-                <span className="text-[7.5px] font-bold text-white">{e.role}</span>
-                <span className="shrink-0 font-mono text-[5.5px] text-[#8f8c99]">
-                  {e.startDate} → {e.endDate}
-                </span>
-              </div>
-              <div className="font-mono text-[6px] text-[#ffd700]/80">
-                {e.company} · {e.type}
-              </div>
-              <p className="mt-0.5 line-clamp-2 text-[6.5px] leading-snug text-[#a8a5b0]">{e.description}</p>
-              <div className="mt-1 flex flex-wrap gap-0.5">
-                {e.skills.slice(0, 4).map((s) => (
-                  <span key={s} className="rounded bg-[#ffd700]/10 px-1 py-px font-mono text-[5.5px] text-[#ffd700]">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    case "projects":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">PROJECTS</div>
-          {projects.map((p) => (
-            <div key={p.id} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <div className="flex items-baseline justify-between">
-                <span className="text-[7.5px] font-bold text-white">{p.title}</span>
-                <span className="font-mono text-[5.5px] text-[#8f8c99]">{p.year}</span>
-              </div>
-              <div className="mt-0.5 line-clamp-2 text-[6.5px] leading-snug text-[#a8a5b0]">
-                {p.description}
-              </div>
-              <div className="mt-1 flex flex-wrap gap-0.5">
-                {p.tags.slice(0, 4).map((t) => (
-                  <span key={t} className="rounded bg-[#ffd700]/15 px-1 py-px font-mono text-[5.5px] text-[#ffd700]">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
       );
     case "skills":
@@ -258,115 +169,17 @@ function LaptopContent({ tab }: { tab: LaptopTab }) {
           ))}
         </div>
       );
-    case "achievements":
+    case "certifications":
       return (
         <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">ACHIEVEMENTS</div>
-          {hackathons.map((h) => (
-            <div key={h.id} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <div className="flex items-baseline justify-between">
-                <span className="text-[7.5px] font-bold text-white">{h.title}</span>
-                <span className="font-mono text-[5.5px] text-[#8f8c99]">{h.year}</span>
-              </div>
-              <div className="font-mono text-[6px] text-[#ffd700]/80">{h.event}</div>
-              <div className="mt-0.5 text-[6.5px] leading-snug text-[#a8a5b0]">{h.outcome}</div>
+          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">CERTIFICATIONS</div>
+          {certifications.map((c) => (
+            <div key={c.id} className="rounded border border-white/10 bg-white/5 p-1.5">
+              <div className="text-[7.5px] font-bold text-white">{c.title}</div>
+              <div className="font-mono text-[6px] text-[#ffd700]/80">{c.issuer}</div>
+              <div className="font-mono text-[5.5px] text-[#8f8c99]">{c.issued}</div>
             </div>
           ))}
-        </div>
-      );
-    case "education":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">EDUCATION</div>
-          {education.map((e) => (
-            <div key={e.id} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <span className="text-[7.5px] font-bold text-white">{e.degree}</span>
-              <div className="font-mono text-[6px] text-[#ffd700]/80">{e.institution}</div>
-              <div className="font-mono text-[5.5px] text-[#8f8c99]">{e.period}</div>
-            </div>
-          ))}
-        </div>
-      );
-    case "open-source":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">OPEN SOURCE</div>
-          <div className="rounded border border-[#ffd700]/40 bg-[#ffd700]/10 p-1.5">
-            <div className="text-[7.5px] font-bold text-white">github.com/ShreyasP10</div>
-            <div className="mt-0.5 text-[6.5px] text-[#a8a5b0]">
-              Code, experiments and prototypes for everything in this workspace.
-            </div>
-            <a
-              href={profile.socialLinks.github}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-1 inline-block rounded bg-[#ffd700] px-1.5 py-0.5 font-mono text-[6px] font-bold text-black"
-            >
-              VISIT GITHUB
-            </a>
-          </div>
-          {projects.map((p) =>
-            p.githubUrl ? (
-              <div key={p.id} className="rounded border border-white/10 bg-white/5 p-1.5">
-                <span className="text-[7px] font-bold text-white">{p.title}</span>{" "}
-                <a href={p.githubUrl} target="_blank" rel="noreferrer" className="font-mono text-[6px] text-[#ffd700]">
-                  ↗ repo
-                </a>
-              </div>
-            ) : null
-          )}
-        </div>
-      );
-    case "blog":
-      return (
-        <div className="space-y-1">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">BLOG</div>
-          {BLOG_POSTS.map((b) => (
-            <div key={b.title} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <div className="text-[7px] font-bold text-white">{b.title}</div>
-              <div className="mt-0.5 line-clamp-2 text-[6px] leading-snug text-[#a8a5b0]">{b.excerpt}</div>
-            </div>
-          ))}
-        </div>
-      );
-    case "contact":
-      return (
-        <div className="space-y-1.5">
-          <div className="font-mono text-[6.5px] tracking-[0.25em] text-[#ffd700]">CONTACT</div>
-          <div className="rounded border border-white/10 bg-white/5 p-1.5 text-[6.5px] text-[#a8a5b0]">
-            <div className="truncate">{profile.email}</div>
-            <div>{profile.phone}</div>
-            <div className="mt-0.5 text-[#8f8c99]">{profile.place}</div>
-          </div>
-          <div className="grid grid-cols-2 gap-1">
-            {(
-              [
-                { label: "LINKEDIN", url: profile.socialLinks.linkedin },
-                { label: "GITHUB", url: profile.socialLinks.github },
-                { label: "X / TWITTER", url: profile.socialLinks.twitter },
-                { label: "WHATSAPP", url: profile.socialLinks.whatsapp },
-              ] as { label: string; url: string }[]
-            ).map((l) => (
-              <a
-                key={l.label}
-                href={l.url}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded border border-white/10 bg-white/5 py-1 text-center font-mono text-[5.5px] tracking-[0.1em] text-white transition-colors hover:border-[#ffd700]/50 hover:bg-[#ffd700]/10 hover:text-[#ffd700]"
-              >
-                {l.label}
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 p-1.5">
-            <QrGlyph />
-            <div className="flex-1">
-              <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">SCAN FOR MY GITHUB</div>
-              <div className="mt-0.5 truncate font-mono text-[5px] leading-snug tracking-[0.15em] text-[#5f5c69]">
-                {profile.socialLinks.github.replace(/^https?:\/\//, "").replace(/\/$/, "")}
-              </div>
-            </div>
-          </div>
         </div>
       );
   }
@@ -423,45 +236,22 @@ function DockRow({ items }: { items: { id: string; label: string }[] }) {
 
 function TabletContent({ tab }: { tab: TabletTab }) {
   switch (tab) {
-    case "experience":
+    case "projects":
       return (
         <div className="space-y-1">
-          <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">EXPERIENCE</div>
-          {experience.map((e) => (
-            <div key={e.id} className="rounded border border-white/10 bg-white/5 p-1">
-              <div className="text-[6.5px] font-bold leading-tight text-white">{e.role}</div>
-              <div className="font-mono text-[5.5px] text-[#ffd700]/80">
-                {e.company} · {e.type}
+          <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">FEATURED PROJECTS</div>
+          {projects.filter((p) => p.highlight).slice(0, 3).map((p) => (
+            <div key={p.id} className="rounded border border-[#ffd700]/30 bg-white/5 p-1">
+              <div className="text-[6.5px] font-bold leading-tight text-white">{p.title}</div>
+              <div className="font-mono text-[5px] text-[#ffd700]/80">{p.year}</div>
+              <div className="mt-0.5 line-clamp-2 text-[5px] leading-snug text-[#a8a5b0]">{p.description}</div>
+              <div className="mt-1 flex flex-wrap gap-0.5">
+                {p.tags.slice(0, 3).map((t) => (
+                  <span key={t} className="rounded bg-[#ffd700]/10 px-1 py-px font-mono text-[4px] text-[#ffd700]">
+                    {t}
+                  </span>
+                ))}
               </div>
-              <div className="font-mono text-[5px] text-[#8f8c99]">
-                {e.startDate} → {e.endDate}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    case "education":
-      return (
-        <div className="space-y-1">
-          <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">EDUCATION</div>
-          {education.map((e) => (
-            <div key={e.id} className="rounded border border-white/10 bg-white/5 p-1">
-              <div className="text-[6.5px] font-bold leading-tight text-white">{e.degree}</div>
-              <div className="font-mono text-[5.5px] text-[#a8a5b0]">{e.institution}</div>
-              <div className="font-mono text-[5px] text-[#8f8c99]">{e.period}</div>
-            </div>
-          ))}
-        </div>
-      );
-    case "certifications":
-      return (
-        <div className="space-y-1">
-          <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">CERTIFICATIONS</div>
-          {certifications.map((c) => (
-            <div key={c.id} className="rounded border border-white/10 bg-white/5 p-1">
-              <div className="text-[6px] font-bold leading-tight text-white">{c.title}</div>
-              <div className="font-mono text-[5.5px] text-[#ffd700]/80">{c.issuer}</div>
-              <div className="font-mono text-[5px] text-[#8f8c99]">{c.issued}</div>
             </div>
           ))}
         </div>
@@ -477,21 +267,6 @@ function TabletContent({ tab }: { tab: TabletTab }) {
                 <span className="font-mono text-[5px] text-[#ffd700]/80">{m.period}</span>
               </div>
               <div className="line-clamp-2 text-[5.5px] leading-snug text-[#a8a5b0]">{m.description}</div>
-            </div>
-          ))}
-        </div>
-      );
-    case "research":
-      return (
-        <div className="space-y-1">
-          <div className="font-mono text-[5.5px] tracking-[0.25em] text-[#ffd700]">R&D</div>
-          {projects.slice(0, 3).map((p) => (
-            <div key={p.id} className="rounded border border-white/10 bg-white/5 p-1">
-              <div className="flex items-baseline justify-between">
-                <span className="text-[6.5px] font-bold leading-tight text-white">{p.title}</span>
-                <span className="font-mono text-[5px] text-[#ffd700]/80">{p.year}</span>
-              </div>
-              <div className="line-clamp-2 text-[5.5px] leading-snug text-[#a8a5b0]">{p.description}</div>
             </div>
           ))}
         </div>
@@ -528,7 +303,6 @@ function QrGlyph() {
 }
 
 export function PhoneScreen({ active }: { active?: boolean }) {
-  const openDevice = useWorkspace((s) => s.openDevice);
   const [notification, setNotification] = useState(false);
   const [now, setNow] = useState(() => new Date());
 
@@ -588,9 +362,11 @@ export function PhoneScreen({ active }: { active?: boolean }) {
           <div className="mx-auto mb-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#ffd700] font-black text-black" style={{ fontSize: "5.5px" }}>
             SP
           </div>
-          <div className="text-center text-[6.5px] font-black leading-tight text-white">Contact Me</div>
+          <div className="text-center text-[6.5px] font-black leading-tight text-white">
+            Let&apos;s Build Something Together
+          </div>
           <div className="mt-0.5 text-center font-mono text-[3.5px] leading-snug text-[#7dd3fc]">
-            Let&apos;s build something together
+            {profile.subheading}
           </div>
           <div className="mt-1 space-y-0.5 rounded border border-white/10 bg-white/5 p-1 text-[4px] text-[#a8a5b0]">
             <div className="truncate">{profile.email}</div>
@@ -609,12 +385,14 @@ export function PhoneScreen({ active }: { active?: boolean }) {
               </a>
             ))}
           </div>
-          <button
-            onClick={() => openDevice("laptop", "contact")}
-            className="mt-1 rounded bg-[#ffd700] py-0.5 text-center font-mono text-[4.5px] font-bold tracking-[0.12em] text-black hover:brightness-110"
+          <a
+            href="/resume/Shreyas%20Pawar%20Resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 block rounded bg-[#ffd700] py-0.5 text-center font-mono text-[4.5px] font-bold tracking-[0.12em] text-black hover:brightness-110"
           >
-            OPEN LAPTOP →
-          </button>
+            DOWNLOAD RESUME ↓
+          </a>
           <div className="mt-1 flex items-center gap-1 rounded border border-white/10 bg-white/5 p-1">
             <QrGlyph />
             <div className="min-w-0 flex-1">
@@ -631,13 +409,11 @@ export function PhoneScreen({ active }: { active?: boolean }) {
 }
 
 const TV_TABS: { id: TvTab; label: string }[] = [
-  { id: "showcase", label: "SHOWCASE" },
-  { id: "projects", label: "PROJECTS" },
+  { id: "hackathons", label: "HACKATHONS" },
+  { id: "achievements", label: "ACHIEVEMENTS" },
   { id: "experience", label: "EXPERIENCE" },
-  { id: "skills", label: "SKILLS" },
   { id: "open-source", label: "OPEN SOURCE" },
   { id: "certs", label: "CERTS" },
-  { id: "contact", label: "CONTACT" },
 ];
 
 function TvDock() {
@@ -694,62 +470,55 @@ export function TvScreen({ fullscreen }: { fullscreen?: boolean }) {
 
 function TvContent({ tab }: { tab: TvTab }) {
   switch (tab) {
-    case "showcase":
+    case "hackathons":
       return (
-        <div className="grid grid-cols-2 gap-1.5">
-          {projects
-            .filter((p) => p.highlight)
-            .slice(0, 4)
-            .map((p) => (
-              <div key={p.id} className="rounded border border-[#ffd700]/40 bg-gradient-to-br from-[#ffd700]/10 to-white/5 p-2">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="truncate text-[9px] font-black text-white">{p.title}</span>
-                  <span className="shrink-0 font-mono text-[6px] text-[#ffd700]/80">{p.year}</span>
-                </div>
-                <div className="mt-0.5 font-mono text-[6px] tracking-[0.15em] text-[#7dd3fc]">
-                  ★ {p.highlight}
-                </div>
-                <p className="mt-1 line-clamp-2 text-[7px] leading-snug text-[#a8a5b0]">{p.description}</p>
-                <div className="mt-1 flex flex-wrap gap-0.5">
-                  {p.tags.slice(0, 3).map((t) => (
-                    <span key={t} className="rounded bg-[#7dd3fc]/15 px-1 py-px font-mono text-[6px] text-[#7dd3fc]">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-        </div>
-      );
-    case "projects":
-      return (
-        <div className="grid grid-cols-2 gap-1.5">
-          {projects.map((p) => (
-            <div
-              key={p.id}
-              className={`rounded border bg-white/5 p-2 ${
-                p.highlight ? "border-[#ffd700]/40" : "border-white/10"
+        <div className="space-y-1.5">
+          {hackathons.map((h) => (
+            <a
+              key={h.id}
+              href={h.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={`block rounded border bg-white/5 p-2 transition-colors hover:border-[#7dd3fc]/50 ${
+                h.year === "2026" ? "border-[#ffd700]/40" : "border-white/10"
               }`}
             >
               <div className="flex items-baseline justify-between gap-2">
-                <span className="truncate text-[9px] font-black text-white">{p.title}</span>
-                <span className="shrink-0 font-mono text-[6px] text-[#ffd700]/80">{p.year}</span>
+                <span className="truncate text-[9px] font-black text-white">{h.title}</span>
+                <span className="shrink-0 font-mono text-[6px] text-[#ffd700]/80">{h.event}</span>
               </div>
-              {p.highlight && (
-                <div className="mt-0.5 font-mono text-[6px] tracking-[0.15em] text-[#7dd3fc]">
-                  ★ {p.highlight}
-                </div>
-              )}
-              <p className="mt-1 line-clamp-2 text-[7px] leading-snug text-[#a8a5b0]">{p.description}</p>
+              <div className="mt-0.5 font-mono text-[6px] tracking-[0.15em] text-[#7dd3fc]">
+                ★ {h.outcome.slice(0, 90)}…
+              </div>
+              <p className="mt-1 line-clamp-2 text-[7px] leading-snug text-[#a8a5b0]">{h.outcome}</p>
               <div className="mt-1 flex flex-wrap gap-0.5">
-                {p.tags.slice(0, 4).map((t) => (
+                {h.tags.slice(0, 4).map((t) => (
                   <span key={t} className="rounded bg-[#7dd3fc]/15 px-1 py-px font-mono text-[6px] text-[#7dd3fc]">
                     {t}
                   </span>
                 ))}
               </div>
-            </div>
+            </a>
           ))}
+        </div>
+      );
+    case "achievements":
+      return (
+        <div className="grid grid-cols-2 gap-1.5">
+          {milestones
+            .filter((m) => m.type === "competition" || m.type === "hackathon")
+            .map((m) => (
+              <div key={m.id} className="rounded border border-[#ffd700]/35 bg-white/5 p-2">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="truncate text-[9px] font-black text-white">{m.title}</span>
+                  <span className="shrink-0 font-mono text-[6px] text-[#ffd700]/80">{m.period}</span>
+                </div>
+                <div className="mt-0.5 font-mono text-[6px] tracking-[0.15em] text-[#7dd3fc]">
+                  ★ {m.place}
+                </div>
+                <p className="mt-1 line-clamp-3 text-[7px] leading-snug text-[#a8a5b0]">{m.description}</p>
+              </div>
+            ))}
         </div>
       );
     case "experience":
@@ -770,25 +539,6 @@ function TvContent({ tab }: { tab: TvTab }) {
               <div className="mt-1 flex flex-wrap gap-0.5">
                 {e.skills.slice(0, 6).map((s) => (
                   <span key={s} className="rounded bg-[#ffd700]/10 px-1 py-px font-mono text-[6px] text-[#ffd700]">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    case "skills":
-      return (
-        <div className="grid grid-cols-2 gap-1.5">
-          {skillGroups.map((g) => (
-            <div key={g.category} className="rounded border border-white/10 bg-white/5 p-1.5">
-              <div className="font-mono text-[7px] tracking-[0.15em] text-[#ffd700]/80">
-                {g.category.toUpperCase()}
-              </div>
-              <div className="mt-1 flex flex-wrap gap-0.5">
-                {g.skills.map((s) => (
-                  <span key={s} className="rounded bg-white/8 px-1 py-px text-[7px] text-[#c9c6d0]">
                     {s}
                   </span>
                 ))}
@@ -834,47 +584,6 @@ function TvContent({ tab }: { tab: TvTab }) {
               <div className="mt-0.5 truncate font-mono text-[5.5px] text-[#5f5c69]">{c.credentialId}</div>
             </div>
           ))}
-        </div>
-      );
-    case "contact":
-      return (
-        <div className="flex items-stretch gap-2">
-          <div className="flex flex-1 flex-col items-center justify-center rounded border border-[#ffd700]/30 bg-[#ffd700]/5 p-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#ffd700] font-black text-black" style={{ fontSize: "11px" }}>
-              SP
-            </div>
-            <div className="mt-1 text-[11px] font-black text-white">Contact Me</div>
-            <div className="mt-0.5 font-mono text-[6.5px] tracking-[0.2em] text-[#7dd3fc]">
-              LET&apos;S BUILD TOGETHER
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col justify-center gap-1">
-            <div className="rounded border border-white/10 bg-white/5 p-1.5 text-[7.5px] text-[#a8a5b0]">
-              <div className="truncate">{profile.email}</div>
-              <div>{profile.phone}</div>
-              <div className="mt-0.5 text-[#8f8c99]">{profile.place}</div>
-            </div>
-            <div className="grid grid-cols-2 gap-1">
-              {(
-                [
-                  { label: "LINKEDIN", url: profile.socialLinks.linkedin },
-                  { label: "GITHUB", url: profile.socialLinks.github },
-                  { label: "X / TWITTER", url: profile.socialLinks.twitter },
-                  { label: "WHATSAPP", url: profile.socialLinks.whatsapp },
-                ] as { label: string; url: string }[]
-              ).map((l) => (
-                <a
-                  key={l.label}
-                  href={l.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded border border-white/10 bg-white/5 py-1 text-center font-mono text-[6px] tracking-[0.1em] text-white transition-colors hover:border-[#ffd700]/50 hover:bg-[#ffd700]/10 hover:text-[#ffd700]"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
       );
   }
