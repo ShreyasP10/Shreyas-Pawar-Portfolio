@@ -1,13 +1,16 @@
 # Test Plan (TRD) & Test-Driven Development (TDD)
 
 **Project:** Shreyas Pawar — Developer Portfolio & Cinematic 3D Workspace
-**Last updated:** 2026-08-06
+**Last updated:** 2026-08-09
 
-> Status: **specification/plan** — no test runner is installed yet (Jest + Playwright are the targets). Tests below are defined before implementation, per TDD.
+> Status: **implemented** — runner: Vitest 4 (node env, no jsdom/RTL needed — UT-01..07 are pure logic/API tests) + Playwright 1.62 (Chromium) for E2E. `npm test` runs all 25 unit tests; `npm run test:e2e` runs the E2E suite; GitHub Actions CI (`.github/workflows/ci.yml`) runs lint + typecheck + unit tests + build + Lighthouse.
 
 ---
 
-## 1. Unit tests (Jest + React Testing Library)
+## 1. Unit tests (Vitest)
+
+- Config: `vitest.config.ts` (node environment, `@` alias).
+- Specs: `tests/unit/data.test.ts` (UT-01), `tests/unit/api.test.ts` (UT-02/03), `tests/unit/store.test.ts` (UT-04/06), `tests/unit/nav.test.ts` (UT-05), `tests/unit/sound.test.ts` (UT-07).
 
 | ID | Test | Assertion |
 | --- | --- | --- |
@@ -15,11 +18,15 @@
 | UT-02 | API ↔ data agreement | `GET /api/projects` response length equals `projects.length` in `lib/data.ts` (repeat for experience, hackathons, about). |
 | UT-03 | Contact validation | `/api/contact` rejects empty name, invalid email, empty message with `400`. |
 | UT-04 | Store logic | `openDevice("tablet", "education")` sets `target: "tablet"`, `activeDevice: "tablet"`, `tabletTab: "education"`, updates `lastInteraction`. |
-| UT-05 | Sequence math | `SEQUENCE` in `app/3d/page.tsx` equals `["door","entry","wall","overview","tv","laptop","tablet","phone"]`; wheel/touch navigation clamps at the ends. |
+| UT-05 | Sequence math | `SEQUENCE` in `components/3d/nav.ts` (single source, imported by `app/3d/page.tsx` + `Overlays.tsx`) equals `["door","entry","wall","overview","tv","laptop","tablet","phone"]`; wheel/touch navigation clamps at the ends. |
 | UT-06 | Camera targets | LOOK targets equal computed screen centers within tolerance (see SDS §3.2/3.3). |
 | UT-07 | Sound | `playTone` respects `soundOn` (no `AudioContext` created when off). |
 
 ## 2. Integration / E2E tests (Playwright)
+
+- Config: `playwright.config.ts` (Chromium, `webServer: npm run dev`); specs in `tests/e2e/`.
+- **Implemented:** E2E-01 (`home.spec.ts` — hero renders, no console errors), E2E-02 (`workspace.spec.ts` — `/3d` loads, HUD visible, WebGL errors tolerated), E2E-08 (`contact.spec.ts` — valid 200 / invalid 400).
+- **Not yet automated** (manual QA §4 + future work): E2E-03..07, 09 — camera/wheel interactions need a WebGL-capable CI browser.
 
 | ID | Test | Steps → Expected |
 | --- | --- | --- |

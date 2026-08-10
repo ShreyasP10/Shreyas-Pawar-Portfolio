@@ -14,9 +14,9 @@ export const DEVICE_SOUND_POS: Record<
   "laptop" | "tablet" | "phone" | "tv",
   [number, number, number]
 > = {
-  laptop: [0, 1.2, -8.09],
-  tablet: [1.78, 1.32, -7.36],
-  phone: [-1.89, 1.13, -7.16],
+  laptop: [0, 1.1, -7.4],
+  tablet: [0.75, 1.1, -7.3],
+  phone: [-0.75, 1.05, -7.35],
   tv: [4.75, 1.9, -4.5],
 };
 

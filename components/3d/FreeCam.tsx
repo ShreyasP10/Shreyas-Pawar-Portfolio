@@ -2,12 +2,19 @@
 
 import { useEffect, useRef } from "react";
 import { OrbitControls } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { TOUCH, Vector3 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { TOUCH } from "three";
-import { useWorkspace } from "./store";
-import { LOOK } from "./CameraRig";
+import { useWorkspace, LOOK } from "./store";
 
 export const freeControlsRef: { current: OrbitControlsImpl | null } = { current: null };
+
+const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+const offset = new Vector3();
+
+// Room interior: walls at x ±4.7, back wall z -8.9, door plane z 0, floor 0, ceiling ~6.
+const CAM_BOUNDS = { minX: -4.55, maxX: 4.55, minY: 0.35, maxY: 4.2, minZ: -8.85, maxZ: 0.2 };
+const TARGET_BOUNDS = { minX: -4.5, maxX: 4.5, minY: 0.3, maxY: 4.0, minZ: -8.8, maxZ: 0.0 };
 
 export function FreeCam() {
   const freeCam = useWorkspace((s) => s.freeCam);
@@ -27,6 +34,26 @@ export function FreeCam() {
     c.target.set(...LOOK[target]);
     if (freeCam) c.update();
   }, [freeCam, target]);
+
+  // Clamp camera + look target inside the room so free look never leaves the walls.
+  // The controls' internal orbit state (spherical) is closure-private in this
+  // OrbitControls build, so instead of syncing it we preserve the camera-target
+  // offset (which mirrors that state exactly) and re-derive the target so that
+  // target + offset stays inside the room. The offset never changes, so the next
+  // damped update reproduces the same state and never fights the clamp.
+  useFrame(() => {
+    const c = ref.current;
+    if (!c || !freeCam) return;
+    const p = c.object.position;
+
+    offset.copy(p).sub(c.target);
+    c.target.set(
+      clamp(clamp(p.x, CAM_BOUNDS.minX, CAM_BOUNDS.maxX) - offset.x, TARGET_BOUNDS.minX, TARGET_BOUNDS.maxX),
+      clamp(clamp(p.y, CAM_BOUNDS.minY, CAM_BOUNDS.maxY) - offset.y, TARGET_BOUNDS.minY, TARGET_BOUNDS.maxY),
+      clamp(clamp(p.z, CAM_BOUNDS.minZ, CAM_BOUNDS.maxZ) - offset.z, TARGET_BOUNDS.minZ, TARGET_BOUNDS.maxZ)
+    );
+    p.set(c.target.x + offset.x, c.target.y + offset.y, c.target.z + offset.z);
+  }, -1);
 
   return (
     <OrbitControls

@@ -36,6 +36,9 @@ interface WorkspaceState {
   loading: boolean;
   lastInteraction: number;
   doorOpen: boolean;
+  isMoving: boolean;
+  targetCameraPosition: [number, number, number];
+  targetLookAt: [number, number, number];
   go: (target: NavTarget) => void;
   openDoor: () => void;
   closeDoor: () => void;
@@ -51,7 +54,30 @@ interface WorkspaceState {
   setSettingsOpen: (value: boolean) => void;
   setLoading: (value: boolean) => void;
   noteInteraction: () => void;
+  setIsMoving: (value: boolean) => void;
 }
+
+export const POS: Record<NavTarget, [number, number, number]> = {
+  door: [3.6, 1.2, 1.6],
+  entry: [1.4, 1.0, -1.9],
+  wall: [0, 3.1, -4.5],
+  overview: [0.5, 2.0, 0.5],
+  laptop: [0, 1.1, -6.85],
+  tablet: [0.75, 1.15, -6.6],
+  phone: [-0.75, 1.05, -6.7],
+  tv: [2.0, 1.9, -1.5],
+};
+
+export const LOOK: Record<NavTarget, [number, number, number]> = {
+  door: [3.6, 1.5, -0.4],
+  entry: [0, 0.95, -6.5],
+  wall: [0, 3.1, -8.95],
+  overview: [0, 0.8, -7.0],
+  laptop: [0, 0.98, -7.55],
+  tablet: [0.75, 1.04, -7.25],
+  phone: [-0.75, 0.97, -7.3],
+  tv: [4.745, 1.9, -4.5],
+};
 
 export const useWorkspace = create<WorkspaceState>((set, get) => ({
   target: "door",
@@ -68,10 +94,22 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   loading: true,
   lastInteraction: Date.now(),
   doorOpen: false,
+  isMoving: false,
+  targetCameraPosition: POS.door,
+  targetLookAt: LOOK.door,
 
   go: (target) => {
+    if (get().isMoving && !get().reducedMotion) return;
     if (get().soundOn) playTone(520, 0.04);
-    set({ target, activeDevice: null, settingsOpen: false, lastInteraction: Date.now(), freeCam: false });
+    set({
+      target,
+      activeDevice: null,
+      settingsOpen: false,
+      lastInteraction: Date.now(),
+      freeCam: false,
+      targetCameraPosition: POS[target],
+      targetLookAt: LOOK[target]
+    });
   },
 
   openDoor: () => {
@@ -95,13 +133,17 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   },
 
   openDevice: (device, tab) => {
+    if (get().isMoving && !get().reducedMotion) return;
     if (get().soundOn) playPositionalTone(680, 0.05, 0.035, DEVICE_SOUND_POS[device]);
+    const target = device as NavTarget;
     set((state) => ({
-      target: device,
+      target,
       activeDevice: device,
       settingsOpen: false,
       lastInteraction: Date.now(),
       freeCam: false,
+      targetCameraPosition: POS[target] || state.targetCameraPosition,
+      targetLookAt: LOOK[target] || state.targetLookAt,
       laptopTab: device === "laptop" && tab ? (tab as LaptopTab) : state.laptopTab,
       tabletTab: device === "tablet" && tab ? (tab as TabletTab) : state.tabletTab,
       tvTab: device === "tv" && tab ? (tab as TvTab) : state.tvTab,
@@ -134,4 +176,5 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   },
   setLoading: (value) => set({ loading: value }),
   noteInteraction: () => set({ lastInteraction: Date.now() }),
+  setIsMoving: (value) => set({ isMoving: value }),
 }));
