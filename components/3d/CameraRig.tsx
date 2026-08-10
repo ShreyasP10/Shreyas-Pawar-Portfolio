@@ -1,184 +1,122 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { easing } from "maath";
 import { useWorkspace, type NavTarget } from "./store";
 
-export const POS: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.2, 1.6],
-  entry: [1.4, 1.0, -1.9],
-  wall: [0, 3.15, -5.5],
-  overview: [0, 3.0, -3.0],
-  laptop: [0, 1.3, -5.75],
-  tablet: [0.23, 1.69, -5.85],
-  phone: [-0.51, 1.44, -5.81],
-  tv: [1.9, 1.9, -4.5],
-};
-
-export const LOOK: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.5, -0.4],
-  entry: [0, 0.95, -6.5],
-  wall: [0, 3.1, -8.95],
-  overview: [0, 2.3, -7.8],
-  laptop: [0, 1.2, -8.09],
-  tablet: [1.78, 1.32, -7.36],
-  phone: [-1.89, 1.13, -7.16],
-  tv: [4.745, 1.9, -4.5],
-};
-
-type Waypoint = { pos: THREE.Vector3; look: THREE.Vector3 };
-
-const v3 = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
+const v3 = new THREE.Vector3();
+const l3 = new THREE.Vector3();
 
 // Doorway waypoints: the door plane is at z = 0.05, opening between x 3.0 and 4.2.
-const WAY_OUT = { pos: v3(3.6, 1.12, 0.55), look: v3(3.6, 1.3, -1.8) };
-const WAY_IN = { pos: v3(3.6, 1.08, -0.55), look: v3(2.0, 1.15, -3.2) };
-const EXIT_WAY_IN = { pos: v3(3.6, 1.1, -0.5), look: v3(3.6, 1.3, 0.8) };
-const EXIT_WAY_OUT = { pos: v3(3.6, 1.12, 0.55), look: v3(3.6, 1.5, -0.4) };
+const WAY_OUT = new THREE.Vector3(3.6, 1.12, 0.55);
+const LOOK_OUT = new THREE.Vector3(3.6, 1.3, -1.8);
 
-const isOutside = (t: NavTarget) => t === "door";
+const WAY_IN = new THREE.Vector3(3.6, 1.08, -0.55);
+const LOOK_IN = new THREE.Vector3(2.0, 1.15, -3.2);
 
-function finalPos(target: NavTarget, scale: number) {
-  const p = POS[target];
-  const l = LOOK[target];
-  const s = target === "door" || target === "entry" ? 1 : scale;
-  return v3(l[0] + (p[0] - l[0]) * s, l[1] + (p[1] - l[1]) * s, l[2] + (p[2] - l[2]) * s);
-}
+const EXIT_WAY_IN = new THREE.Vector3(3.6, 1.1, -0.5);
+const EXIT_LOOK_IN = new THREE.Vector3(3.6, 1.3, 0.8);
 
-const finalLook = (target: NavTarget) => v3(...LOOK[target]);
+const EXIT_WAY_OUT = new THREE.Vector3(3.6, 1.12, 0.55);
+const EXIT_LOOK_OUT = new THREE.Vector3(3.6, 1.5, -0.4);
 
 export function CameraRig() {
+  const { camera, size } = useThree();
   const target = useWorkspace((s) => s.target);
+  const targetPos = useWorkspace((s) => s.targetCameraPosition);
+  const targetLook = useWorkspace((s) => s.targetLookAt);
   const freeCam = useWorkspace((s) => s.freeCam);
   const setFreeCam = useWorkspace((s) => s.setFreeCam);
   const reducedMotion = useWorkspace((s) => s.reducedMotion);
   const doorOpen = useWorkspace((s) => s.doorOpen);
   const openDoor = useWorkspace((s) => s.openDoor);
   const closeDoor = useWorkspace((s) => s.closeDoor);
-  const camera = useThree((s) => s.camera);
+  const setIsMoving = useWorkspace((s) => s.setIsMoving);
 
-  const scale = useMemo(() => {
-    if (typeof window === "undefined") return 1;
-    return Math.max(0.55, Math.min(1, Math.min(window.innerWidth / 1400, window.innerHeight / 900)));
-  }, []);
+  const [route, setRoute] = useState<{ pos: THREE.Vector3; look: THREE.Vector3 }[] | null>(null);
+  const [routeIdx, setRouteIdx] = useState(0);
+  const prevTarget = useRef<NavTarget | null>(null);
 
-  const posRef = useRef(new THREE.Vector3());
-  const lookRef = useRef(new THREE.Vector3());
-  const posVel = useRef(new THREE.Vector3());
-  const lookVel = useRef(new THREE.Vector3());
-  const targetPos = useRef(new THREE.Vector3());
-  const targetLook = useRef(new THREE.Vector3());
-  const currentKey = useRef<NavTarget | null>(null);
-  const wasFree = useRef(false);
-  const route = useRef<Waypoint[] | null>(null);
-  const routeIdx = useRef(0);
+  // Dynamic Offset logic for "30% room visibility" rule
+  const dynamicOffset = (size.width < 768) ? 1.4 : 1.0;
 
-  useFrame((_, rawDelta) => {
-    const delta = Math.min(rawDelta, 0.1);
+  useEffect(() => {
+    if (prevTarget.current !== target) {
+      const isOutsidePrev = prevTarget.current === "door" || prevTarget.current === null;
+      const isOutsideNext = target === "door";
 
-    if (freeCam) {
-      wasFree.current = true;
-      return;
-    }
-
-    if (wasFree.current) {
-      wasFree.current = false;
-      const dir = new THREE.Vector3();
-      camera.getWorldDirection(dir);
-      posRef.current.copy(camera.position);
-      lookRef.current.copy(camera.position).addScaledVector(dir, 10);
-      posVel.current.set(0, 0, 0);
-      lookVel.current.set(0, 0, 0);
-    }
-
-    if (currentKey.current !== target) {
-      const prev = currentKey.current;
-      currentKey.current = target;
-      posRef.current.copy(camera.position);
-      const dir = new THREE.Vector3();
-      camera.getWorldDirection(dir);
-      lookRef.current.copy(camera.position).addScaledVector(dir, 10);
-      posVel.current.set(0, 0, 0);
-      lookVel.current.set(0, 0, 0);
-
-      if (prev !== null && isOutside(prev) !== isOutside(target)) {
-        // Crossing the door plane: guide the camera through the open doorway.
-        route.current = isOutside(prev) ? [WAY_OUT, WAY_IN] : [EXIT_WAY_IN, EXIT_WAY_OUT];
-        routeIdx.current = 0;
+      if (isOutsidePrev !== isOutsideNext) {
+        // We are crossing the threshold
+        setIsMoving(true);
         if (!doorOpen) openDoor();
-      } else {
-        route.current = null;
-        routeIdx.current = 0;
-        targetPos.current.copy(finalPos(target, scale));
-        targetLook.current.copy(finalLook(target));
-        if (prev === null) {
-          posRef.current.copy(targetPos.current);
-          lookRef.current.copy(targetLook.current);
-          posVel.current.set(0, 0, 0);
-          lookVel.current.set(0, 0, 0);
-        }
-      }
-    }
 
-    const wp = route.current
-      ? route.current[Math.min(routeIdx.current, route.current.length - 1)]
-      : null;
-    const desiredPos = wp ? wp.pos : targetPos.current;
-    const desiredLook = wp ? wp.look : targetLook.current;
+        if (isOutsidePrev) {
+          // Entering
+          setRoute([{ pos: WAY_OUT, look: LOOK_OUT }, { pos: WAY_IN, look: LOOK_IN }]);
+        } else {
+          // Exiting
+          setRoute([{ pos: EXIT_WAY_IN, look: EXIT_LOOK_IN }, { pos: EXIT_WAY_OUT, look: EXIT_LOOK_OUT }]);
+        }
+        setRouteIdx(0);
+      } else {
+        setRoute(null);
+        setIsMoving(true);
+      }
+      prevTarget.current = target;
+    }
+  }, [target, doorOpen, openDoor, setIsMoving]);
+
+  useFrame((state, delta) => {
+    if (freeCam) return;
 
     if (reducedMotion) {
-      const endPos = route.current ? finalPos(target, scale) : desiredPos;
-      const endLook = route.current ? finalLook(target) : desiredLook;
-      camera.position.copy(endPos);
-      camera.lookAt(endLook);
-      posRef.current.copy(endPos);
-      lookRef.current.copy(endLook);
-      posVel.current.set(0, 0, 0);
-      lookVel.current.set(0, 0, 0);
-      if (route.current) {
-        route.current = null;
-        routeIdx.current = 0;
-        targetPos.current.copy(endPos);
-        targetLook.current.copy(endLook);
-        if (doorOpen) closeDoor();
-      }
-      if (
-        posRef.current.distanceTo(targetPos.current) < 0.03 &&
-        lookRef.current.distanceTo(targetLook.current) < 0.03
-      ) {
-        setFreeCam(true);
-      }
+      camera.position.set(targetPos[0], targetPos[1], targetPos[2]);
+      camera.lookAt(targetLook[0], targetLook[1], targetLook[2]);
+      setIsMoving(false);
+      setRoute(null);
+      if (doorOpen) closeDoor();
       return;
     }
 
-    const step = (vec: THREE.Vector3, vel: THREE.Vector3, tgt: THREE.Vector3, k: number, c: number) => {
-      vel.addScaledVector(tgt.clone().sub(vec), k * delta);
-      vel.multiplyScalar(Math.exp(-c * delta));
-      vec.addScaledVector(vel, delta);
-    };
-    step(posRef.current, posVel.current, desiredPos, 11, 4.4);
-    step(lookRef.current, lookVel.current, desiredLook, 14, 4.8);
-    camera.position.copy(posRef.current);
-    camera.lookAt(lookRef.current);
+    const currentTargetPos = v3.set(targetPos[0], targetPos[1], targetPos[2]);
+    const currentTargetLook = l3.set(targetLook[0], targetLook[1], targetLook[2]);
 
-    if (route.current) {
-      if (posRef.current.distanceTo(desiredPos) < 0.07 && lookRef.current.distanceTo(desiredLook) < 0.07) {
-        routeIdx.current += 1;
-        if (routeIdx.current >= route.current.length) {
-          route.current = null;
-          routeIdx.current = 0;
-          targetPos.current.copy(finalPos(target, scale));
-          targetLook.current.copy(finalLook(target));
+    // Apply dynamic offset if focused on devices
+    if (target === "laptop" || target === "tablet" || target === "phone") {
+        const direction = new THREE.Vector3().subVectors(currentTargetPos, currentTargetLook).normalize();
+        currentTargetPos.addScaledVector(direction, dynamicOffset - 1);
+    }
+
+    let activeTargetPos = currentTargetPos;
+    let activeTargetLook = currentTargetLook;
+
+    if (route && route[routeIdx]) {
+      activeTargetPos = route[routeIdx].pos;
+      activeTargetLook = route[routeIdx].look;
+
+      if (camera.position.distanceTo(activeTargetPos) < 0.1) {
+        if (routeIdx < route.length - 1) {
+          setRouteIdx(routeIdx + 1);
+        } else {
+          setRoute(null);
           if (doorOpen) closeDoor();
         }
       }
-    } else if (
-      currentKey.current === target &&
-      posRef.current.distanceTo(targetPos.current) < 0.03 &&
-      lookRef.current.distanceTo(targetLook.current) < 0.03
-    ) {
-      setFreeCam(true);
+    }
+
+    // Smooth damping
+    easing.damp3(camera.position, activeTargetPos, 0.4, delta);
+    easing.dampLookAt(camera, activeTargetLook, 0.4, delta);
+
+    // Check if we arrived
+    if (!route && camera.position.distanceTo(currentTargetPos) < 0.05) {
+        setIsMoving(false);
+        // Only set freeCam if we aren't at the door
+        if (target !== "door") {
+            // setFreeCam(true); // Optional: enable if you want OrbitControls to take over after arrival
+        }
     }
   });
 

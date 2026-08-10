@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useWorkspace } from "./store";
+import { SEQUENCE } from "./nav";
 
 const VIEW_LABELS: Record<string, string> = {
   door: "DOOR — ENTRY POINT",
@@ -168,8 +169,6 @@ export function HelpBar() {
     </div>
   );
 }
-
-const SEQUENCE: string[] = ["door", "entry", "wall", "overview", "tv", "laptop", "tablet", "phone"];
 
 export function ScrollRail() {
   const target = useWorkspace((s) => s.target);

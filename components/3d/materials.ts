@@ -78,22 +78,39 @@ function brushedCanvas(): HTMLCanvasElement {
 }
 
 function fabricCanvas(base: string): HTMLCanvasElement {
-  const c = makeCanvas(128, 128);
+  const c = makeCanvas(256, 256);
   const g = c.getContext("2d")!;
   g.fillStyle = base;
-  g.fillRect(0, 0, 128, 128);
-  g.strokeStyle = "rgba(255,255,255,0.06)";
-  for (let i = 0; i <= 128; i += 3) {
-    g.beginPath();
-    g.moveTo(i, 0);
-    g.lineTo(i, 128);
-    g.stroke();
-    g.beginPath();
-    g.moveTo(0, i);
-    g.lineTo(128, i);
-    g.stroke();
+  g.fillRect(0, 0, 256, 256);
+
+  // Gold geometric pattern for curtains
+  if (base === "#050505") {
+    g.strokeStyle = "#ffd700";
+    g.lineWidth = 1;
+    g.globalAlpha = 0.4;
+    for (let i = 0; i < 256; i += 32) {
+      for (let j = 0; j < 256; j += 32) {
+        g.strokeRect(i + 4, j + 4, 24, 24);
+        g.beginPath();
+        g.moveTo(i + 4, j + 4);
+        g.lineTo(i + 28, j + 28);
+        g.stroke();
+      }
+    }
+  } else {
+    g.strokeStyle = "rgba(255,255,255,0.06)";
+    for (let i = 0; i <= 256; i += 6) {
+      g.beginPath();
+      g.moveTo(i, 0);
+      g.lineTo(i, 256);
+      g.stroke();
+      g.beginPath();
+      g.moveTo(0, i);
+      g.lineTo(256, i);
+      g.stroke();
+    }
   }
-  noise(g, 128, 128, 500, "rgba(255,255,255,0.5)", "rgba(0,0,0,0.6)", 0.04, 0.08);
+  noise(g, 256, 256, 500, "rgba(255,255,255,0.2)", "rgba(0,0,0,0.4)", 0.04, 0.08);
   return c;
 }
 
@@ -123,67 +140,154 @@ function plasterCanvas(): HTMLCanvasElement {
 }
 
 function floorCanvas(): HTMLCanvasElement {
-  const c = makeCanvas(256, 256);
+  const c = makeCanvas(512, 512);
   const g = c.getContext("2d")!;
-  g.fillStyle = "#0d0d11";
-  g.fillRect(0, 0, 256, 256);
-  const plankH = 32;
-  for (let y = 0; y < 256; y += plankH) {
-    g.globalAlpha = 0.3;
-    g.fillStyle = "#000000";
-    g.fillRect(0, y, 256, 2);
-    for (let i = 0; i < 10; i++) {
-      g.globalAlpha = 0.3;
-      g.fillRect(Math.random() * 256, y, 2, 2);
+  g.fillStyle = "#050507";
+  g.fillRect(0, 0, 512, 512);
+
+  // Organic gold veining
+  g.strokeStyle = "#ffd700";
+  for (let i = 0; i < 8; i++) {
+    g.globalAlpha = 0.15 + Math.random() * 0.3;
+    g.lineWidth = 0.5 + Math.random() * 2;
+    g.beginPath();
+    let x = Math.random() * 512;
+    let y = 0;
+    g.moveTo(x, y);
+    while (y < 512) {
+      x += (Math.random() - 0.5) * 40 + 20; // diagonal-ish
+      y += Math.random() * 30 + 10;
+      g.lineTo(x, y);
     }
-    noise(g, 256, plankH - 2, 90, "#17171c", "#0a0a0d", 0.03, 0.07);
+    g.stroke();
+
+    // Finer veins
+    g.lineWidth = 0.2;
+    g.globalAlpha = 0.1;
+    for (let j = 0; j < 3; j++) {
+      g.beginPath();
+      g.moveTo(x - 20, y - 50);
+      g.lineTo(x + 10, y + 20);
+      g.stroke();
+    }
   }
+
+  noise(g, 512, 512, 1000, "#17171c", "#000000", 0.02, 0.05);
   g.globalAlpha = 1;
   return c;
 }
 
 function cityNightCanvas(): HTMLCanvasElement {
-  const c = makeCanvas(256, 256);
+  const c = makeCanvas(512, 512);
   const g = c.getContext("2d")!;
-  const sky = g.createLinearGradient(0, 0, 0, 256);
-  sky.addColorStop(0, "#070b1e");
-  sky.addColorStop(0.55, "#0d1330");
-  sky.addColorStop(1, "#141a3a");
+  // Deep night sky
+  const sky = g.createLinearGradient(0, 0, 0, 512);
+  sky.addColorStop(0, "#040614");
+  sky.addColorStop(0.45, "#0a1030");
+  sky.addColorStop(0.72, "#131b42");
+  sky.addColorStop(1, "#1c2450");
   g.fillStyle = sky;
-  g.fillRect(0, 0, 256, 256);
-  g.globalAlpha = 0.9;
-  g.fillStyle = "#e8e9f0";
+  g.fillRect(0, 0, 512, 512);
+
+  // Stars
+  for (let i = 0; i < 130; i++) {
+    const sx = Math.random() * 512;
+    const sy = Math.random() * 330;
+    const r = 0.4 + Math.random() * 1.1;
+    g.globalAlpha = 0.25 + Math.random() * 0.65;
+    g.fillStyle = Math.random() < 0.75 ? "#dfe6ff" : "#ffd9a0";
+    g.fillRect(sx, sy, r, r);
+  }
+  g.globalAlpha = 1;
+
+  // Moon + halo
+  g.fillStyle = "#eef1ff";
   g.beginPath();
-  g.arc(208, 52, 16, 0, Math.PI * 2);
+  g.arc(392, 84, 30, 0, Math.PI * 2);
   g.fill();
-  g.globalAlpha = 0.18;
-  g.fillStyle = "#e8e9f0";
+  g.globalAlpha = 0.16;
+  g.fillStyle = "#eef1ff";
   g.beginPath();
-  g.arc(208, 52, 30, 0, Math.PI * 2);
+  g.arc(392, 84, 58, 0, Math.PI * 2);
+  g.fill();
+  g.globalAlpha = 0.07;
+  g.beginPath();
+  g.arc(392, 84, 92, 0, Math.PI * 2);
   g.fill();
   g.globalAlpha = 1;
-  for (let i = 0; i < 42; i++) {
-    const bw = 10 + Math.random() * 22;
-    const bh = 18 + Math.random() * 52;
-    const bx = Math.random() * 256;
-    const by = 30 + Math.random() * 180;
-    g.fillStyle = `rgba(${8 + Math.random() * 10}, ${10 + Math.random() * 12}, ${26 + Math.random() * 16}, 1)`;
-    g.fillRect(bx, by, bw, bh);
-    for (let w = 0; w < 7; w++) {
-      for (let hh = 0; hh < 9; hh++) {
-        if (Math.random() < 0.22) {
-          g.globalAlpha = 0.55 + Math.random() * 0.45;
-          const warm = Math.random() < 0.55;
-          g.fillStyle = warm ? "#ffc887" : "#dfe6ff";
-          g.fillRect(bx + 1.5 + w * 2.8, by + 2 + hh * 4.4, 1.6, 2.4);
+  // Moon craters
+  g.fillStyle = "rgba(200, 208, 235, 0.5)";
+  for (const [cx, cy, cr] of [[380, 76, 5], [398, 92, 7], [404, 72, 4], [386, 96, 3]] as const) {
+    g.beginPath();
+    g.arc(cx, cy, cr, 0, Math.PI * 2);
+    g.fill();
+  }
+
+  // Far building layer (darker silhouettes)
+  const horizon = 368;
+  for (let i = 0; i < 26; i++) {
+    const bw = 26 + Math.random() * 46;
+    const bh = 60 + Math.random() * 150;
+    const bx = Math.random() * 512;
+    const top = horizon - bh;
+    g.fillStyle = "#0d1230";
+    g.fillRect(bx, top, bw, bh);
+    // sparse cool windows
+    for (let w = 0; w < Math.floor(bw / 7); w++) {
+      for (let hh = 0; hh < Math.floor(bh / 11); hh++) {
+        if (Math.random() < 0.1) {
+          g.globalAlpha = 0.35 + Math.random() * 0.4;
+          g.fillStyle = "#bfd4ff";
+          g.fillRect(bx + 3 + w * 7, top + 5 + hh * 11, 2.6, 4);
         }
       }
     }
   }
-  g.globalAlpha = 0.25;
+  g.globalAlpha = 1;
+
+  // Near building layer (taller, lit windows)
+  for (let i = 0; i < 18; i++) {
+    const bw = 34 + Math.random() * 58;
+    const bh = 110 + Math.random() * 210;
+    const bx = Math.random() * 512;
+    const top = horizon - bh;
+    const shade = 8 + Math.random() * 8;
+    g.fillStyle = `rgb(${shade + 6}, ${shade + 8}, ${shade + 26})`;
+    g.fillRect(bx, top, bw, bh);
+    // window grid
+    const cols = Math.floor(bw / 8);
+    const rows = Math.floor(bh / 12);
+    for (let w = 0; w < cols; w++) {
+      for (let hh = 0; hh < rows; hh++) {
+        const warm = Math.random() < 0.58;
+        if (Math.random() < 0.34) {
+          g.globalAlpha = 0.5 + Math.random() * 0.5;
+          g.fillStyle = warm ? "#ffc887" : "#dfe6ff";
+          g.fillRect(bx + 3 + w * 8, top + 4 + hh * 12, 3.4, 5.4);
+        }
+      }
+    }
+  }
+  g.globalAlpha = 1;
+
+  // Antennae/roof details on near layer
+  for (let i = 0; i < 9; i++) {
+    const bx = 20 + Math.random() * 470;
+    g.fillStyle = "#05070f";
+    g.fillRect(bx, 40 + Math.random() * 200, 2, 30 + Math.random() * 60);
+  }
+
+  // Distant traffic glow along the horizon
+  const glow = g.createLinearGradient(0, horizon - 24, 0, horizon + 46);
+  glow.addColorStop(0, "rgba(255, 180, 110, 0.0)");
+  glow.addColorStop(0.5, "rgba(255, 190, 120, 0.10)");
+  glow.addColorStop(1, "rgba(255, 200, 130, 0.22)");
+  g.fillStyle = glow;
+  g.fillRect(0, horizon - 24, 512, 70);
+  g.globalAlpha = 0.55;
   g.fillStyle = "#ffd9a0";
-  for (let i = 0; i < 26; i++) {
-    g.fillRect(Math.random() * 256, 205 + Math.random() * 30, 1.4 + Math.random() * 1.6, 1.4);
+  for (let i = 0; i < 60; i++) {
+    g.fillRect(Math.random() * 512, horizon + 4 + Math.random() * 16, 1.4 + Math.random() * 2.2, 1.4);
   }
   g.globalAlpha = 1;
   return c;
@@ -220,60 +324,33 @@ export const cityNightTexture = () => get("cityNight", cityNightCanvas);
 function wallBoardCanvas(): HTMLCanvasElement {
   const c = makeCanvas(1024, 320);
   const g = c.getContext("2d")!;
-  const grad = g.createLinearGradient(0, 0, 0, 320);
-  grad.addColorStop(0, "#1a1521");
-  grad.addColorStop(1, "#0f0c15");
-  g.fillStyle = grad;
+  g.fillStyle = "#0a0a0a";
   g.fillRect(0, 0, 1024, 320);
-  noise(g, 1024, 320, 420, "#ffffff", "#000000", 0.015, 0.035);
+  noise(g, 1024, 320, 300, "#ffffff", "#000000", 0.02, 0.04);
 
-  g.strokeStyle = "rgba(255,215,0,0.55)";
-  g.lineWidth = 3;
-  g.strokeRect(16, 16, 992, 288);
-
-  const g2 = g as CanvasRenderingContext2D & { letterSpacing?: string };
+  const g2 = g as unknown as { letterSpacing?: string };
   g.textAlign = "center";
   g.textBaseline = "middle";
-  g.shadowColor = "rgba(255,215,0,0.4)";
-  g.shadowBlur = 22;
+
+  // Outer Glow
+  g.shadowColor = "rgba(255, 215, 0, 0.4)";
+  g.shadowBlur = 40;
 
   g.fillStyle = "#ffd700";
-  g.font = "900 116px 'Segoe UI', Arial, sans-serif";
-  g2.letterSpacing = "24px";
-  g.fillText("SHREYAS", 512, 92);
-  g.fillText("PAWAR", 512, 188);
-  g2.letterSpacing = "0px";
-
-  g.fillStyle = "#7dd3fc";
-  g.font = "600 19px 'Courier New', monospace";
-  g.shadowColor = "rgba(125,211,252,0.6)";
-  g.shadowBlur = 10;
-  g2.letterSpacing = "5px";
-  g.fillText("SOFTWARE ENGINEER · AI DEVELOPER · FULL STACK DEVELOPER · INNOVATOR", 512, 236);
-  g2.letterSpacing = "0px";
+  g.font = "900 100px 'Segoe UI', Arial, sans-serif";
+  if (g2.letterSpacing !== undefined) g2.letterSpacing = "22px";
+  g.fillText("SHREYAS PAWAR", 512, 160);
 
   g.shadowBlur = 0;
-  g.font = "600 21px 'Courier New', monospace";
-  const tags = ["PROBLEM SOLVER", "TECH ENTHUSIAST", "LIFELONG LEARNER", "OPEN SOURCE"];
-  const tagW = tags.map((t) => g.measureText(t).width + 34);
-  const totalW = tagW.reduce((a, b) => a + b, 0) + 14 * (tags.length - 1);
-  let x = 512 - totalW / 2;
-  tags.forEach((t, i) => {
-    g.fillStyle = "rgba(255,215,0,0.12)";
-    const w = tagW[i];
-    const h = 40;
-    const y = 264;
-    const r = 20;
-    g.beginPath();
-    g.roundRect(x, y - h / 2, w, h, r);
-    g.fill();
-    g.strokeStyle = "rgba(255,215,0,0.5)";
-    g.lineWidth = 1.5;
-    g.stroke();
-    g.fillStyle = "#ffd700";
-    g.fillText(t, x + w / 2, y + 1);
-    x += w + 14;
-  });
+
+  // Subtle decorative lines
+  g.strokeStyle = "rgba(255, 215, 0, 0.3)";
+  g.lineWidth = 2;
+  g.beginPath();
+  g.moveTo(250, 230);
+  g.lineTo(774, 230);
+  g.stroke();
+
   return c;
 }
 
@@ -328,34 +405,42 @@ function asusChinCanvas(): HTMLCanvasElement {
 export const asusChinTexture = () => get("asusChin", asusChinCanvas);
 
 function mugTextCanvas(): HTMLCanvasElement {
-  const c = makeCanvas(1024, 256);
+  const c = makeCanvas(512, 512);
   const g = c.getContext("2d")!;
-  const grad = g.createLinearGradient(0, 0, 0, 256);
-  grad.addColorStop(0, "#2b2b32");
-  grad.addColorStop(0.5, "#1d1d23");
-  grad.addColorStop(1, "#27272e");
-  g.fillStyle = grad;
-  g.fillRect(0, 0, 1024, 256);
-  noise(g, 1024, 256, 260, "#ffffff", "#000000", 0.02, 0.05);
 
-  g.strokeStyle = "rgba(255,215,0,0.55)";
-  g.lineWidth = 4;
+  // Background
+  g.fillStyle = "#0a0a0a";
+  g.fillRect(0, 0, 512, 512);
+
+  // Subtle Noise/Grain
+  noise(g, 512, 512, 400, "#ffffff", "#000000", 0.03, 0.06);
+
+  // Gold Ring
+  g.strokeStyle = "#ffd700";
+  g.lineWidth = 8;
   g.beginPath();
-  g.moveTo(0, 46);
-  g.lineTo(1024, 46);
-  g.stroke();
-  g.beginPath();
-  g.moveTo(0, 210);
-  g.lineTo(1024, 210);
+  g.arc(256, 256, 180, 0, Math.PI * 2);
   g.stroke();
 
+  // Inner Ring
+  g.lineWidth = 2;
+  g.beginPath();
+  g.arc(256, 256, 165, 0, Math.PI * 2);
+  g.stroke();
+
+  // Monogram SP
+  g.fillStyle = "#ffd700";
   g.textAlign = "center";
   g.textBaseline = "middle";
-  g.fillStyle = "#ffd700";
-  g.font = "700 66px 'Courier New', monospace";
-  g.shadowColor = "rgba(255,215,0,0.55)";
-  g.shadowBlur = 20;
-  g.fillText("CODE · BUILD · REPEAT", 512, 128);
+  g.font = "bold 140px 'Segoe UI', Arial, sans-serif";
+  g.fillText("SP", 256, 256);
+
+  // Bottom text
+  const g2 = g as unknown as { letterSpacing?: string };
+  g.font = "300 24px 'Segoe UI', Arial, sans-serif";
+  if (g2.letterSpacing !== undefined) g2.letterSpacing = "10px";
+  g.fillText("EST. 2022", 256, 380);
+
   return c;
 }
 

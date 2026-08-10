@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>GLB Preview</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #14141a; overflow: hidden; font-family: monospace; }
+  #ui { position: fixed; top: 8px; left: 8px; color: #ffd700; font-size: 11px; z-index: 10; white-space: pre; background: rgba(0,0,0,.55); padding: 6px 10px; border-radius: 4px; }
+  #ui a { color: #7dd3fc; text-decoration: none; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div id="ui"></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "/lib/three.module.js",
+    "three/addons/": "/lib/addons/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const params = new URLSearchParams(location.search);
+const model = params.get("model") || "office_chair";
+const rotX = parseFloat(params.get("rx") || "0");
+const rotY = parseFloat(params.get("ry") || "0");
+const rotZ = parseFloat(params.get("rz") || "0");
+const scale = parseFloat(params.get("scale") || "1");
+const offY = parseFloat(params.get("y") || "0");
+const offX = parseFloat(params.get("x") || "0");
+const offZ = parseFloat(params.get("z") || "0");
+const cam = params.get("cam") || "front";
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a24);
+
+const grid = new THREE.GridHelper(8, 16, 0x3a3a4a, 0x262633);
+scene.add(grid);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 100);
+const views = {
+  front: () => { camera.position.set(0, 1.6, 6); },
+  side: () => { camera.position.set(6, 1.6, 0); },
+  top: () => { camera.position.set(0, 7, 0.01); },
+  threequarter: () => { camera.position.set(4, 2.4, 4); },
+};
+(views[cam] || views.front)();
+camera.lookAt(0, 1, 0);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x30303a, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 2);
+key.position.set(3, 6, 4);
+key.castShadow = true;
+scene.add(key);
+scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+const group = new THREE.Group();
+group.rotation.set(rotX, rotY, rotZ);
+group.scale.setScalar(scale);
+group.position.set(offX, offY, offZ);
+scene.add(group);
+
+const axes = new THREE.AxesHelper(1.5);
+axes.material.transparent = true;
+axes.material.opacity = 0.5;
+scene.add(axes);
+
+const info = document.getElementById("ui");
+const controls = new OrbitControls(camera, renderer.domElement);
+
+const loader = new GLTFLoader();
+const url = `/models/${model}.glb`;
+loader.load(url, (gltf) => {
+  const root = gltf.scene;
+  root.traverse((o) => {
+    if (o.isMesh) {
+      o.castShadow = true;
+      o.receiveShadow = true;
+    }
+  });
+  group.add(root);
+  const box = new THREE.Box3().setFromObject(group);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+  info.textContent =
+    `model: ${model}\nscale: ${scale.toFixed(4)}  rot: [${rotX}, ${rotY}, ${rotZ}]\n` +
+    `world size: ${size.x.toFixed(3)} x ${size.y.toFixed(3)} x ${size.z.toFixed(3)}\n` +
+    `min: ${box.min.x.toFixed(3)}, ${box.min.y.toFixed(3)}, ${box.min.z.toFixed(3)}\n` +
+    `max: ${box.max.x.toFixed(3)}, ${box.max.y.toFixed(3)}, ${box.max.z.toFixed(3)}\n` +
+    `center: ${center.x.toFixed(3)}, ${center.y.toFixed(3)}, ${center.z.toFixed(3)}\n\n` +
+    `<a href="?model=${model}&rx=${rotX}&ry=${rotY}&rz=${rotZ}&scale=${scale}&x=${offX}&y=${offY}&z=${offZ}&cam=${cam}">refresh url</a>`;
+  controls.target.copy(center);
+  controls.update();
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+</body>
+</html>

@@ -261,12 +261,8 @@ export function getHackathons(): Hackathon[] {
   return hackathons;
 }
 
-export const roles: string[] = [
-  "Data Scientist",
-  "Android Developer",
-  "Full-Stack Developer",
-  "ML Solutions Builder",
-];
+export const headline =
+  "Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases";
 
 export const stats: Stat[] = [
   { value: 5, suffix: "+", label: "Projects Built" },

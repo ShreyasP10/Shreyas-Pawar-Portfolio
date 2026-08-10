@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { Profile } from "@/lib/types";
 import { useFetch } from "@/lib/useFetch";
-import { roles, stats } from "@/lib/data";
+import { stats } from "@/lib/data";
 import { CountUp } from "./CountUp";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "./icons";
 
@@ -13,32 +12,6 @@ export function Hero() {
   const { data: githubStats } = useFetch<{ followers: number }>(
     "/api/github-stats"
   );
-  const [text, setText] = useState("");
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const word = roles[roleIndex];
-    let timeout: ReturnType<typeof setTimeout>;
-
-    if (!deleting && text === word) {
-      timeout = setTimeout(() => setDeleting(true), 1600);
-    } else if (deleting && text === "") {
-      timeout = setTimeout(() => {
-        setDeleting(false);
-        setRoleIndex((index) => (index + 1) % roles.length);
-      }, 200);
-    } else {
-      timeout = setTimeout(
-        () => {
-          setText(word.slice(0, text.length + (deleting ? -1 : 1)));
-        },
-        deleting ? 35 : 80
-      );
-    }
-
-    return () => clearTimeout(timeout);
-  }, [text, deleting, roleIndex]);
 
   return (
     <section
@@ -73,22 +46,14 @@ export function Hero() {
           Shreyas Pawar
         </motion.h1>
 
-        <motion.div
+        <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-4 flex min-h-10 items-center gap-3"
+          className="mt-5 max-w-3xl font-mono text-lg font-semibold leading-snug text-accent sm:text-2xl"
         >
-          <span className="font-mono text-lg text-accent sm:text-2xl">
-            &gt;_
-          </span>
-          <span className="h-8 overflow-hidden font-mono text-lg font-semibold text-accent sm:h-9 sm:text-2xl">
-            {text}
-            <span className="caret-blink" aria-hidden="true">
-              |
-            </span>
-          </span>
-        </motion.div>
+          Data Science &amp; DSA | Built ML &amp; Mobile Solutions for Real-World Use Cases
+        </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 24 }}

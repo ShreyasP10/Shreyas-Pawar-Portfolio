@@ -104,44 +104,47 @@ export function Devices() {
 
   return (
     <group>
-      <Hoverable device="laptop" label="LAPTOP — PRIMARY HUB · CODE & PROJECTS" position={[0, 0.835, -7.4]} floorOffset={-0.835}>
-        <LaptopModel />
-        {activeDevice === "laptop" && (
-          <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
-            <Html transform position={[0, 0.55, 0.024]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
-              <LaptopScreen />
-            </Html>
-          </group>
-        )}
+      <Hoverable device="laptop" label="LAPTOP — PRIMARY HUB · CODE & PROJECTS" position={[0, 0.8273, -7.4]} floorOffset={-0.8273}>
+        <group position={[0, 0.018, 0]} scale={0.6}>
+          <LaptopModel />
+          {activeDevice === "laptop" && (
+            <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
+              <group position={[0, 0.55, 0.013]}>
+                <Html transform position={[0, 0, 0.002]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
+                  <LaptopScreen />
+                </Html>
+              </group>
+            </group>
+          )}
+        </group>
       </Hoverable>
 
-      <Hoverable device="tablet" label="TABLET — EXPERIENCE DASHBOARD" position={[1.8, 0.995, -7.3]} floorOffset={-0.995}>
-        <TabletModel />
-        {activeDevice === "tablet" && (
-          <group position={[0, 0.33, 0.024]} rotation={[-0.24, -Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.032]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
-              <TabletScreen />
-            </Html>
-          </group>
-        )}
+      <Hoverable device="tablet" label="TABLET — EXPERIENCE DASHBOARD" position={[0.75, 0.8273, -7.3]} floorOffset={-0.8273}>
+        <group position={[0, 0.06, 0]} scale={0.6}>
+          <TabletModel />
+          {activeDevice === "tablet" && (
+            <group rotation={[-0.24, -Math.PI / 4, 0]}>
+              <group position={[0, 0.33, 0.024]}>
+                <Html transform position={[0, 0, 0.001]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
+                  <TabletScreen />
+                </Html>
+              </group>
+            </group>
+          )}
+        </group>
       </Hoverable>
 
-      <Hoverable device="phone" label="PHONE — CONTACT" position={[-1.9, 0.81, -7.1]} floorOffset={-0.81}>
-        <PhoneModel />
-        {activeDevice === "phone" && (
-          <group position={[0, 0.33, 0.02]} rotation={[-0.22, Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.022]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
-              <PhoneScreen active />
-            </Html>
+      <Hoverable device="phone" label="PHONE — CONTACT" position={[-0.75, 0.8273, -7.35]} floorOffset={-0.8273}>
+        <group scale={0.55}>
+          <PhoneModel />
+          <group rotation={[-0.22, Math.PI / 4, 0]}>
+            <group position={[0, 0.33, 0.015]}>
+              <Html transform position={[0, 0, 0.001]} distanceFactor={1.1} zIndexRange={[40, 0]} occlude>
+                <PhoneScreen active={activeDevice === "phone"} />
+              </Html>
+            </group>
           </group>
-        )}
-        {activeDevice !== "phone" && (
-          <group position={[0, 0.33, 0.02]} rotation={[-0.22, Math.PI / 4, 0]}>
-            <Html transform position={[0, 0, 0.022]} distanceFactor={2} zIndexRange={[30, 0]} occlude>
-              <PhoneScreen active={false} />
-            </Html>
-          </group>
-        )}
+        </group>
       </Hoverable>
 
       <TvWall />
@@ -222,31 +225,36 @@ function TvWall() {
 function TvModel({ }: { onClick?: () => void }) {
   return (
     <group>
+      {/* Massive flat screen display */}
       <mesh position={[0, 0, 0.02]} castShadow>
         <boxGeometry args={[2.5, 1.45, 0.06]} />
         <meshStandardMaterial color="#08080c" roughness={0.4} metalness={0.7} />
       </mesh>
-        <mesh position={[0, 0, 0.055]}>
-          <boxGeometry args={[2.4, 1.35, 0.008]} />
-          <meshStandardMaterial
-            color={SCREEN_DARK}
-            emissive="#0d0d18"
-            emissiveIntensity={0.18}
-            roughness={0.45}
-          />
-        </mesh>
-      <mesh position={[0, -0.7, 0.06]}>
-        <boxGeometry args={[2.3, 0.02, 0.02]} />
-        <meshStandardMaterial color="#ffd700" emissive="#ffd700" emissiveIntensity={0.9} roughness={0.4} />
+      {/* Thin crisp gold frame */}
+      <mesh position={[0, 0, 0.051]}>
+        <boxGeometry args={[2.52, 1.47, 0.01]} />
+        <meshStandardMaterial color="#ffd700" metalness={0.9} roughness={0.2} />
       </mesh>
-      <mesh position={[0, -0.745, 0]}>
-        <boxGeometry args={[0.6, 0.08, 0.2]} />
-        <meshStandardMaterial map={BRUSHED} color="#ffffff" roughness={0.35} metalness={0.7} />
+      <mesh position={[0, 0, 0.055]}>
+        <boxGeometry args={[2.46, 1.41, 0.01]} />
+        <meshStandardMaterial
+          color={SCREEN_DARK}
+          emissive="#0d0d18"
+          emissiveIntensity={0.18}
+          roughness={0.45}
+        />
       </mesh>
+
+      {/* Cabinet and props below */}
       <group position={[0, -1.325, 0.32]}>
         <mesh castShadow>
           <boxGeometry args={[1.7, 1.05, 0.5]} />
-          <meshStandardMaterial map={DECK} color="#ffffff" roughness={0.6} />
+          <meshStandardMaterial map={DECK} color="#0a0a0a" roughness={0.6} metalness={0.2} />
+        </mesh>
+        {/* Gold accents on cabinet */}
+        <mesh position={[0, 0.526, 0.26]}>
+           <boxGeometry args={[1.72, 0.005, 0.52]} />
+           <meshStandardMaterial color="#ffd700" />
         </mesh>
         <mesh position={[-0.55, 0.56, 0.28]}>
           <boxGeometry args={[0.24, 0.03, 0.18]} />

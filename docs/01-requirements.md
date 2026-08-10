@@ -114,7 +114,7 @@ Both experiences must consume the same `lib/data.ts`; adding a project must upda
 | `RESEND_API_KEY` | No | Live email delivery for contact form |
 | `CONTACT_EMAIL` | No | Recipient for contact form |
 
-Without `RESEND_API_KEY`, `POST /api/contact` validates payload and logs server-side; the site works fully with no env vars.
+Without `RESEND_API_KEY`, `POST /api/contact` validates payload and logs server-side; the site works fully with no env vars. `.env.local.example` (repo root) documents both vars.
 
 ### 4.4 Scripts
 | Command | Description |
@@ -123,3 +123,6 @@ Without `RESEND_API_KEY`, `POST /api/contact` validates payload and logs server-
 | `npm run build` | Production build + type check |
 | `npm run start` | Serve production build |
 | `npm run lint` | ESLint |
+| `npm test` | Vitest unit tests (`tests/unit`) |
+| `npm run test:watch` | Vitest watch mode |
+| `npm run test:e2e` | Playwright E2E (`tests/e2e`, needs `npx playwright install chromium`) |

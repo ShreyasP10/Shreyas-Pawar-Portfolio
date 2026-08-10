@@ -12,8 +12,7 @@ import {
   SettingsModal,
 } from "@/components/3d/Overlays";
 import { useWorkspace, type NavTarget } from "@/components/3d/store";
-
-const SEQUENCE: NavTarget[] = ["door", "entry", "wall", "overview", "tv", "laptop", "tablet", "phone"];
+import { SEQUENCE } from "@/components/3d/nav";
 
 export default function WorkspacePage() {
   const go = useWorkspace((s) => s.go);

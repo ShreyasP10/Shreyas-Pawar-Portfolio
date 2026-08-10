@@ -1,7 +1,7 @@
 # Developer Guide
 
 **Project:** Shreyas Pawar — Developer Portfolio & Cinematic 3D Workspace
-**Last updated:** 2026-08-06
+**Last updated:** 2026-08-09
 
 ---
 
@@ -42,6 +42,8 @@ Both optional. Without them the site works; `POST /api/contact` validates + logs
 | `npm run build` | production build + TS check |
 | `npm run start` | serve the build |
 | `npm run lint` | ESLint |
+| `npm test` | Vitest unit tests (`tests/unit`) |
+| `npm run test:e2e` | Playwright E2E (run `npx playwright install chromium` once) |
 | `npx tsc --noEmit` | type check only |
 | `npx next build && npx next start --port 3999` | verify production build locally (use any free port) |
 

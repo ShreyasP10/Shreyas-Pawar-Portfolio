@@ -105,47 +105,57 @@ export function LaptopScreen() {
 }
 
 function LaptopContent({ tab }: { tab: LaptopTab }) {
-  const navigateTab = useWorkspace((s) => s.navigateTab);
-  const openDevice = useWorkspace((s) => s.openDevice);
-
   switch (tab) {
     case "home":
       return (
-        <div className="space-y-1.5">
-          <div className="text-[12px] font-black leading-tight text-white">
-            Hi, I&apos;m{" "}
-            <span className="bg-gradient-to-r from-[#ffd700] to-[#ffaa00] bg-clip-text text-transparent">
-              Shreyas Pawar
-            </span>
+        <div className="space-y-1.5 font-mono text-[7px]">
+          <div className="flex items-center gap-1 border-b border-white/5 pb-1 text-[5px] text-[#5f5c69]">
+            <span className="rounded-t bg-white/5 px-1.5 py-0.5 text-[#ffd700]">shreyas.tsx</span>
+            <span className="px-1.5 py-0.5">about.md</span>
+            <span className="px-1.5 py-0.5">projects.json</span>
           </div>
-          <div className="font-mono text-[6.5px] leading-snug tracking-[0.15em] text-[#7dd3fc]">
-            {profile.subheading}
+          <div className="pt-1 leading-snug">
+            <div className="flex gap-1.5">
+              <span className="text-[#c586c0]">import</span>
+              <span className="text-[#9cdcfe]">Developer</span>
+              <span className="text-[#c586c0]">from</span>
+              <span className="text-[#ce9178]">&apos;@core/shreyas&apos;</span>
+            </div>
+            <div className="mt-1">
+              <span className="text-[#569cd6]">const</span> <span className="text-[#4fc1ff]">Portfolio</span> = () {"=>"} (
+            </div>
+            <div className="pl-3">
+              {"<"}<span className="text-[#569cd6]">Section</span>
+            </div>
+            <div className="pl-6 text-[#9cdcfe]">
+              title=<span className="text-[#ce9178]">&quot;Shreyas Pawar&quot;</span>
+            </div>
+            <div className="pl-6 text-[#9cdcfe]">
+              role=<span className="text-[#ce9178]">&quot;Software Engineer&quot;</span>
+            </div>
+            <div className="pl-3">{">"}</div>
+            <div className="pl-6 text-[#d4d4d4]">
+              Building intelligent software that solves real-world problems.
+            </div>
+            <div className="pl-3">
+              {"</"}<span className="text-[#569cd6]">Section</span>{">"}
+            </div>
+            <div>);</div>
           </div>
-          <p className="line-clamp-3 text-[7px] leading-snug text-[#a8a5b0]">{profile.bio}</p>
-          <IsometricMark />
-          <div className="flex gap-1 pt-0.5">
+
+          <div className="mt-2 flex gap-1.5 pt-1">
             <button
-              onClick={() => navigateTab("laptop", "skills")}
-              className="rounded-full bg-[#ffd700] px-2 py-0.5 font-mono text-[6px] font-bold tracking-[0.15em] text-black hover:brightness-110"
+              onClick={() => useWorkspace.getState().navigateTab("laptop", "skills")}
+              className="rounded-sm bg-[#ffd700] px-2 py-0.5 font-mono text-[6px] font-bold text-black hover:brightness-110"
             >
-              VIEW SKILLS →
+              RUN --SKILLS
             </button>
             <button
-              onClick={() => openDevice("phone")}
-              className="rounded-full border border-[#7dd3fc]/60 px-2 py-0.5 font-mono text-[6px] font-bold tracking-[0.15em] text-[#7dd3fc] hover:bg-[#7dd3fc] hover:text-black"
+              onClick={() => useWorkspace.getState().openDevice("phone")}
+              className="rounded-sm border border-[#7dd3fc]/40 px-2 py-0.5 font-mono text-[6px] font-bold text-[#7dd3fc] hover:bg-[#7dd3fc]/10"
             >
-              GET IN TOUCH
+              CONTACT.INVOKE()
             </button>
-          </div>
-          <div className="flex flex-wrap gap-0.5">
-            {techStack.slice(0, 6).map((t) => (
-              <span
-                key={t}
-                className="rounded border border-white/10 bg-white/5 px-1 py-px font-mono text-[5.5px] text-[#c9c6d0]"
-              >
-                {t}
-              </span>
-            ))}
           </div>
         </div>
       );
