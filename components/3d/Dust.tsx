@@ -18,7 +18,8 @@ function seededRandom(seed: number) {
 export function Dust() {
   const particlesOn = useWorkspace((s) => s.particlesOn);
   const reducedMotion = useWorkspace((s) => s.reducedMotion);
-  const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const particles = useMemo(() => {
     const rand = seededRandom(20260805);
@@ -35,37 +36,37 @@ export function Dust() {
   }, []);
 
   useFrame((state) => {
-    if (!groupRef.current) return;
+    if (!meshRef.current || !particlesOn || reducedMotion) return;
     const t = state.clock.elapsedTime;
-    groupRef.current.children.forEach((child, i) => {
+    for (let i = 0; i < COUNT; i++) {
       const p = particles[i];
-      if (!p) return;
+      if (!p) continue;
       const bob = Math.sin(t * p.speed + p.phase) * p.sway * 0.02;
-      child.position.y = p.position[1] + Math.sin(t * p.speed * 0.6 + p.phase) * 0.14;
-      child.position.x = p.position[0] + Math.sin(t * p.speed + p.phase * 2) * 0.22 + bob;
-      child.position.z = p.position[2] + Math.cos(t * p.speed * 0.8 + p.phase) * 0.18;
-      const twinkle = 0.35 + (Math.sin(t * p.speed * 2 + p.seed * 1.7) * 0.5 + 0.5) * 0.65;
-      const mat = (child as THREE.Mesh).material as THREE.MeshBasicMaterial;
-      mat.opacity = twinkle;
-    });
+      const py = p.position[1] + Math.sin(t * p.speed * 0.6 + p.phase) * 0.14;
+      const px = p.position[0] + Math.sin(t * p.speed + p.phase * 2) * 0.22 + bob;
+      const pz = p.position[2] + Math.cos(t * p.speed * 0.8 + p.phase) * 0.18;
+      const twinkle = 0.4 + (Math.sin(t * p.speed * 2 + p.seed * 1.7) * 0.5 + 0.5) * 0.6;
+
+      dummy.position.set(px, py, pz);
+      dummy.scale.setScalar(p.size * twinkle);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   if (!particlesOn || reducedMotion) return null;
 
   return (
-    <group ref={groupRef}>
-      {particles.map((p, i) => (
-        <mesh key={i} position={p.position}>
-          <sphereGeometry args={[p.size, 8, 8]} />
-          <meshBasicMaterial
-            color="#ffd700"
-            transparent
-            opacity={0.5}
-            depthWrite={false}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      ))}
-    </group>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, COUNT]} frustumCulled={false}>
+      <sphereGeometry args={[1, 8, 8]} />
+      <meshBasicMaterial
+        color="#ffd700"
+        transparent
+        opacity={0.65}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </instancedMesh>
   );
 }

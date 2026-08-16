@@ -19,6 +19,12 @@ export async function POST(request: Request) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
+  const honeypot = (body as { honeypot?: string }).honeypot;
+
+  // Bot detection via honeypot
+  if (honeypot) {
+    return NextResponse.json({ success: true, message: "Message received" });
+  }
 
   if (name.length < 2) {
     return validationError("Name must be at least 2 characters");

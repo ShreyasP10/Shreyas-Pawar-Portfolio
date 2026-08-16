@@ -21,7 +21,7 @@ export function Portfolio() {
       <ScrollProgress />
       <GoldenParticles />
       <Navbar />
-      <main className="relative z-10">
+      <main id="main" className="relative z-10">
         <Hero />
         <FeaturedProjects />
         <Hackathons />

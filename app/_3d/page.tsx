@@ -10,6 +10,8 @@ import {
   LoadingScreen,
   ScrollRail,
   SettingsModal,
+  QuickNav,
+  TvFullscreenOverlay,
 } from "@/components/3d/Overlays";
 import { useWorkspace, type NavTarget } from "@/components/3d/store";
 import { SEQUENCE } from "@/components/3d/nav";
@@ -40,7 +42,6 @@ export default function WorkspacePage() {
   }, [loading, doorOpen, target, go, openDoor]);
 
   useEffect(() => {
-    document.title = "Shreyas Pawar — 3D Workspace";
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
     const navigateTo = (id: NavTarget) => {
@@ -48,7 +49,7 @@ export default function WorkspacePage() {
       else openDevice(id);
     };
 
-    const currentIndex = () => SEQUENCE.indexOf(target);
+    const getCurrentIndex = () => SEQUENCE.indexOf(useWorkspace.getState().target);
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -60,7 +61,7 @@ export default function WorkspacePage() {
         return;
       }
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        const current = currentIndex();
+        const current = getCurrentIndex();
         if (current === -1) return;
         const step = e.key === "ArrowRight" ? 1 : -1;
         const next = SEQUENCE[(current + step + SEQUENCE.length) % SEQUENCE.length];
@@ -69,10 +70,11 @@ export default function WorkspacePage() {
     };
 
     const onWheel = (e: WheelEvent) => {
+      if (useWorkspace.getState().freeCam) return;
       if (Math.abs(e.deltaY) < 12) return;
       const now = Date.now();
       if (now - lastNav.current < 650) return;
-      const current = currentIndex();
+      const current = getCurrentIndex();
       if (current === -1) return;
       const nextIdx = e.deltaY > 0 ? current + 1 : current - 1;
       if (nextIdx < 0 || nextIdx >= SEQUENCE.length) return;
@@ -85,11 +87,12 @@ export default function WorkspacePage() {
       touchStartY = e.touches[0].clientY;
     };
     const onTouchMove = (e: TouchEvent) => {
+      if (useWorkspace.getState().freeCam) return;
       const delta = touchStartY - e.touches[0].clientY;
       if (Math.abs(delta) < 40) return;
       const now = Date.now();
       if (now - lastNav.current < 650) return;
-      const current = currentIndex();
+      const current = getCurrentIndex();
       if (current === -1) return;
       const nextIdx = delta > 0 ? current + 1 : current - 1;
       if (nextIdx < 0 || nextIdx >= SEQUENCE.length) return;
@@ -108,7 +111,7 @@ export default function WorkspacePage() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
     };
-  }, [closePanels, go, openDevice, setReducedMotion, target]);
+  }, [closePanels, go, openDevice, setReducedMotion, toggleFreeCam]);
 
   return (
     <div className="fixed inset-0 overflow-hidden overscroll-none bg-[#0a0a0a]">
@@ -118,10 +121,12 @@ export default function WorkspacePage() {
       <HUD />
       <Sidebar />
       <ScrollRail />
+      <QuickNav />
       <HelpBar />
       <LandingOverlay />
       <SettingsModal />
       <LoadingScreen />
+      <TvFullscreenOverlay />
     </div>
   );
 }

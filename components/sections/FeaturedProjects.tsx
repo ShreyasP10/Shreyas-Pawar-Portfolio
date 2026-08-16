@@ -1,7 +1,6 @@
 "use client";
 
-import type { Project } from "@/lib/types";
-import { useFetch } from "@/lib/useFetch";
+import { projects } from "@/lib/data";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { TiltCard } from "../TiltCard";
@@ -14,16 +13,6 @@ const placeholderGradients = [
 ];
 
 export function FeaturedProjects() {
-  const { data: projects, loading, error } = useFetch<Project[]>("/api/projects");
-
-  if (error) {
-    return (
-      <section id="projects" className="scroll-mt-24 px-4 sm:px-6">
-        <p className="text-accent-dim">Failed to load projects.</p>
-      </section>
-    );
-  }
-
   return (
     <section id="projects" className="scroll-mt-24 px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-6xl">
@@ -34,13 +23,11 @@ export function FeaturedProjects() {
         />
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {(loading ? [null, null, null] : (projects ?? []).slice(0, 6)).map(
-            (project, index) => (
-              <Reveal key={project?.id ?? index} delay={index * 0.08}>
-                {project ? (
-                  <div className="h-full [perspective:1000px]">
-                    <TiltCard>
-                      <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-panel p-5 transition-colors duration-300 hover:border-accent/60">
+          {projects.slice(0, 6).map((project, index) => (
+            <Reveal key={project.id} delay={index * 0.08}>
+              <div className="h-full [perspective:1000px]">
+                <TiltCard>
+                  <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-panel p-5 transition-colors duration-300 hover:border-accent/60">
                         <div
                           className={`mb-4 flex h-36 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br ${placeholderGradients[index % placeholderGradients.length]}`}
                         >
@@ -105,9 +92,6 @@ export function FeaturedProjects() {
                       </article>
                     </TiltCard>
                   </div>
-                ) : (
-                  <div className="h-72 animate-pulse rounded-2xl border border-white/10 bg-panel" />
-                )}
               </Reveal>
             )
           )}

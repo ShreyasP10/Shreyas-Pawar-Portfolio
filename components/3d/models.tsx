@@ -55,3 +55,5 @@ export function GlbModel({ tuning }: GlbModelProps) {
     </group>
   );
 }
+
+useGLTF.preload(GLB.chair.url);

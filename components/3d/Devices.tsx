@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -32,6 +32,12 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
   const glowTarget = useRef(0);
   const ringMatRef = useRef<THREE.MeshBasicMaterial | null>(null);
   const openDevice = useWorkspace((s) => s.openDevice);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, []);
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -107,30 +113,26 @@ export function Devices() {
       <Hoverable device="laptop" label="LAPTOP — PRIMARY HUB · CODE & PROJECTS" position={[0, 0.8273, -7.4]} floorOffset={-0.8273}>
         <group position={[0, 0.018, 0]} scale={0.6}>
           <LaptopModel />
-          {activeDevice === "laptop" && (
-            <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
-              <group position={[0, 0.55, 0.013]}>
-                <Html transform position={[0, 0, 0.002]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
-                  <LaptopScreen />
-                </Html>
-              </group>
+          <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
+            <group position={[0, 0.55, 0.013]}>
+              <Html transform position={[0, 0, 0.002]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
+                <LaptopScreen />
+              </Html>
             </group>
-          )}
+          </group>
         </group>
       </Hoverable>
 
       <Hoverable device="tablet" label="TABLET — EXPERIENCE DASHBOARD" position={[0.75, 0.8273, -7.3]} floorOffset={-0.8273}>
         <group position={[0, 0.06, 0]} scale={0.6}>
           <TabletModel />
-          {activeDevice === "tablet" && (
-            <group rotation={[-0.24, -Math.PI / 4, 0]}>
-              <group position={[0, 0.33, 0.024]}>
-                <Html transform position={[0, 0, 0.001]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
-                  <TabletScreen />
-                </Html>
-              </group>
+          <group rotation={[-0.24, -Math.PI / 4, 0]}>
+            <group position={[0, 0.33, 0.024]}>
+              <Html transform position={[0, 0, 0.001]} distanceFactor={1.2} zIndexRange={[40, 0]} occlude>
+                <TabletScreen />
+              </Html>
             </group>
-          )}
+          </group>
         </group>
       </Hoverable>
 
@@ -153,7 +155,6 @@ export function Devices() {
 }
 
 function TvWall() {
-  const activeDevice = useWorkspace((s) => s.activeDevice);
   const tvFullscreen = useWorkspace((s) => s.tvFullscreen);
   const setTvFullscreen = useWorkspace((s) => s.setTvFullscreen);
   const closePanels = useWorkspace((s) => s.closePanels);
@@ -162,12 +163,6 @@ function TvWall() {
     if (!tvFullscreen) {
       setTvFullscreen(true);
     }
-  };
-
-  const handleFullscreenClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    closePanels();
-    setTvFullscreen(false);
   };
 
   return (
@@ -181,50 +176,19 @@ function TvWall() {
         glowZ={0.7}
       >
         <TvModel onClick={handleTvClick} />
-      </Hoverable>
-      {activeDevice === "tv" && !tvFullscreen && (
-        <group position={[4.8, 1.9, -4.5]} rotation={[0, -Math.PI / 2, 0]}>
+        {!tvFullscreen && (
           <Html transform position={[0, 0, 0.064]} distanceFactor={2} zIndexRange={[40, 0]} occlude>
             <TvScreen />
           </Html>
-        </group>
-      )}
-      {tvFullscreen && (
-        <Html
-          center
-          position={[4.8, 1.5, -4.0]}
-          distanceFactor={1.8}
-          zIndexRange={[100, 0]}
-          onClick={handleFullscreenClick}
-        >
-          <div
-            className="fixed inset-0 bg-black/95 flex flex-col items-center justify-center backdrop-blur-xl"
-            style={{ width: "100vw", height: "100vh" }}
-          >
-            <div className="absolute top-4 right-4 flex items-center gap-2">
-              <span className="font-mono text-[11px] tracking-[0.2em] text-[#7dd3fc]">PRESS ESC OR CLICK TO EXIT</span>
-              <button
-                onClick={handleFullscreenClick}
-                className="rounded-full p-2 bg-white/10 hover:bg-white/20 transition-colors text-[#ffd700]"
-                aria-label="Exit fullscreen"
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-            <TvScreen fullscreen />
-          </div>
-        </Html>
-      )}
+        )}
+      </Hoverable>
     </group>
   );
 }
 
-function TvModel({ }: { onClick?: () => void }) {
+function TvModel({ onClick }: { onClick?: () => void }) {
   return (
-    <group>
+    <group onClick={onClick}>
       {/* Massive flat screen display */}
       <mesh position={[0, 0, 0.02]} castShadow>
         <boxGeometry args={[2.5, 1.45, 0.06]} />

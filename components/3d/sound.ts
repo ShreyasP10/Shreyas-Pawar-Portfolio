@@ -88,7 +88,11 @@ export function playPositionalTone(
   position: [number, number, number]
 ) {
   const ctx = ensureContext();
-  if (!ctx || !listener) return;
+  if (!ctx) return;
+  if (!listener) {
+    playTone(frequency, duration, gainValue);
+    return;
+  }
 
   const oscillator = ctx.createOscillator();
   const gain = ctx.createGain();

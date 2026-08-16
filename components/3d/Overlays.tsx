@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useWorkspace } from "./store";
 import { SEQUENCE } from "./nav";
+import { TvScreen } from "./Screens";
 
 const VIEW_LABELS: Record<string, string> = {
   door: "DOOR — ENTRY POINT",
@@ -26,6 +27,10 @@ function Toggle({
 }) {
   return (
     <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
       onClick={() => onChange(!checked)}
       className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-left transition-colors hover:border-[#ffd700]/40"
     >
@@ -136,7 +141,7 @@ export function HUD() {
       <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.3em] text-[#ffd700] backdrop-blur-xl">
         {VIEW_LABELS[target] ?? target.toUpperCase()}
       </div>
-      <div className="hidden flex items-center gap-2 sm:flex">
+      <div className="hidden sm:flex items-center gap-2">
         <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] text-[#8f8c99] backdrop-blur-xl">
           SP·3D
         </div>
@@ -157,7 +162,7 @@ export function HelpBar() {
   if (loading) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-4 right-5 z-[50] hidden items-center gap-3 sm:flex">
+    <div className="pointer-events-none fixed bottom-4 right-5 z-[50] hidden items-center gap-3 xl:flex">
       <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.2em] text-[#8f8c99] backdrop-blur-xl">
         SCROLL TO EXPLORE · ← → DEVICES · DRAG TO LOOK · F: FREE LOOK
       </div>
@@ -166,6 +171,54 @@ export function HelpBar() {
           ESC TO CLOSE
         </div>
       )}
+    </div>
+  );
+}
+
+export function QuickNav() {
+  const target = useWorkspace((s) => s.target);
+  const loading = useWorkspace((s) => s.loading);
+  const go = useWorkspace((s) => s.go);
+  const openDevice = useWorkspace((s) => s.openDevice);
+
+  const activeDevice = useWorkspace((s) => s.activeDevice);
+
+  if (loading || activeDevice !== null) return null;
+
+  const stations: { id: "door" | "entry" | "overview" | "laptop" | "tablet" | "phone" | "tv"; label: string }[] = [
+    { id: "door", label: "DOOR" },
+    { id: "entry", label: "ROOM" },
+    { id: "overview", label: "OVERVIEW" },
+    { id: "laptop", label: "LAPTOP" },
+    { id: "tablet", label: "TABLET" },
+    { id: "phone", label: "PHONE" },
+    { id: "tv", label: "TV" },
+  ];
+
+  return (
+    <div className="fixed bottom-4 left-1/2 z-[50] flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/15 bg-black/70 p-1 shadow-2xl backdrop-blur-xl">
+      {stations.map((s) => {
+        const isActive = target === s.id;
+        return (
+          <button
+            key={s.id}
+            onClick={() => {
+              if (s.id === "door" || s.id === "entry" || s.id === "overview") {
+                go(s.id);
+              } else {
+                openDevice(s.id);
+              }
+            }}
+            className={`rounded-full px-2.5 py-1 font-mono text-[8.5px] font-bold tracking-[0.14em] transition-all ${
+              isActive
+                ? "bg-[#ffd700] text-black shadow-[0_0_12px_rgba(255,215,0,0.6)]"
+                : "text-[#a8a5b0] hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            {s.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -206,8 +259,11 @@ export function SettingsModal() {
   const setSettingsOpen = useWorkspace((s) => s.setSettingsOpen);
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setReducedMotion(reduced);
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, [setReducedMotion]);
 
   if (!open) return null;
@@ -241,6 +297,37 @@ export function SettingsModal() {
           <br />
           ARE TUNED FOR 60FPS
         </p>
+      </div>
+    </div>
+  );
+}
+
+export function TvFullscreenOverlay() {
+  const tvFullscreen = useWorkspace((s) => s.tvFullscreen);
+  const setTvFullscreen = useWorkspace((s) => s.setTvFullscreen);
+
+  if (!tvFullscreen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl"
+      onClick={() => setTvFullscreen(false)}
+    >
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <span className="font-mono text-[11px] tracking-[0.2em] text-[#7dd3fc]">PRESS ESC OR CLICK TO EXIT</span>
+        <button
+          onClick={() => setTvFullscreen(false)}
+          className="rounded-full bg-white/10 p-2 text-[#ffd700] transition-colors hover:bg-white/20"
+          aria-label="Exit fullscreen"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div onClick={(e) => e.stopPropagation()} style={{ transform: "scale(1.8)" }} className="shadow-2xl">
+        <TvScreen fullscreen />
       </div>
     </div>
   );
