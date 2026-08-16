@@ -1,26 +1,17 @@
 "use client";
 
-import type { Project } from "@/lib/types";
+import { projects } from "@/lib/data";
 import { useFetch } from "@/lib/useFetch";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { ExternalLinkIcon, GitHubIcon } from "../icons";
 
 export function OpenSource() {
-  const { data: projects, loading, error } = useFetch<Project[]>("/api/projects");
   const { data: githubStats } = useFetch<{ followers: number }>(
     "/api/github-stats"
   );
 
-  if (error) {
-    return (
-      <section id="open-source" className="scroll-mt-24 px-4 sm:px-6">
-        <p className="text-accent-dim">Failed to load repositories.</p>
-      </section>
-    );
-  }
-
-  const repos = (projects ?? []).slice(0, 4);
+  const repos = projects.slice(0, 4);
 
   return (
     <section
@@ -70,7 +61,7 @@ export function OpenSource() {
           </Reveal>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:col-span-2">
-            {(loading ? [] : repos).map((repo, index) => (
+            {repos.map((repo, index) => (
               <Reveal key={repo.id} delay={index * 0.06}>
                 <a
                   href={repo.githubUrl}

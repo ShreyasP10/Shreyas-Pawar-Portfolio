@@ -1,28 +1,15 @@
 "use client";
 
 import type { SkillGroup } from "@/lib/types";
+import { skillGroups as defaultSkillGroups, techStack } from "@/lib/data";
 import { useFetch } from "@/lib/useFetch";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
-import { techStack } from "@/lib/data";
 import { CodeIcon } from "../icons";
 
 export function Skills() {
-  const {
-    data: about,
-    loading,
-    error,
-  } = useFetch<{ skillGroups: SkillGroup[] }>("/api/about");
-
-  if (error) {
-    return (
-      <section id="skills" className="scroll-mt-24 px-4 sm:px-6">
-        <p className="text-accent-dim">Failed to load skills.</p>
-      </section>
-    );
-  }
-
-  const groups = about?.skillGroups ?? [];
+  const { data: about } = useFetch<{ skillGroups: SkillGroup[] }>("/api/about");
+  const groups = about?.skillGroups ?? defaultSkillGroups;
 
   return (
     <section
@@ -37,7 +24,7 @@ export function Skills() {
         />
 
         <div className="grid gap-5 sm:grid-cols-2">
-          {(loading ? [] : groups).map((group, index) => (
+          {groups.map((group, index) => (
             <Reveal key={group.category} delay={index * 0.06}>
               <div className="h-full rounded-2xl border border-white/10 bg-panel p-6 transition-colors hover:border-accent/40">
                 <div className="mb-4 flex items-center gap-2.5">

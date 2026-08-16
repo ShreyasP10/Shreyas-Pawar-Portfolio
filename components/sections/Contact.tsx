@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import type { Profile } from "@/lib/types";
-import { useFetch } from "@/lib/useFetch";
+import { profile } from "@/lib/data";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import {
@@ -19,21 +18,27 @@ const inputClasses =
   "w-full rounded-xl border border-white/10 bg-ink px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-accent";
 
 export function Contact() {
-  const { data: profile } = useFetch<Profile>("/api/profile");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<Status>({ type: "idle", text: "" });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (honeypot) {
+      // Silent discard for bots
+      setStatus({ type: "success", text: "Message sent! I will get back to you soon." });
+      return;
+    }
+
     setStatus({ type: "loading", text: "Sending..." });
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, honeypot }),
       });
       const body = (await res.json()) as {
         success: boolean;
@@ -68,20 +73,20 @@ export function Contact() {
   const directLinks = [
     {
       label: "Email",
-      value: profile?.email ?? "",
-      href: `mailto:${profile?.email ?? ""}`,
+      value: profile.email,
+      href: `mailto:${profile.email}`,
       Icon: MailIcon,
     },
     {
       label: "GitHub",
       value: "ShreyasP10",
-      href: profile?.socialLinks?.github ?? "https://github.com/ShreyasP10",
+      href: profile.socialLinks.github,
       Icon: GitHubIcon,
     },
     {
       label: "LinkedIn",
       value: "linkedin.com/in/shreyaspawar10",
-      href: profile?.socialLinks?.linkedin ?? "https://www.linkedin.com",
+      href: profile.socialLinks.linkedin,
       Icon: LinkedInIcon,
     },
   ];
@@ -106,10 +111,10 @@ export function Contact() {
                   SP
                 </span>
                 <div>
-                  <p className="font-bold text-white">{profile?.name}</p>
+                  <p className="font-bold text-white">{profile.name}</p>
                   <p className="flex items-center gap-1.5 text-sm text-muted">
                     <MapPinIcon className="h-3.5 w-3.5" />
-                    {profile?.place}
+                    {profile.place}
                   </p>
                 </div>
               </div>
@@ -139,7 +144,7 @@ export function Contact() {
               </div>
 
               <p className="mt-auto font-mono text-xs text-muted">
-                {"// "}available for internships, hackathons &amp; freelance
+                {"// "}available for internships, hackathons {"&"} freelance
               </p>
             </div>
           </Reveal>
@@ -149,6 +154,18 @@ export function Contact() {
               onSubmit={handleSubmit}
               className="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-panel p-6"
             >
+              {/* Anti-spam Honeypot Field */}
+              <input
+                type="text"
+                name="website_hp"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-1.5 text-xs font-bold uppercase tracking-wider text-muted">
                   Name

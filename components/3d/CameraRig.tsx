@@ -8,6 +8,7 @@ import { useWorkspace, type NavTarget } from "./store";
 
 const v3 = new THREE.Vector3();
 const l3 = new THREE.Vector3();
+const _scratchDirection = new THREE.Vector3();
 
 // Doorway waypoints: the door plane is at z = 0.05, opening between x 3.0 and 4.2.
 const WAY_OUT = new THREE.Vector3(3.6, 1.12, 0.55);
@@ -20,15 +21,18 @@ const EXIT_WAY_IN = new THREE.Vector3(3.6, 1.1, -0.5);
 const EXIT_LOOK_IN = new THREE.Vector3(3.6, 1.3, 0.8);
 
 const EXIT_WAY_OUT = new THREE.Vector3(3.6, 1.12, 0.55);
-const EXIT_LOOK_OUT = new THREE.Vector3(3.6, 1.5, -0.4);
+const EXIT_LOOK_OUT = new THREE.Vector3(3.6, 1.5, 1.8);
+
+const parallaxOffset = new THREE.Vector3();
+const combinedTargetPos = new THREE.Vector3();
+const combinedTargetLook = new THREE.Vector3();
 
 export function CameraRig() {
-  const { camera, size } = useThree();
+  const size = useThree((s) => s.size);
   const target = useWorkspace((s) => s.target);
   const targetPos = useWorkspace((s) => s.targetCameraPosition);
   const targetLook = useWorkspace((s) => s.targetLookAt);
   const freeCam = useWorkspace((s) => s.freeCam);
-  const setFreeCam = useWorkspace((s) => s.setFreeCam);
   const reducedMotion = useWorkspace((s) => s.reducedMotion);
   const doorOpen = useWorkspace((s) => s.doorOpen);
   const openDoor = useWorkspace((s) => s.openDoor);
@@ -39,8 +43,18 @@ export function CameraRig() {
   const [routeIdx, setRouteIdx] = useState(0);
   const prevTarget = useRef<NavTarget | null>(null);
 
-  // Dynamic Offset logic for "30% room visibility" rule
-  const dynamicOffset = (size.width < 768) ? 1.4 : 1.0;
+  // Responsive device offset calculation
+  const aspect = size.width / Math.max(1, size.height);
+  const isMobile = size.width < 768 || aspect < 1.1;
+  const dynamicOffset = isMobile ? 1.45 : 1.0;
+
+  // Target FOV per view target
+  const targetFov =
+    target === "laptop" || target === "tablet" || target === "phone"
+      ? (isMobile ? 44 : 38)
+      : target === "tv"
+      ? (isMobile ? 46 : 42)
+      : 48;
 
   useEffect(() => {
     if (prevTarget.current !== target) {
@@ -48,15 +62,12 @@ export function CameraRig() {
       const isOutsideNext = target === "door";
 
       if (isOutsidePrev !== isOutsideNext) {
-        // We are crossing the threshold
         setIsMoving(true);
         if (!doorOpen) openDoor();
 
         if (isOutsidePrev) {
-          // Entering
           setRoute([{ pos: WAY_OUT, look: LOOK_OUT }, { pos: WAY_IN, look: LOOK_IN }]);
         } else {
-          // Exiting
           setRoute([{ pos: EXIT_WAY_IN, look: EXIT_LOOK_IN }, { pos: EXIT_WAY_OUT, look: EXIT_LOOK_OUT }]);
         }
         setRouteIdx(0);
@@ -70,23 +81,37 @@ export function CameraRig() {
 
   useFrame((state, delta) => {
     if (freeCam) return;
+    const cam = state.camera as THREE.PerspectiveCamera;
 
     if (reducedMotion) {
-      camera.position.set(targetPos[0], targetPos[1], targetPos[2]);
-      camera.lookAt(targetLook[0], targetLook[1], targetLook[2]);
+      cam.position.set(targetPos[0], targetPos[1], targetPos[2]);
+      cam.lookAt(targetLook[0], targetLook[1], targetLook[2]);
+      if (cam.fov !== targetFov) {
+        cam.fov = targetFov;
+        cam.updateProjectionMatrix();
+      }
       setIsMoving(false);
       setRoute(null);
       if (doorOpen) closeDoor();
       return;
     }
 
+    // Dynamic FOV easing
+    if (cam.fov && Math.abs(cam.fov - targetFov) > 0.1) {
+      easing.damp(cam, "fov", targetFov, 0.45, delta);
+      cam.updateProjectionMatrix();
+    }
+
     const currentTargetPos = v3.set(targetPos[0], targetPos[1], targetPos[2]);
     const currentTargetLook = l3.set(targetLook[0], targetLook[1], targetLook[2]);
 
-    // Apply dynamic offset if focused on devices
-    if (target === "laptop" || target === "tablet" || target === "phone") {
-        const direction = new THREE.Vector3().subVectors(currentTargetPos, currentTargetLook).normalize();
-        currentTargetPos.addScaledVector(direction, dynamicOffset - 1);
+    // Apply dynamic distance offset for devices on smaller / portrait screens
+    if (target === "laptop" || target === "tablet" || target === "phone" || target === "tv") {
+      const direction = _scratchDirection.subVectors(currentTargetPos, currentTargetLook).normalize();
+      currentTargetPos.addScaledVector(direction, dynamicOffset - 1);
+      if (isMobile && target !== "tv") {
+        currentTargetPos.y += 0.06;
+      }
     }
 
     let activeTargetPos = currentTargetPos;
@@ -96,7 +121,7 @@ export function CameraRig() {
       activeTargetPos = route[routeIdx].pos;
       activeTargetLook = route[routeIdx].look;
 
-      if (camera.position.distanceTo(activeTargetPos) < 0.1) {
+      if (cam.position.distanceTo(activeTargetPos) < 0.12) {
         if (routeIdx < route.length - 1) {
           setRouteIdx(routeIdx + 1);
         } else {
@@ -104,19 +129,32 @@ export function CameraRig() {
           if (doorOpen) closeDoor();
         }
       }
+    } else {
+      // Apply subtle mouse pointer parallax sway when sitting at a waypoint
+      const isDevice = target === "laptop" || target === "tablet" || target === "phone";
+      const parallaxFactorX = isDevice ? 0.025 : 0.15;
+      const parallaxFactorY = isDevice ? 0.015 : 0.08;
+
+      parallaxOffset.set(
+        state.pointer.x * parallaxFactorX,
+        state.pointer.y * parallaxFactorY,
+        0
+      );
+
+      combinedTargetPos.copy(activeTargetPos).add(parallaxOffset);
+      combinedTargetLook.copy(activeTargetLook).add(parallaxOffset.clone().multiplyScalar(0.4));
+
+      activeTargetPos = combinedTargetPos;
+      activeTargetLook = combinedTargetLook;
     }
 
-    // Smooth damping
-    easing.damp3(camera.position, activeTargetPos, 0.4, delta);
-    easing.dampLookAt(camera, activeTargetLook, 0.4, delta);
+    // Smooth cinematic camera position and rotation damping
+    easing.damp3(cam.position, activeTargetPos, 0.38, delta);
+    easing.dampLookAt(cam, activeTargetLook, 0.38, delta);
 
     // Check if we arrived
-    if (!route && camera.position.distanceTo(currentTargetPos) < 0.05) {
-        setIsMoving(false);
-        // Only set freeCam if we aren't at the door
-        if (target !== "door") {
-            // setFreeCam(true); // Optional: enable if you want OrbitControls to take over after arrival
-        }
+    if (!route && cam.position.distanceTo(currentTargetPos) < 0.06) {
+      setIsMoving(false);
     }
   });
 

@@ -44,7 +44,8 @@ export function Lights() {
 
       {/* Luxury Backlight for Wall Board area */}
       <rectAreaLight
-        position={[0, 3.1, -8.92]}
+        position={[0, 3.1, -8.98]}
+        rotation={[0, Math.PI, 0]}
         color="#ffd700"
         intensity={reducedMotion ? 4.5 : 6.2}
         width={7.5}
@@ -59,6 +60,24 @@ export function Lights() {
         intensity={3}
         width={5.4}
         height={0.15}
+      />
+
+      {/* Screen Radiance - Laptop Monitor Glow casting onto desk */}
+      <pointLight
+        position={[0, 1.05, -7.2]}
+        color="#ffd700"
+        intensity={0.8}
+        distance={2.8}
+        decay={2}
+      />
+
+      {/* TV Screen OLED Ambient Radiance casting onto side wall */}
+      <pointLight
+        position={[4.6, 2.3, -4.5]}
+        color="#7dd3fc"
+        intensity={1.2}
+        distance={3.8}
+        decay={2}
       />
     </>
   );

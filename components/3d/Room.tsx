@@ -21,6 +21,10 @@ import {
   floorTextureRepeat,
   wallBoardTexture,
   mugTextTexture,
+  deskMatTexture,
+  acousticSlatTexture,
+  posterTexture,
+  bookSpinesTexture,
 } from "./materials";
 
 type RoomTextures = Record<string, THREE.Texture | null>;
@@ -30,7 +34,11 @@ export function Room() {
     () => ({
       floor: floorTextureRepeat([5, 4]),
       wall: plasterTextureRepeat([4, 2]),
+      slats: acousticSlatTexture([6, 1]),
       desk: woodTextureRepeat([3, 1.5]),
+      deskMat: deskMatTexture(),
+      poster: posterTexture(),
+      books: bookSpinesTexture(),
       leg: woodTextureRepeat([1, 2]),
       mat: speckleTextureWarm(),
       matTop: speckleTextureMid(),
@@ -44,6 +52,7 @@ export function Room() {
       trim: speckleTextureTrim(),
       doorWood: woodTextureRepeat([1, 2.5]),
       carpet: speckleTextureCarpet(),
+      mugText: mugTextTexture(),
     }),
     []
   );
@@ -55,16 +64,34 @@ export function Room() {
         <meshStandardMaterial map={tex.floor} color="#ffffff" roughness={0.2} metalness={0.4} />
       </mesh>
 
+      {/* Acoustic Feature Slat Wall behind desk */}
+      <mesh position={[0, 2.8, -8.99]}>
+        <boxGeometry args={[7.6, 3.8, 0.04]} />
+        <meshStandardMaterial map={tex.slats} roughness={0.8} />
+      </mesh>
+
+      {/* Framed Generative Tech Poster on side wall */}
+      <group position={[4.98, 3.2, -4.5]} rotation={[0, -Math.PI / 2, 0]}>
+        <mesh castShadow>
+          <boxGeometry args={[1.8, 2.4, 0.04]} />
+          <meshStandardMaterial color="#000000" roughness={0.4} metalness={0.8} />
+        </mesh>
+        <mesh position={[0, 0, 0.025]}>
+          <planeGeometry args={[1.65, 2.25]} />
+          <meshStandardMaterial map={tex.poster} roughness={0.2} />
+        </mesh>
+      </group>
+
       <mesh position={[0, 3, -9.05]}>
         <boxGeometry args={[10, 6, 0.1]} />
         <meshStandardMaterial map={tex.wall} color="#0a0a0a" roughness={0.9} />
       </mesh>
-      <mesh position={[0, 3, 0.05]}>
-        <boxGeometry args={[8.2, 6, 0.1]} />
+      <mesh position={[-0.9875, 3, 0.05]}>
+        <boxGeometry args={[8.025, 6, 0.1]} />
         <meshStandardMaterial map={tex.wall} color="#0a0a0a" roughness={0.9} />
       </mesh>
-      <mesh position={[4.925, 3, 0.05]}>
-        <boxGeometry args={[0.15, 6, 0.1]} />
+      <mesh position={[4.5875, 3, 0.05]}>
+        <boxGeometry args={[0.825, 6, 0.1]} />
         <meshStandardMaterial map={tex.wall} color="#0a0a0a" roughness={0.9} />
       </mesh>
       <mesh position={[-5.05, 3, -4.5]}>
@@ -81,8 +108,9 @@ export function Room() {
         <meshStandardMaterial color="#0d0d11" roughness={0.92} />
       </mesh>
       {[
-        [0, 5.95, -8.95, [10.2, 0.02, 0.03]],
-        [0, 5.95, 0.08, [10.2, 0.02, 0.03]],
+        [0, 5.95, -8.985, [10.2, 0.02, 0.03]],
+        [-0.9875, 5.95, -0.015, [8.025, 0.02, 0.03]],
+        [4.5875, 5.95, -0.015, [0.825, 0.02, 0.03]],
         [-4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
         [4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
       ].map((p, i) => (
@@ -93,9 +121,9 @@ export function Room() {
       ))}
 
       {[
-        [0, 0.095, -8.94, [10, 0.09, 0.06]],
-        [-0.9, 0.095, 0.06, [8.2, 0.09, 0.06]],
-        [4.925, 0.095, 0.06, [0.15, 0.09, 0.06]],
+        [0, 0.095, -8.97, [10, 0.09, 0.06]],
+        [-0.9875, 0.095, -0.03, [8.025, 0.09, 0.06]],
+        [4.5875, 0.095, -0.03, [0.825, 0.09, 0.06]],
         [4.94, 0.095, -4.5, [0.06, 0.09, 9]],
         [-4.94, 0.095, -4.5, [0.06, 0.09, 9]],
       ].map((p, i) => (
@@ -105,8 +133,9 @@ export function Room() {
         </mesh>
       ))}
       {[
-        [0, 0.16, -8.94, [10, 0.012, 0.015]],
-        [0, 0.16, 0.06, [10, 0.012, 0.015]],
+        [0, 0.16, -8.9925, [10, 0.012, 0.015]],
+        [-0.9875, 0.16, -0.015, [8.025, 0.012, 0.015]],
+        [4.5875, 0.16, -0.015, [0.825, 0.012, 0.015]],
         [4.94, 0.16, -4.5, [0.015, 0.012, 9]],
         [-4.94, 0.16, -4.5, [0.015, 0.012, 9]],
       ].map((p, i) => (
@@ -171,7 +200,7 @@ export function Room() {
 
       <Keyboard />
 
-      <group position={[0.4, 0.8823, -7.12]}>
+      <group position={[0.4, 0.8885, -7.12]}>
         <mesh castShadow scale={[1, 0.65, 0.85]}>
           <sphereGeometry args={[0.085, 20, 20]} />
           <meshStandardMaterial map={tex.rubber} color="#ffffff" roughness={0.35} metalness={0.6} />
@@ -183,10 +212,10 @@ export function Room() {
         <BreathingDot />
       </group>
 
-      <group position={[0.52, 0.8723, -7.85]}>
+      <group position={[0.52, 0.8833, -7.85]}>
         <mesh castShadow rotation={[0, Math.PI, 0]}>
           <cylinderGeometry args={[0.075, 0.06, 0.1, 20]} />
-          <meshStandardMaterial map={mugTextTexture()} color="#ffffff" roughness={0.45} metalness={0.3} />
+          <meshStandardMaterial map={tex.mugText} color="#ffffff" roughness={0.45} metalness={0.3} />
         </mesh>
         <mesh position={[0, 0.08, 0]}>
           <cylinderGeometry args={[0.078, 0.078, 0.018, 20]} />
@@ -196,7 +225,7 @@ export function Room() {
 
       <MugSteam />
 
-      <group position={[-0.55, 0.8253, -7.85]}>
+      <group position={[-0.55, 0.8393, -7.85]}>
         <mesh castShadow>
           <boxGeometry args={[0.42, 0.012, 0.3]} />
           <meshStandardMaterial map={tex.paper} color="#ffffff" roughness={0.6} />
@@ -284,6 +313,7 @@ function ProceduralDesk() {
   const tex = useMemo(
     () => ({
       desk: woodTextureRepeat([3, 1.5]),
+      deskMat: deskMatTexture(),
     }),
     []
   );
@@ -296,6 +326,16 @@ function ProceduralDesk() {
           map={tex.desk}
           color="#080808"
           roughness={0.3}
+          metalness={0.1}
+        />
+      </mesh>
+
+      {/* Topographical Premium Desk Mat */}
+      <mesh position={[0, 0.048, 0.15]} receiveShadow>
+        <boxGeometry args={[2.6, 0.006, 0.85]} />
+        <meshStandardMaterial
+          map={tex.deskMat}
+          roughness={0.9}
           metalness={0.1}
         />
       </mesh>
@@ -319,12 +359,11 @@ function ProceduralDesk() {
 
 function Chair() {
   const chairRef = useRef<THREE.Group>(null);
-  const lastInteraction = useWorkspace((s) => s.lastInteraction);
-
   useFrame((state) => {
     if (!chairRef.current) return;
-    const idle = state.clock.elapsedTime - lastInteraction / 1000;
-    if (idle > 20) {
+    const lastInteraction = useWorkspace.getState().lastInteraction;
+    const idleSeconds = (Date.now() - lastInteraction) / 1000;
+    if (idleSeconds > 12) {
       chairRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.06;
     } else {
       chairRef.current.rotation.y = 0;
@@ -402,7 +441,7 @@ function ProceduralChair() {
 function WallName() {
   const tex = wallBoardTexture();
   return (
-    <group position={[0, 3.1, -8.95]}>
+    <group position={[0, 3.1, -8.97]}>
       <mesh>
         <boxGeometry args={[6.4, 2.0, 0.06]} />
         <meshStandardMaterial color="#141018" roughness={0.7} />
@@ -487,7 +526,7 @@ function CeilingFan() {
   const bladeMat = <meshStandardMaterial color="#1a1a1e" roughness={0.7} metalness={0.2} side={THREE.DoubleSide} />;
 
   return (
-    <group ref={fanRef} position={[0, 5.85, -4.5]}>
+    <group ref={fanRef} position={[0, 5.96, -4.5]}>
       <mesh castShadow>
         <cylinderGeometry args={[0.25, 0.25, 0.08, 16]} />
         <meshStandardMaterial color="#141418" roughness={0.5} metalness={0.6} />
@@ -560,7 +599,7 @@ function MonitorLightBar() {
         intensity={reducedMotion ? 4 : 6}
         width={1.8}
         height={0.15}
-        lookAt={[0, 0.3, -2.2]}
+        lookAt={[0, 0.8, -7.15]}
       />
     </group>
   );
@@ -588,7 +627,7 @@ function MugSteam() {
   });
 
   return (
-    <group position={[0.52, 0.9623, -7.85]}>
+    <group position={[0.52, 0.9733, -7.85]}>
       {Array.from({ length: 6 }).map((_, i) => (
         <mesh
           key={i}
@@ -628,11 +667,11 @@ function Door({ tex }: { tex: RoomTextures }) {
   return (
     <group>
       {/* Door frame — jambs + header */}
-      <mesh position={[DOOR_X_HINGE, 1.125, 0.05]} castShadow>
+      <mesh position={[DOOR_X_HINGE + 0.045, 1.125, 0.05]} castShadow>
         <boxGeometry args={[0.09, DOOR_Y_TOP + 0.06, 0.14]} />
         {jambMat}
       </mesh>
-      <mesh position={[DOOR_X_EDGE, 1.125, 0.05]} castShadow>
+      <mesh position={[DOOR_X_EDGE - 0.045, 1.125, 0.05]} castShadow>
         <boxGeometry args={[0.09, DOOR_Y_TOP + 0.06, 0.14]} />
         {jambMat}
       </mesh>
@@ -781,8 +820,27 @@ function PlantSway({ tex }: { tex: RoomTextures }) {
 function Bookshelf({ tex }: { tex: RoomTextures }) {
   return (
     <group position={[-4.8, 0, -8.0]}>
-      <mesh position={[0, 1.15, 0]} castShadow>
-        <boxGeometry args={[0.42, 2.3, 1.05]} />
+      {/* Back Panel */}
+      <mesh position={[-0.2, 1.15, 0]} castShadow>
+        <boxGeometry args={[0.02, 2.3, 1.05]} />
+        <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.6} />
+      </mesh>
+      {/* Side Panels */}
+      <mesh position={[0.01, 1.15, -0.515]} castShadow>
+        <boxGeometry args={[0.4, 2.3, 0.02]} />
+        <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.6} />
+      </mesh>
+      <mesh position={[0.01, 1.15, 0.515]} castShadow>
+        <boxGeometry args={[0.4, 2.3, 0.02]} />
+        <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.6} />
+      </mesh>
+      {/* Top/Bottom Panels */}
+      <mesh position={[0.01, 2.29, 0]} castShadow>
+        <boxGeometry args={[0.4, 0.02, 1.01]} />
+        <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.6} />
+      </mesh>
+      <mesh position={[0.01, 0.01, 0]} castShadow>
+        <boxGeometry args={[0.4, 0.02, 1.01]} />
         <meshStandardMaterial map={tex.doorWood} color="#ffffff" roughness={0.6} />
       </mesh>
       {[0.55, 1.1, 1.65].map((y) => (
@@ -805,7 +863,7 @@ function Bookshelf({ tex }: { tex: RoomTextures }) {
       ].map((b, i) => (
         <mesh key={i} position={[0.02, b.y, b.z]} castShadow>
           <boxGeometry args={[0.36, 0.16 + (i % 3) * 0.05, 0.1]} />
-          <meshStandardMaterial color={b.c} roughness={0.85} />
+          <meshStandardMaterial map={tex.books} color={b.c} roughness={0.7} />
         </mesh>
       ))}
       <group position={[-0.02, 0.62, 0.42]}>
@@ -1168,7 +1226,7 @@ function Keyboard() {
   });
 
   return (
-    <group position={[0, 0.8273, -7.15]}>
+    <group position={[0, 0.8333, -7.15]}>
       <mesh castShadow>
         <boxGeometry args={[0.36, 0.018, 0.12]} />
         <meshStandardMaterial color="#121216" roughness={0.6} />

@@ -1,33 +1,15 @@
 "use client";
 
+import type { Certification } from "@/lib/types";
+import { certifications as defaultCertifications } from "@/lib/data";
 import { useFetch } from "@/lib/useFetch";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { AwardIcon } from "../icons";
 
-interface Certification {
-  id: number;
-  title: string;
-  issuer: string;
-  issued: string;
-}
-
 export function Certifications() {
-  const {
-    data: about,
-    loading,
-    error,
-  } = useFetch<{ certifications: Certification[] }>("/api/about");
-
-  if (error) {
-    return (
-      <section id="certifications" className="scroll-mt-24 px-4 sm:px-6">
-        <p className="text-accent-dim">Failed to load certifications.</p>
-      </section>
-    );
-  }
-
-  const certifications = about?.certifications ?? [];
+  const { data: about } = useFetch<{ certifications: Certification[] }>("/api/about");
+  const certifications = about?.certifications ?? defaultCertifications;
 
   return (
     <section
@@ -42,7 +24,7 @@ export function Certifications() {
         />
 
         <div className="grid gap-5 sm:grid-cols-2">
-          {(loading ? [] : certifications).map((cert, index) => (
+          {certifications.map((cert, index) => (
             <Reveal key={cert.id} delay={index * 0.08}>
               <article className="group flex h-full items-start gap-4 rounded-2xl border border-white/10 bg-panel p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/40 text-accent">

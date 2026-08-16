@@ -3,12 +3,11 @@
 import { motion } from "framer-motion";
 import type { Profile } from "@/lib/types";
 import { useFetch } from "@/lib/useFetch";
-import { stats } from "@/lib/data";
+import { stats, profile } from "@/lib/data";
 import { CountUp } from "./CountUp";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "./icons";
 
 export function Hero() {
-  const { data: profile } = useFetch<Profile>("/api/profile");
   const { data: githubStats } = useFetch<{ followers: number }>(
     "/api/github-stats"
   );
@@ -43,7 +42,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-6xl lg:text-7xl"
         >
-          Shreyas Pawar
+          {profile.name}
         </motion.h1>
 
         <motion.p
@@ -52,7 +51,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-5 max-w-3xl font-mono text-lg font-semibold leading-snug text-accent sm:text-2xl"
         >
-          Data Science &amp; DSA | Built ML &amp; Mobile Solutions for Real-World Use Cases
+          {profile.subheading}
         </motion.p>
 
         <motion.p
@@ -61,7 +60,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg"
         >
-          Data Science &amp; DSA. I build ML and mobile solutions for real-world
+          Data Science {"&"} DSA. I build ML and mobile solutions for real-world
           use cases — from encrypted chat platforms and satellite-imagery AI
           prototypes to campus intelligence systems and crop disease detection.
         </motion.p>
@@ -84,22 +83,23 @@ export function Hero() {
           >
             Get in Touch
           </a>
+
           <div className="flex items-center gap-2">
             {[
               {
-                key: "github",
+                key: "github" as const,
                 label: "GitHub",
                 Icon: GitHubIcon,
               },
               {
-                key: "linkedin",
+                key: "linkedin" as const,
                 label: "LinkedIn",
                 Icon: LinkedInIcon,
               },
             ].map(({ key, label, Icon }) => (
               <a
                 key={key}
-                href={profile?.socialLinks?.[key as "github" | "linkedin"]}
+                href={profile.socialLinks[key]}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
@@ -110,7 +110,7 @@ export function Hero() {
               </a>
             ))}
             <a
-              href={`mailto:${profile?.email ?? ""}`}
+              href={`mailto:${profile.email}`}
               aria-label="Email"
               title="Email"
               className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent"
@@ -127,8 +127,7 @@ export function Hero() {
           className="mt-14 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:grid-cols-4"
         >
           {stats.map((stat) => (
-            <div key={stat.label}>
-              <dt className="sr-only">{stat.label}</dt>
+            <div key={stat.label} className="flex flex-col-reverse">
               <dd className="text-3xl font-bold text-accent">
                 <CountUp
                   value={
@@ -139,9 +138,9 @@ export function Hero() {
                   suffix={stat.suffix}
                 />
               </dd>
-              <dd className="mt-1 text-xs text-muted sm:text-sm">
+              <dt className="mb-1 text-xs text-muted sm:text-sm">
                 {stat.label}
-              </dd>
+              </dt>
             </div>
           ))}
         </motion.dl>

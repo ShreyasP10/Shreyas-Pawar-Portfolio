@@ -11,6 +11,7 @@ export function DownloadResume() {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
+          label="resume_download"
           title="Download Resume"
           description="One page, all the essentials — education, experience, hackathons, projects, certifications and skills."
         />
