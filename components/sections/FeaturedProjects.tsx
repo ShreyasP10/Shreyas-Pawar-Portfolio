@@ -27,14 +27,28 @@ export function FeaturedProjects() {
             <Reveal key={project.id} delay={index * 0.08}>
               <div className="h-full [perspective:1000px]">
                 <TiltCard>
-                  <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-panel p-5 transition-colors duration-300 hover:border-accent/60">
+                  <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] transition-colors duration-300 hover:border-accent/60">
                         <div
-                          className={`mb-4 flex h-36 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br ${placeholderGradients[index % placeholderGradients.length]}`}
+                          className={`relative mb-4 flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br ${
+                            project.image ? "" : placeholderGradients[index % placeholderGradients.length]
+                          }`}
                         >
-                          <span className="font-mono text-sm font-bold text-accent/80">
-                            {String(index + 1).padStart(2, "0")} /{" "}
-                            {project.title}
-                          </span>
+                          {project.image ? (
+                            <>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={project.image}
+                                alt={`${project.title} preview`}
+                                className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                              />
+                              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                            </>
+                          ) : (
+                            <span className="font-mono text-sm font-bold text-accent/80">
+                              {String(index + 1).padStart(2, "0")} /{" "}
+                              {project.title}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-2 flex items-start justify-between gap-3">

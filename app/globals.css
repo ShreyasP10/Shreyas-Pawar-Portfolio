@@ -98,3 +98,15 @@ body {
 .caret-blink {
   animation: caret-blink 1s step-end infinite;
 }
+
+@utility neo-raised {
+  box-shadow: 4px 4px 10px #040404, -4px -4px 10px #151515;
+}
+
+@utility neo-pressed {
+  box-shadow: inset 4px 4px 10px #040404, inset -4px -4px 10px #151515;
+}
+
+@utility neo-inset {
+  box-shadow: inset 3px 3px 6px #040404, inset -3px -3px 6px #151515;
+}

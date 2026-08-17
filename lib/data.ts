@@ -131,14 +131,22 @@ export const skillGroups: SkillGroup[] = [
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Chatrixz",
+    title: "CropIQ",
     description:
-      "Real-time encrypted chat application where every message is encrypted on the client with AES-256-GCM before upload — Firestore stores only ciphertext, so the server never understands message content. Built around that single architectural decision: encrypted replies, read receipts, file sharing, message reactions, WebRTC peer-to-peer voice calls, PWA with offline support.",
-    tags: ["React", "Firebase", "WebRTC", "AES-256-GCM", "PWA"],
-    githubUrl: "https://github.com/ShreyasP10/Chatrixz",
-    demoUrl: "https://github.com/ShreyasP10/Chatrixz",
-    year: "2026",
-    highlight: "End-to-end encrypted messaging",
+      "AI-powered crop disease detection platform with an Android app (Java + Kotlin), web portal and admin dashboard. Detects diseases across crops like apple and banana using a CNN implemented with TensorFlow/TensorFlow Lite, provides recommended solutions and preventive measures, and delivers real-time updates via Firebase Cloud Messaging.",
+    tags: [
+      "Android",
+      "Java",
+      "Kotlin",
+      "TensorFlow Lite",
+      "Firebase",
+      "Firestore",
+      "FCM",
+    ],
+    githubUrl: "https://github.com/ShreyasP10/CropIQ",
+    year: "2025",
+    highlight: "MSBTE State Level Project Competition",
+    image: "/projects/cropiq.jpg",
   },
   {
     id: 2,
@@ -158,9 +166,22 @@ export const projects: Project[] = [
     demoUrl: "https://github.com/ShreyasP10/Kepler-404",
     year: "2026",
     highlight: "ISRO SAC BAH 2026 Hackathon",
+    image: "/projects/kepler-404.png",
   },
   {
     id: 3,
+    title: "Chatrixz",
+    description:
+      "Real-time encrypted chat application where every message is encrypted on the client with AES-256-GCM before upload — Firestore stores only ciphertext, so the server never understands message content. Built around that single architectural decision: encrypted replies, read receipts, file sharing, message reactions, WebRTC peer-to-peer voice calls, PWA with offline support.",
+    tags: ["React", "Firebase", "WebRTC", "AES-256-GCM", "PWA"],
+    githubUrl: "https://github.com/ShreyasP10/Chatrixz",
+    demoUrl: "https://github.com/ShreyasP10/Chatrixz",
+    year: "2026",
+    highlight: "End-to-end encrypted messaging",
+    image: "/projects/chatrixz.png",
+  },
+  {
+    id: 4,
     title: "Camptel AI",
     description:
       "Campus decision-intelligence platform built for the Gen AI Academy APAC Edition (Google Cloud Hackathon 2026). Transforms raw campus data into actionable decisions: academic risk panel with real-time risk scoring, placement readiness tiers across branches, classroom utilization heatmaps with conflict alerts, and a plain-English AI assistant that converts natural language into SQL. 11x GPU speedup using NVIDIA RAPIDS cuDF over Pandas (45s to 4.1s on 1.2M records).",
@@ -176,24 +197,7 @@ export const projects: Project[] = [
     demoUrl: "https://github.com/ShreyasP10/Camptel-AI",
     year: "2026",
     highlight: "Google Cloud Hackathon 2026",
-  },
-  {
-    id: 4,
-    title: "CropIQ",
-    description:
-      "AI-powered crop disease detection platform with an Android app (Java + Kotlin), web portal and admin dashboard. Detects diseases across crops like apple and banana using a CNN implemented with TensorFlow/TensorFlow Lite, provides recommended solutions and preventive measures, and delivers real-time updates via Firebase Cloud Messaging.",
-    tags: [
-      "Android",
-      "Java",
-      "Kotlin",
-      "TensorFlow Lite",
-      "Firebase",
-      "Firestore",
-      "FCM",
-    ],
-    githubUrl: "https://github.com/ShreyasP10/CropIQ",
-    year: "2025",
-    highlight: "MSBTE State Level Project Competition",
+    image: "/projects/camptel-ai.png",
   },
   {
     id: 5,
@@ -205,6 +209,7 @@ export const projects: Project[] = [
     demoUrl: "https://github.com/ShreyasP10/AI-for-Learning",
     year: "2026",
     highlight: "AWS AI for Bharat Hackathon",
+    image: "/projects/ai-productivity.png",
   },
 ];
 

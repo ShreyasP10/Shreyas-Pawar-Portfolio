@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import type { Profile } from "@/lib/types";
 import { useFetch } from "@/lib/useFetch";
 import { stats, profile } from "@/lib/data";
@@ -11,6 +11,10 @@ export function Hero() {
   const { data: githubStats } = useFetch<{ followers: number }>(
     "/api/github-stats"
   );
+  
+  const { scrollY } = useScroll();
+  const yParallax = useTransform(scrollY, [0, 500], [0, -100]);
+  const opacityParallax = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
     <section
@@ -37,12 +41,24 @@ export function Hero() {
         </motion.p>
 
         <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-6xl lg:text-7xl"
+          style={{ y: yParallax, opacity: opacityParallax }}
+          className="flex flex-wrap max-w-5xl text-6xl font-black leading-[0.95] tracking-tighter text-white sm:text-8xl lg:text-9xl overflow-hidden py-2"
         >
-          {profile.name}
+          {profile.name.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.1 + index * 0.03,
+                ease: [0.33, 1, 0.68, 1],
+              }}
+              className={char === " " ? "w-[0.3em]" : "inline-block"}
+            >
+              {char}
+            </motion.span>
+          ))}
         </motion.h1>
 
         <motion.p
@@ -69,17 +85,17 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 flex flex-wrap items-center gap-3"
+          className="mt-8 flex flex-wrap items-center gap-4"
         >
           <a
             href="#projects"
-            className="rounded-xl border-2 border-accent bg-accent px-5 py-2.5 text-sm font-bold text-ink transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,215,0,0.25)]"
+            className="neo-raised rounded-xl bg-panel px-6 py-3 text-sm font-bold text-accent transition-all active:neo-pressed hover:-translate-y-0.5"
           >
             View Projects
           </a>
           <a
             href="#contact"
-            className="rounded-xl border-2 border-accent px-5 py-2.5 text-sm font-bold text-accent transition-all hover:-translate-y-0.5 hover:bg-accent/10"
+            className="neo-inset rounded-xl bg-panel px-6 py-3 text-sm font-bold text-muted transition-all hover:text-white"
           >
             Get in Touch
           </a>
@@ -104,18 +120,18 @@ export function Hero() {
                 rel="noopener noreferrer"
                 aria-label={label}
                 title={label}
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+                className="neo-raised flex h-11 w-11 items-center justify-center rounded-xl bg-panel text-muted transition-all active:neo-pressed hover:-translate-y-0.5 hover:text-accent"
               >
-                <Icon className="h-4.5 w-4.5" />
+                <Icon className="h-5 w-5" />
               </a>
             ))}
             <a
               href={`mailto:${profile.email}`}
               aria-label="Email"
               title="Email"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+              className="neo-raised flex h-11 w-11 items-center justify-center rounded-xl bg-panel text-muted transition-all active:neo-pressed hover:-translate-y-0.5 hover:text-accent"
             >
-              <MailIcon className="h-4.5 w-4.5" />
+              <MailIcon className="h-5 w-5" />
             </a>
           </div>
         </motion.div>

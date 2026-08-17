@@ -1,5 +1,6 @@
 import { BackToTop } from "./BackToTop";
 import { GoldenParticles } from "./GoldenParticles";
+import { AmbientGlow } from "./AmbientGlow";
 import { Navbar } from "./Navbar";
 import { Hero } from "./Hero";
 import { Footer } from "./Footer";
@@ -18,6 +19,7 @@ import { Skills } from "./sections/Skills";
 export function Portfolio() {
   return (
     <div className="relative">
+      <AmbientGlow />
       <ScrollProgress />
       <GoldenParticles />
       <Navbar />

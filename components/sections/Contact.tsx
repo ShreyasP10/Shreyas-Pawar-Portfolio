@@ -15,7 +15,7 @@ import {
 type Status = { type: "idle" | "loading" | "success" | "error"; text: string };
 
 const inputClasses =
-  "w-full rounded-xl border border-white/10 bg-ink px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-accent";
+  "neo-inset w-full rounded-xl border border-white/5 bg-ink px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-accent";
 
 export function Contact() {
   const [name, setName] = useState("");
@@ -126,7 +126,7 @@ export function Contact() {
                     href={href}
                     target={href.startsWith("mailto") ? undefined : "_blank"}
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-xl border border-white/10 bg-panel p-4 transition-all hover:-translate-y-0.5 hover:border-accent/60"
+                    className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] transition-all hover:-translate-y-0.5 hover:border-accent/60"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-accent/40 text-accent">
                       <Icon className="h-4 w-4" />
@@ -152,7 +152,7 @@ export function Contact() {
           <Reveal delay={0.1} className="lg:col-span-3">
             <form
               onSubmit={handleSubmit}
-              className="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-panel p-6"
+              className="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
             >
               {/* Anti-spam Honeypot Field */}
               <input
@@ -207,7 +207,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={status.type === "loading"}
-                className="cursor-pointer rounded-xl border-2 border-accent bg-accent px-5 py-2.5 text-sm font-bold text-ink transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,215,0,0.25)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                className="neo-raised cursor-pointer rounded-xl bg-panel px-6 py-3 text-sm font-bold text-accent transition-all active:neo-pressed hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 {status.type === "loading" ? "Sending..." : "Send Message"}
               </button>
