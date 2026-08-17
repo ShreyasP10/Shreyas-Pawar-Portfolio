@@ -49,6 +49,8 @@ export interface Project {
   demoUrl?: string;
   year: string;
   highlight?: string;
+  /** Path to a project image, e.g. "/projects/chatrixz.png" (paste files in public/projects/). */
+  image?: string;
 }
 
 export interface ExperienceItem {

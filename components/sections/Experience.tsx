@@ -1,15 +1,11 @@
 "use client";
 
-import type { ExperienceItem } from "@/lib/types";
-import { experience as defaultExperience } from "@/lib/data";
-import { useFetch } from "@/lib/useFetch";
+import { experience } from "@/lib/data";
 import { Reveal } from "../Reveal";
 import { SectionHeading } from "../SectionHeading";
 import { BriefcaseIcon } from "../icons";
 
 export function Experience() {
-  const { data: fetchedExperience } = useFetch<ExperienceItem[]>("/api/experience");
-  const experience = fetchedExperience ?? defaultExperience;
 
   return (
     <section
@@ -31,7 +27,7 @@ export function Experience() {
                   <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                 </span>
 
-                <div className="rounded-2xl border border-white/10 bg-panel p-6 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-accent/50 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-accent/50 group-hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
                   <div className="mb-1 flex flex-wrap items-center gap-2">
                     <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-accent/40 text-accent">
                       <BriefcaseIcon className="h-3.5 w-3.5" />

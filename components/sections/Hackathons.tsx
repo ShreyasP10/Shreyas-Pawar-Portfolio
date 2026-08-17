@@ -24,7 +24,7 @@ export function Hackathons() {
             <Reveal key={item.id} delay={index * 0.08}>
               <div className="h-full [perspective:1000px]">
                 <TiltCard>
-                  <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-panel p-6 transition-colors duration-300 hover:border-accent/60">
+                  <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] transition-colors duration-300 hover:border-accent/60">
                     <div className="mb-3 flex items-center gap-3">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-accent/40 text-accent">
                         <AwardIcon className="h-4.5 w-4.5" />

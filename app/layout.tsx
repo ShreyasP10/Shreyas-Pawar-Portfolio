@@ -44,6 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { CustomCursor } from "@/components/CustomCursor";
+
 export default function RootLayout({
   children,
 }: {
@@ -55,6 +57,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <CustomCursor />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-xs focus:font-bold focus:text-ink focus:shadow-lg focus:outline-none"
