@@ -99,6 +99,7 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   targetLookAt: LOOK.door,
 
   go: (target) => {
+    if (get().isMoving && !get().reducedMotion) return;
     if (get().soundOn) playTone(520, 0.04);
     set({
       target,
@@ -133,6 +134,7 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
   },
 
   openDevice: (device, tab) => {
+    if (get().isMoving && !get().reducedMotion) return;
     if (get().soundOn) playPositionalTone(680, 0.05, 0.035, DEVICE_SOUND_POS[device]);
     const target = device as NavTarget;
     set((state) => ({
