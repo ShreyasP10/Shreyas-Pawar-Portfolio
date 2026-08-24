@@ -11,6 +11,9 @@ export function Hero() {
   const { data: githubStats } = useFetch<{ followers: number }>(
     "/api/github-stats"
   );
+  const { data: leetcodeStats } = useFetch<{ ranking: number; solved: number }>(
+    "/api/leetcode-stats"
+  );
   
   const { scrollY } = useScroll();
   const yParallax = useTransform(scrollY, [0, 500], [0, -100]);
@@ -140,7 +143,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-14 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:grid-cols-4"
+          className="mt-14 grid grid-cols-2 gap-4 border-t border-white/10 pt-8 sm:grid-cols-5"
         >
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col-reverse">
@@ -149,6 +152,8 @@ export function Hero() {
                   value={
                     stat.label === "GitHub Followers"
                       ? githubStats?.followers ?? stat.value
+                      : stat.label === "LeetCode Solved"
+                      ? leetcodeStats?.solved ?? stat.value
                       : stat.value
                   }
                   suffix={stat.suffix}

@@ -24,7 +24,7 @@ export const profile: Profile = {
     linkedin: "https://www.linkedin.com/in/shreyaspawar10/",
     github: "https://github.com/ShreyasP10",
     instagram: "https://www.instagram.com/shreyas_p10",
-    leetcode: "https://leetcode.com/u/ShreyasP10",
+    leetcode: "https://leetcode.com/u/ShreyasPawar10/",
     twitter: "https://x.com/ShreyasP10",
     whatsapp: "https://wa.me/919999999999",
   },
@@ -273,6 +273,7 @@ export const stats: Stat[] = [
   { value: 5, suffix: "+", label: "Projects Built" },
   { value: 4, suffix: "+", label: "Hackathons" },
   { value: 19, suffix: "", label: "GitHub Followers" },
+  { value: 200, suffix: "+", label: "LeetCode Solved" },
   { value: 4, suffix: "+", label: "Years in Tech" },
 ];
 
