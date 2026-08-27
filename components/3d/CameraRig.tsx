@@ -5,6 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { easing } from "maath";
 import { useWorkspace, type NavTarget } from "./store";
+import { useScrollSync } from "./useScrollSync";
 
 const v3 = new THREE.Vector3();
 const l3 = new THREE.Vector3();
@@ -38,6 +39,8 @@ export function CameraRig() {
   const openDoor = useWorkspace((s) => s.openDoor);
   const closeDoor = useWorkspace((s) => s.closeDoor);
   const setIsMoving = useWorkspace((s) => s.setIsMoving);
+
+  useScrollSync();
 
   const [route, setRoute] = useState<{ pos: THREE.Vector3; look: THREE.Vector3 }[] | null>(null);
   const [routeIdx, setRouteIdx] = useState(0);

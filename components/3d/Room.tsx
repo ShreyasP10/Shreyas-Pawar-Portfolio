@@ -4,6 +4,7 @@ import { Suspense, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useWorkspace } from "./store";
 import { GlbModel, GLB } from "./models";
 import { certifications } from "@/lib/data";
@@ -57,6 +58,75 @@ export function Room() {
     []
   );
 
+  // Merged static geometries to reduce draw calls
+  const mergedGeoms = useMemo(() => {
+    // Walls: 5 sections with same material
+    const wallGeoms: THREE.BufferGeometry[] = [];
+    const wallPositions = [
+      { pos: [0, 3, -9.05], args: [10, 6, 0.1] },
+      { pos: [-0.9875, 3, 0.05], args: [8.025, 6, 0.1] },
+      { pos: [4.5875, 3, 0.05], args: [0.825, 6, 0.1] },
+      { pos: [-5.05, 3, -4.5], args: [0.1, 6, 9] },
+      { pos: [5.05, 3, -4.5], args: [0.1, 6, 9] },
+    ];
+    for (const w of wallPositions) {
+      const g = new THREE.BoxGeometry(...w.args);
+      g.translate(w.pos[0], w.pos[1], w.pos[2]);
+      wallGeoms.push(g);
+    }
+    const walls = mergeGeometries(wallGeoms);
+
+    // Ceiling gold bands: 5 sections with same emissive material
+    const ceilingBandGeoms: THREE.BufferGeometry[] = [];
+    const ceilingBandPositions = [
+      [0, 5.95, -8.985, [10.2, 0.02, 0.03]],
+      [-0.9875, 5.95, -0.015, [8.025, 0.02, 0.03]],
+      [4.5875, 5.95, -0.015, [0.825, 0.02, 0.03]],
+      [-4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
+      [4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
+    ];
+    for (const p of ceilingBandPositions) {
+      const g = new THREE.BoxGeometry(...(p[3] as [number, number, number]));
+      g.translate(p[0] as number, p[1] as number, p[2] as number);
+      ceilingBandGeoms.push(g);
+    }
+    const ceilingBands = mergeGeometries(ceilingBandGeoms);
+
+    // Floor trim/baseboards: 5 sections with same trim material
+    const floorTrimGeoms: THREE.BufferGeometry[] = [];
+    const floorTrimPositions = [
+      [0, 0.095, -8.97, [10, 0.09, 0.06]],
+      [-0.9875, 0.095, -0.03, [8.025, 0.09, 0.06]],
+      [4.5875, 0.095, -0.03, [0.825, 0.09, 0.06]],
+      [4.94, 0.095, -4.5, [0.06, 0.09, 9]],
+      [-4.94, 0.095, -4.5, [0.06, 0.09, 9]],
+    ];
+    for (const p of floorTrimPositions) {
+      const g = new THREE.BoxGeometry(...(p[3] as [number, number, number]));
+      g.translate(p[0] as number, p[1] as number, p[2] as number);
+      floorTrimGeoms.push(g);
+    }
+    const floorTrim = mergeGeometries(floorTrimGeoms);
+
+    // Ceiling light strips: 5 sections with same emissive material
+    const ceilingLightGeoms: THREE.BufferGeometry[] = [];
+    const ceilingLightPositions = [
+      [0, 0.16, -8.9925, [10, 0.012, 0.015]],
+      [-0.9875, 0.16, -0.015, [8.025, 0.012, 0.015]],
+      [4.5875, 0.16, -0.015, [0.825, 0.012, 0.015]],
+      [4.94, 0.16, -4.5, [0.015, 0.012, 9]],
+      [-4.94, 0.16, -4.5, [0.015, 0.012, 9]],
+    ];
+    for (const p of ceilingLightPositions) {
+      const g = new THREE.BoxGeometry(...(p[3] as [number, number, number]));
+      g.translate(p[0] as number, p[1] as number, p[2] as number);
+      ceilingLightGeoms.push(g);
+    }
+    const ceilingLights = mergeGeometries(ceilingLightGeoms);
+
+    return { walls, ceilingBands, floorTrim, ceilingLights };
+  }, []);
+
   return (
     <group>
       <mesh position={[0, 0, -4.5]} receiveShadow>
@@ -102,48 +172,22 @@ export function Room() {
         <boxGeometry args={[0.1, 6, 9]} />
         <meshStandardMaterial map={tex.wall} color="#0a0a0a" roughness={0.9} />
       </mesh>
-
-      <mesh position={[0, 6.05, -4.5]}>
+<mesh position={[0, 6.05, -4.5]}>
         <boxGeometry args={[10.2, 0.1, 9.2]} />
         <meshStandardMaterial color="#0d0d11" roughness={0.92} />
       </mesh>
-      {[
-        [0, 5.95, -8.985, [10.2, 0.02, 0.03]],
-        [-0.9875, 5.95, -0.015, [8.025, 0.02, 0.03]],
-        [4.5875, 5.95, -0.015, [0.825, 0.02, 0.03]],
-        [-4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
-        [4.95, 5.95, -4.5, [0.03, 0.02, 9.2]],
-      ].map((p, i) => (
-        <mesh key={i} position={[p[0] as number, p[1] as number, p[2] as number]}>
-          <boxGeometry args={p[3] as [number, number, number]} />
-          <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={2.0} roughness={0.4} />
-        </mesh>
-      ))}
-
-      {[
-        [0, 0.095, -8.97, [10, 0.09, 0.06]],
-        [-0.9875, 0.095, -0.03, [8.025, 0.09, 0.06]],
-        [4.5875, 0.095, -0.03, [0.825, 0.09, 0.06]],
-        [4.94, 0.095, -4.5, [0.06, 0.09, 9]],
-        [-4.94, 0.095, -4.5, [0.06, 0.09, 9]],
-      ].map((p, i) => (
-        <mesh key={i} position={[p[0] as number, p[1] as number, p[2] as number]}>
-          <boxGeometry args={p[3] as [number, number, number]} />
-          <meshStandardMaterial map={tex.trim} color="#ffffff" roughness={0.8} />
-        </mesh>
-      ))}
-      {[
-        [0, 0.16, -8.9925, [10, 0.012, 0.015]],
-        [-0.9875, 0.16, -0.015, [8.025, 0.012, 0.015]],
-        [4.5875, 0.16, -0.015, [0.825, 0.012, 0.015]],
-        [4.94, 0.16, -4.5, [0.015, 0.012, 9]],
-        [-4.94, 0.16, -4.5, [0.015, 0.012, 9]],
-      ].map((p, i) => (
-        <mesh key={i} position={[p[0] as number, p[1] as number, p[2] as number]}>
-          <boxGeometry args={p[3] as [number, number, number]} />
-          <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={1.6} roughness={0.4} />
-        </mesh>
-      ))}
+      <mesh geometry={mergedGeoms.walls}>
+        <meshStandardMaterial map={tex.wall} color="#0a0a0a" roughness={0.9} />
+      </mesh>
+      <mesh geometry={mergedGeoms.ceilingBands}>
+        <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={2.0} roughness={0.4} />
+      </mesh>
+      <mesh geometry={mergedGeoms.floorTrim}>
+        <meshStandardMaterial map={tex.trim} color="#ffffff" roughness={0.8} />
+      </mesh>
+      <mesh geometry={mergedGeoms.ceilingLights}>
+        <meshStandardMaterial color="#ffb347" emissive="#ffb347" emissiveIntensity={1.6} roughness={0.4} />
+      </mesh>
 
       {/* Ceiling fan - minimal modern */}
       <CeilingFan />
@@ -1166,8 +1210,23 @@ function Curtains() {
   useFrame((state) => {
     if (reducedMotion) return;
     const t = state.clock.elapsedTime;
-    if (leftRef.current) leftRef.current.rotation.z = Math.sin(t * 0.35) * 0.025;
-    if (rightRef.current) rightRef.current.rotation.z = -Math.sin(t * 0.3 + 1.1) * 0.025;
+    // Multi-frequency wind simulation: base sway + gust + micro-flutter
+    // Bottom moves more than top (pinned at top edge at y ~2.8)
+    const baseSway = Math.sin(t * 0.35) * 0.025;
+    const gust = Math.sin(t * 0.18 + 0.7) * 0.012;
+    const flutter = Math.sin(t * 2.1) * 0.003;
+    const sway = baseSway + gust + flutter;
+
+    if (leftRef.current) {
+      // Apply more rotation at bottom (y scale) - pinned at top
+      leftRef.current.rotation.z = sway;
+      // Subtle x-rotation for depth
+      leftRef.current.rotation.x = Math.sin(t * 0.25 + 0.3) * 0.006;
+    }
+    if (rightRef.current) {
+      rightRef.current.rotation.z = -sway * 0.92; // Slightly different phase
+      rightRef.current.rotation.x = -Math.sin(t * 0.22 + 1.1) * 0.006;
+    }
   });
 
   const curtainMat = <meshStandardMaterial map={fabricTexture("#050505")} color="#ffffff" roughness={0.95} />;
