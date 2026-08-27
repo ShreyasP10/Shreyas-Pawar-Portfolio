@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function AmbientGlow() {
   const [isMounted, setIsMounted] = useState(false);
-  
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -13,9 +13,10 @@ export function AmbientGlow() {
   const smoothX = useSpring(mouseX, { damping: 50, stiffness: 200 });
   const smoothY = useSpring(mouseY, { damping: 50, stiffness: 200 });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
-    
+
     // Set initial position to center of screen
     mouseX.set(window.innerWidth / 2);
     mouseY.set(window.innerHeight / 2);

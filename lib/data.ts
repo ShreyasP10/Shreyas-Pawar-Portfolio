@@ -270,7 +270,7 @@ export const headline =
   "Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases";
 
 export const stats: Stat[] = [
-  { value: 5, suffix: "+", label: "Projects Built" },
+  { value: 8, suffix: "+", label: "Projects Built" },
   { value: 4, suffix: "+", label: "Hackathons" },
   { value: 19, suffix: "", label: "GitHub Followers" },
   { value: 200, suffix: "+", label: "LeetCode Solved" },

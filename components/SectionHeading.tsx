@@ -10,7 +10,7 @@ export function SectionHeading({
   description,
 }: SectionHeadingProps) {
   return (
-    <div className="mb-10">
+    <div className="mb-10" data-section={label}>
 
       <h2 className="text-5xl font-black tracking-tighter text-white sm:text-7xl">
         {title}

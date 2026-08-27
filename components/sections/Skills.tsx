@@ -49,12 +49,12 @@ export function Skills() {
         </div>
 
         <Reveal delay={0.1} className="mt-10">
-          <div className="rounded-2xl border border-white/10 bg-panel p-6">
+          <div className="rounded-2xl border border-white/10 bg-panel p-6 pb-8">
             <h3 className="mb-4 font-mono text-sm font-semibold text-accent">
               daily_drivers
             </h3>
-            <div className="overflow-hidden">
-              <div className="marquee-track flex w-max">
+            <div className="relative h-14">
+              <div className="marquee-track flex w-max items-center h-full">
                 {[...techStack, ...techStack].map((tool, index) => (
                   <span
                     key={`${tool}-${index}`}

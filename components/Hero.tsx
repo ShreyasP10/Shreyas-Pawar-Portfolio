@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import type { Profile } from "@/lib/types";
 import { useFetch } from "@/lib/useFetch";
 import { stats, profile } from "@/lib/data";
 import { CountUp } from "./CountUp";

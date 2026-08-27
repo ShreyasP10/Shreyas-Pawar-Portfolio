@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import QRCode from "qrcode";
 import {
   profile,
@@ -53,12 +53,16 @@ export function LaptopScreen() {
   const tab = useWorkspace((s) => s.laptopTab) as ExtendedLaptopTab;
   const [selectedTab, setSelectedTab] = useState<ExtendedLaptopTab | null>(null);
   const [time, setTime] = useState("");
+  const prevTabRef = useRef(tab);
+
+  useLayoutEffect(() => {
+    if (prevTabRef.current !== tab) {
+      setSelectedTab(null);
+      prevTabRef.current = tab;
+    }
+  }, [tab]);
 
   const activeTab = selectedTab ?? tab ?? "home";
-
-  useEffect(() => {
-    setSelectedTab(null);
-  }, [tab]);
 
   useEffect(() => {
     const updateTime = () => {

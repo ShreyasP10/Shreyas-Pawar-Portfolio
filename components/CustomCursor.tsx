@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
@@ -17,9 +17,10 @@ export function CustomCursor() {
   const smoothX = useSpring(cursorX, springConfig);
   const smoothY = useSpring(cursorY, springConfig);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Check if it's a touch device
     if (window.matchMedia("(pointer: coarse)").matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouch(true);
       return;
     }
@@ -28,7 +29,7 @@ export function CustomCursor() {
       cursorX.set(e.clientX - 16); // Center the 32px cursor
       cursorY.set(e.clientY - 16);
       if (!isVisible) setIsVisible(true);
-      
+
       // Check if hovering over a clickable element
       const target = e.target as HTMLElement;
       const isClickable = !!target.closest("a, button, [role='button'], input, textarea, select, .neo-raised, .neo-pressed");

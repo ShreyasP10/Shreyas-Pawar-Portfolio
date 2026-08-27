@@ -143,9 +143,9 @@ export function Contact() {
                 ))}
               </div>
 
-              <p className="mt-auto font-mono text-xs text-muted">
-                {"// "}available for internships, hackathons {"&"} freelance
-              </p>
+              <p className="mt-auto text-sm text-muted">
+              Open to internships, hackathons & freelance projects
+            </p>
             </div>
           </Reveal>
 

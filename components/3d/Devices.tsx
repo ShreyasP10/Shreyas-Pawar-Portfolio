@@ -157,7 +157,6 @@ export function Devices() {
 function TvWall() {
   const tvFullscreen = useWorkspace((s) => s.tvFullscreen);
   const setTvFullscreen = useWorkspace((s) => s.setTvFullscreen);
-  const closePanels = useWorkspace((s) => s.closePanels);
 
   const handleTvClick = () => {
     if (!tvFullscreen) {
