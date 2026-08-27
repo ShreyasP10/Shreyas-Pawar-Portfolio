@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 import { profile } from "@/lib/data";
 
 interface MenuItem {
@@ -122,15 +122,15 @@ function Icon({ name }: { name: string }) {
 }
 
 export function Sidebar() {
-  const target = useWorkspace((s) => s.target);
-  const activeDevice = useWorkspace((s) => s.activeDevice);
-  const laptopTab = useWorkspace((s) => s.laptopTab);
-  const tabletTab = useWorkspace((s) => s.tabletTab);
-  const tvTab = useWorkspace((s) => s.tvTab);
-  const settingsOpen = useWorkspace((s) => s.settingsOpen);
-  const setSettingsOpen = useWorkspace((s) => s.setSettingsOpen);
-  const go = useWorkspace((s) => s.go);
-  const openDevice = useWorkspace((s) => s.openDevice);
+  const target = useUIStore((s) => s.target);
+  const activeDevice = useUIStore((s) => s.activeDevice);
+  const laptopTab = useUIStore((s) => s.laptopTab);
+  const tabletTab = useUIStore((s) => s.tabletTab);
+  const tvTab = useUIStore((s) => s.tvTab);
+  const settingsOpen = useUIStore((s) => s.settingsOpen);
+  const setSettingsOpen = useUIStore((s) => s.setSettingsOpen);
+  const go = useUIStore((s) => s.go);
+  const openDevice = useUIStore((s) => s.openDevice);
 
   const items: MenuItem[] = [
     {

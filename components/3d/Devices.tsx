@@ -4,7 +4,7 @@ import { useRef, useState, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
-import { useWorkspace, type DeviceId } from "./store";
+import { useUIStore, type DeviceId } from "./store";
 import { LaptopScreen, TabletScreen, PhoneScreen, TvScreen } from "./Screens";
 import { brushedTexture, speckleTextureDark, asusLidTexture, asusChinTexture } from "./materials";
 
@@ -31,7 +31,7 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
   const glowRef = useRef<THREE.PointLight>(null);
   const glowTarget = useRef(0);
   const ringMatRef = useRef<THREE.MeshBasicMaterial | null>(null);
-  const openDevice = useWorkspace((s) => s.openDevice);
+  const openDevice = useUIStore((s) => s.openDevice);
 
   useEffect(() => {
     return () => {
@@ -116,7 +116,7 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
 }
 
 export function Devices() {
-  const activeDevice = useWorkspace((s) => s.activeDevice);
+  const activeDevice = useUIStore((s) => s.activeDevice);
 
   return (
     <group>
@@ -165,8 +165,8 @@ export function Devices() {
 }
 
 function TvWall() {
-  const tvFullscreen = useWorkspace((s) => s.tvFullscreen);
-  const setTvFullscreen = useWorkspace((s) => s.setTvFullscreen);
+  const tvFullscreen = useUIStore((s) => s.tvFullscreen);
+  const setTvFullscreen = useUIStore((s) => s.setTvFullscreen);
 
   const handleTvClick = () => {
     if (!tvFullscreen) {

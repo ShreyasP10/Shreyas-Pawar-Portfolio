@@ -13,19 +13,19 @@ import {
   QuickNav,
   TvFullscreenOverlay,
 } from "@/components/3d/Overlays";
-import { useWorkspace, type NavTarget } from "@/components/3d/store";
+import { useUIStore, type NavTarget } from "@/components/3d/store";
 import { SEQUENCE } from "@/components/3d/nav";
 
 export default function WorkspacePage() {
-  const go = useWorkspace((s) => s.go);
-  const openDevice = useWorkspace((s) => s.openDevice);
-  const closePanels = useWorkspace((s) => s.closePanels);
-  const toggleFreeCam = useWorkspace((s) => s.toggleFreeCam);
-  const target = useWorkspace((s) => s.target);
-  const loading = useWorkspace((s) => s.loading);
-  const doorOpen = useWorkspace((s) => s.doorOpen);
-  const openDoor = useWorkspace((s) => s.openDoor);
-  const setReducedMotion = useWorkspace((s) => s.setReducedMotion);
+  const go = useUIStore((s) => s.go);
+  const openDevice = useUIStore((s) => s.openDevice);
+  const closePanels = useUIStore((s) => s.closePanels);
+  const toggleFreeCam = useUIStore((s) => s.toggleFreeCam);
+  const target = useUIStore((s) => s.target);
+  const loading = useUIStore((s) => s.loading);
+  const doorOpen = useUIStore((s) => s.doorOpen);
+  const openDoor = useUIStore((s) => s.openDoor);
+  const setReducedMotion = useUIStore((s) => s.setReducedMotion);
   const lastNav = useRef(0);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function WorkspacePage() {
     if (doorOpen || target !== "door") return;
     const t1 = setTimeout(() => openDoor(), 1600);
     const t2 = setTimeout(() => {
-      if (useWorkspace.getState().target === "door") go("entry");
+      if (useUIStore.getState().target === "door") go("entry");
     }, 2400);
     return () => {
       clearTimeout(t1);
@@ -49,7 +49,7 @@ export default function WorkspacePage() {
       else openDevice(id);
     };
 
-    const getCurrentIndex = () => SEQUENCE.indexOf(useWorkspace.getState().target);
+    const getCurrentIndex = () => SEQUENCE.indexOf(useUIStore.getState().target);
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -70,7 +70,7 @@ export default function WorkspacePage() {
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (useWorkspace.getState().freeCam) return;
+      if (useUIStore.getState().freeCam) return;
       if (Math.abs(e.deltaY) < 12) return;
       const now = Date.now();
       if (now - lastNav.current < 650) return;
@@ -87,7 +87,7 @@ export default function WorkspacePage() {
       touchStartY = e.touches[0].clientY;
     };
     const onTouchMove = (e: TouchEvent) => {
-      if (useWorkspace.getState().freeCam) return;
+      if (useUIStore.getState().freeCam) return;
       const delta = touchStartY - e.touches[0].clientY;
       if (Math.abs(delta) < 40) return;
       const now = Date.now();

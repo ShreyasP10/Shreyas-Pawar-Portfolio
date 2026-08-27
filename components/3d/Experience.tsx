@@ -11,11 +11,11 @@ import { Dust } from "./Dust";
 import { CameraRig } from "./CameraRig";
 import { FreeCam } from "./FreeCam";
 import { WebGLBoundary } from "./WebGLBoundary";
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 import { setAudioListener, startHum, stopHum, DEVICE_SOUND_POS } from "./sound";
 
 function ReadyGate() {
-  const setLoading = useWorkspace((s) => s.setLoading);
+  const setLoading = useUIStore((s) => s.setLoading);
   const ready = useRef(false);
 
   useFrame(() => {
@@ -30,8 +30,8 @@ function ReadyGate() {
 
 function AudioRig() {
   const camera = useThree((s) => s.camera);
-  const activeDevice = useWorkspace((s) => s.activeDevice);
-  const soundOn = useWorkspace((s) => s.soundOn);
+  const activeDevice = useUIStore((s) => s.activeDevice);
+  const soundOn = useUIStore((s) => s.soundOn);
   const [listener] = useState(() => new THREE.AudioListener());
 
   useEffect(() => {

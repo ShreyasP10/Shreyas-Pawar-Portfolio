@@ -1,10 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import {
-  useWorkspace,
-  POS,
-  LOOK,
-  type NavTarget,
-} from "@/components/3d/store";
+import { useUIStore, useCameraStore, POS, LOOK, type NavTarget } from "@/components/3d/store";
 import { DEVICE_SOUND_POS } from "@/components/3d/sound";
 
 const NAV_TARGETS: NavTarget[] = [
@@ -19,7 +14,7 @@ const NAV_TARGETS: NavTarget[] = [
 ];
 
 beforeEach(() => {
-  useWorkspace.setState({
+  useUIStore.setState({
     target: "door",
     activeDevice: null,
     laptopTab: "home",
@@ -29,7 +24,12 @@ beforeEach(() => {
     freeCam: false,
     soundOn: false,
     settingsOpen: false,
+    reducedMotion: false,
     isMoving: false,
+    targetCameraPosition: POS.door,
+    targetLookAt: LOOK.door,
+  });
+  useCameraStore.setState({
     targetCameraPosition: POS.door,
     targetLookAt: LOOK.door,
   });
@@ -37,8 +37,8 @@ beforeEach(() => {
 
 describe("UT-04 · store device navigation", () => {
   it("openDevice sets target, active device and tab", () => {
-    useWorkspace.getState().openDevice("tablet", "journey");
-    const s = useWorkspace.getState();
+    useUIStore.getState().openDevice("tablet", "journey");
+    const s = useUIStore.getState();
     expect(s.target).toBe("tablet");
     expect(s.activeDevice).toBe("tablet");
     expect(s.tabletTab).toBe("journey");
@@ -49,21 +49,21 @@ describe("UT-04 · store device navigation", () => {
   });
 
   it("openDevice without a tab keeps existing tabs", () => {
-    useWorkspace.getState().openDevice("tv", "hackathons");
-    useWorkspace.getState().openDevice("phone");
-    const s = useWorkspace.getState();
+useUIStore.getState().openDevice("tv", "hackathons");
+  useUIStore.getState().openDevice("phone");
+  const s = useUIStore.getState();
     expect(s.target).toBe("phone");
     expect(s.tvTab).toBe("hackathons");
   });
 
   it("is blocked while moving (unless reducedMotion)", () => {
-    useWorkspace.setState({ isMoving: true });
-    useWorkspace.getState().openDevice("tv");
-    expect(useWorkspace.getState().target).toBe("door");
+useUIStore.setState({ isMoving: true });
+  useUIStore.getState().openDevice("tv");
+  expect(useUIStore.getState().target).toBe("door");
 
-    useWorkspace.setState({ isMoving: true, reducedMotion: true });
-    useWorkspace.getState().openDevice("tv");
-    expect(useWorkspace.getState().target).toBe("tv");
+  useUIStore.setState({ isMoving: true, reducedMotion: true });
+  useUIStore.getState().openDevice("tv");
+  expect(useUIStore.getState().target).toBe("tv");
   });
 });
 

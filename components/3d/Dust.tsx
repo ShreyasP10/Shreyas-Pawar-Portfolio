@@ -3,7 +3,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 
 const COUNT = 70;
 
@@ -16,8 +16,8 @@ function seededRandom(seed: number) {
 }
 
 export function Dust() {
-  const particlesOn = useWorkspace((s) => s.particlesOn);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const particlesOn = useUIStore((s) => s.particlesOn);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 

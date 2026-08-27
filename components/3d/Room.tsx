@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 import { GlbModel, GLB } from "./models";
 import { certifications } from "@/lib/data";
 import {
@@ -405,7 +405,7 @@ function Chair() {
   const chairRef = useRef<THREE.Group>(null);
   useFrame((state) => {
     if (!chairRef.current) return;
-    const lastInteraction = useWorkspace.getState().lastInteraction;
+    const lastInteraction = useUIStore.getState().lastInteraction;
     const idleSeconds = (Date.now() - lastInteraction) / 1000;
     if (idleSeconds > 12) {
       chairRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.06;
@@ -510,7 +510,7 @@ function WallName() {
 
 function FloorLamp({ tex }: { tex: RoomTextures }) {
   const lightRef = useRef<THREE.PointLight>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (!lightRef.current) return;
@@ -559,7 +559,7 @@ function FloorLamp({ tex }: { tex: RoomTextures }) {
 
 function CeilingFan() {
   const fanRef = useRef<THREE.Group>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (!fanRef.current) return;
@@ -624,7 +624,7 @@ function CeilingSpotlights() {
 }
 
 function MonitorLightBar() {
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   return (
     <group position={[0, 1.05, -7.5]}>
@@ -651,7 +651,7 @@ function MonitorLightBar() {
 
 function MugSteam() {
   const meshes = useRef<(THREE.Mesh | null)[]>([]);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (reducedMotion) return;
@@ -693,7 +693,7 @@ const DOOR_X_EDGE = 3.025;
 const DOOR_Y_TOP = 2.25;
 
 function Door({ tex }: { tex: RoomTextures }) {
-  const doorOpen = useWorkspace((s) => s.doorOpen);
+  const doorOpen = useUIStore((s) => s.doorOpen);
   const hingeRef = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -834,7 +834,7 @@ function Pegboard({ tex }: { tex: RoomTextures }) {
 
 function PlantSway({ tex }: { tex: RoomTextures }) {
   const ref = useRef<THREE.Group>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (!ref.current || reducedMotion) return;
@@ -1125,7 +1125,7 @@ function StickyNote({
   rotation: number;
 }) {
   const [hovered, setHovered] = useState(false);
-  const openDevice = useWorkspace((s) => s.openDevice);
+  const openDevice = useUIStore((s) => s.openDevice);
 
   return (
     <Html position={position} distanceFactor={1.35} zIndexRange={[20, 0]}>
@@ -1205,7 +1205,7 @@ function CertsWall() {
 function Curtains() {
   const leftRef = useRef<THREE.Mesh>(null);
   const rightRef = useRef<THREE.Mesh>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (reducedMotion) return;
@@ -1271,7 +1271,7 @@ function Curtains() {
 
 function Keyboard() {
   const glowRef = useRef<THREE.MeshStandardMaterial>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (!glowRef.current) return;
@@ -1306,7 +1306,7 @@ function Keyboard() {
 
 function BreathingDot() {
   const matRef = useRef<THREE.MeshStandardMaterial>(null);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   useFrame((state) => {
     if (!matRef.current) return;

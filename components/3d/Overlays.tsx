@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 import { SEQUENCE } from "./nav";
 import { TvScreen } from "./Screens";
 
@@ -51,7 +51,7 @@ function Toggle({
 }
 
 export function LoadingScreen() {
-  const loading = useWorkspace((s) => s.loading);
+  const loading = useUIStore((s) => s.loading);
 
   return (
     <div
@@ -73,11 +73,11 @@ export function LoadingScreen() {
 }
 
 export function LandingOverlay() {
-  const target = useWorkspace((s) => s.target);
-  const loading = useWorkspace((s) => s.loading);
-  const go = useWorkspace((s) => s.go);
-  const openDoor = useWorkspace((s) => s.openDoor);
-  const soundOn = useWorkspace((s) => s.soundOn);
+  const target = useUIStore((s) => s.target);
+  const loading = useUIStore((s) => s.loading);
+  const go = useUIStore((s) => s.go);
+  const openDoor = useUIStore((s) => s.openDoor);
+  const soundOn = useUIStore((s) => s.soundOn);
 
   const visible = (target === "door" || target === "entry") && !loading;
   const atDoor = target === "door";
@@ -128,9 +128,9 @@ export function LandingOverlay() {
 }
 
 export function HUD() {
-  const target = useWorkspace((s) => s.target);
-  const loading = useWorkspace((s) => s.loading);
-  const freeCam = useWorkspace((s) => s.freeCam);
+  const target = useUIStore((s) => s.target);
+  const loading = useUIStore((s) => s.loading);
+  const freeCam = useUIStore((s) => s.freeCam);
 
   return (
     <div
@@ -160,8 +160,8 @@ export function HUD() {
 }
 
 export function HelpBar() {
-  const activeDevice = useWorkspace((s) => s.activeDevice);
-  const loading = useWorkspace((s) => s.loading);
+  const activeDevice = useUIStore((s) => s.activeDevice);
+  const loading = useUIStore((s) => s.loading);
 
   if (loading) return null;
 
@@ -180,12 +180,12 @@ export function HelpBar() {
 }
 
 export function QuickNav() {
-  const target = useWorkspace((s) => s.target);
-  const loading = useWorkspace((s) => s.loading);
-  const go = useWorkspace((s) => s.go);
-  const openDevice = useWorkspace((s) => s.openDevice);
+  const target = useUIStore((s) => s.target);
+  const loading = useUIStore((s) => s.loading);
+  const go = useUIStore((s) => s.go);
+  const openDevice = useUIStore((s) => s.openDevice);
 
-  const activeDevice = useWorkspace((s) => s.activeDevice);
+  const activeDevice = useUIStore((s) => s.activeDevice);
 
   if (loading || activeDevice !== null) return null;
 
@@ -228,8 +228,8 @@ export function QuickNav() {
 }
 
 export function ScrollRail() {
-  const target = useWorkspace((s) => s.target);
-  const loading = useWorkspace((s) => s.loading);
+  const target = useUIStore((s) => s.target);
+  const loading = useUIStore((s) => s.loading);
   const index = SEQUENCE.indexOf(target);
 
   if (loading) return null;
@@ -253,14 +253,14 @@ export function ScrollRail() {
 }
 
 export function SettingsModal() {
-  const open = useWorkspace((s) => s.settingsOpen);
-  const soundOn = useWorkspace((s) => s.soundOn);
-  const particlesOn = useWorkspace((s) => s.particlesOn);
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
-  const setSound = useWorkspace((s) => s.setSound);
-  const setParticles = useWorkspace((s) => s.setParticles);
-  const setReducedMotion = useWorkspace((s) => s.setReducedMotion);
-  const setSettingsOpen = useWorkspace((s) => s.setSettingsOpen);
+  const open = useUIStore((s) => s.settingsOpen);
+  const soundOn = useUIStore((s) => s.soundOn);
+  const particlesOn = useUIStore((s) => s.particlesOn);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
+  const setSound = useUIStore((s) => s.setSound);
+  const setParticles = useUIStore((s) => s.setParticles);
+  const setReducedMotion = useUIStore((s) => s.setReducedMotion);
+  const setSettingsOpen = useUIStore((s) => s.setSettingsOpen);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -307,8 +307,8 @@ export function SettingsModal() {
 }
 
 export function TvFullscreenOverlay() {
-  const tvFullscreen = useWorkspace((s) => s.tvFullscreen);
-  const setTvFullscreen = useWorkspace((s) => s.setTvFullscreen);
+  const tvFullscreen = useUIStore((s) => s.tvFullscreen);
+  const setTvFullscreen = useUIStore((s) => s.setTvFullscreen);
 
   if (!tvFullscreen) return null;
 

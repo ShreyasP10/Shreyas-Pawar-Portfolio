@@ -11,7 +11,7 @@ import {
   certifications,
   milestones,
 } from "@/lib/data";
-import { useWorkspace, type LaptopTab, type TabletTab, type TvTab } from "./store";
+import { useUIStore, type LaptopTab, type TabletTab, type TvTab } from "./store";
 
 export type ExtendedLaptopTab = LaptopTab | "terminal";
 
@@ -50,7 +50,7 @@ function Panel({ children, title, badge }: { children: React.ReactNode; title: s
 }
 
 export function LaptopScreen() {
-  const tab = useWorkspace((s) => s.laptopTab) as ExtendedLaptopTab;
+  const tab = useUIStore((s) => s.laptopTab) as ExtendedLaptopTab;
   const [selectedTab, setSelectedTab] = useState<ExtendedLaptopTab | null>(null);
   const [time, setTime] = useState("");
   const prevTabRef = useRef(tab);
@@ -107,7 +107,7 @@ export function LaptopScreen() {
                     onClick={() => {
                       setSelectedTab(t.id);
                       if (t.id !== "terminal") {
-                        useWorkspace.getState().navigateTab("laptop", t.id as LaptopTab);
+                        useUIStore.getState().navigateTab("laptop", t.id as LaptopTab);
                       }
                     }}
                     className={`flex items-center gap-1 rounded px-1.5 py-1 text-left font-mono text-[6px] tracking-wide transition-all ${
@@ -176,13 +176,13 @@ function LaptopContent({ tab }: { tab: ExtendedLaptopTab }) {
 
           <div className="mt-2 flex gap-1.5 pt-1">
             <button
-              onClick={() => useWorkspace.getState().openDevice("tablet", "projects")}
+              onClick={() => useUIStore.getState().openDevice("tablet", "projects")}
               className="rounded bg-[#ffd700] px-2 py-0.5 font-mono text-[6px] font-bold text-black transition-transform hover:scale-105"
             >
               EXPLORE PROJECTS →
             </button>
             <button
-              onClick={() => useWorkspace.getState().openDevice("phone")}
+              onClick={() => useUIStore.getState().openDevice("phone")}
               className="rounded border border-[#7dd3fc]/50 px-2 py-0.5 font-mono text-[6px] font-bold text-[#7dd3fc] hover:bg-[#7dd3fc]/15"
             >
               CONNECT ☎
@@ -264,7 +264,7 @@ function LaptopContent({ tab }: { tab: ExtendedLaptopTab }) {
 }
 
 export function TabletScreen() {
-  const tab = useWorkspace((s) => s.tabletTab);
+  const tab = useUIStore((s) => s.tabletTab);
 
   return (
     <div style={{ width: 112, height: 172 }} className="select-none text-white">
@@ -277,7 +277,7 @@ export function TabletScreen() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => useWorkspace.getState().navigateTab("tablet", item.id)}
+                  onClick={() => useUIStore.getState().navigateTab("tablet", item.id)}
                   className={`flex-1 rounded py-0.5 text-center font-mono text-[5px] font-bold tracking-wider transition-colors ${
                     isActive
                       ? "bg-[#ffd700] text-black"
@@ -487,7 +487,7 @@ export function TvScreen({ fullscreen }: { fullscreen?: boolean }) {
 }
 
 function TvPanel() {
-  const tvTab = useWorkspace((s) => s.tvTab);
+  const tvTab = useUIStore((s) => s.tvTab);
 
   return (
     <div style={{ width: 500, height: 280 }} className="select-none text-white">
@@ -501,7 +501,7 @@ function TvPanel() {
                 return (
                   <button
                     key={item.id}
-                    onClick={() => useWorkspace.getState().navigateTab("tv", item.id)}
+                    onClick={() => useUIStore.getState().navigateTab("tv", item.id)}
                     className={`rounded px-2 py-0.5 font-mono text-[6.5px] font-bold tracking-wider transition-colors ${
                       isActive
                         ? "bg-[#ffd700] text-black shadow-md"

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { useWorkspace, POS } from "@/components/3d/store";
+import { useUIStore, useCameraStore, POS } from "@/components/3d/store";
 
 class FakeAudioContext {
   static instances: FakeAudioContext[] = [];
@@ -62,39 +62,43 @@ class FakeAudioContext {
 
 beforeEach(() => {
   FakeAudioContext.instances.length = 0;
-  useWorkspace.setState({
+  useUIStore.setState({
     soundOn: false,
     target: "door",
     activeDevice: null,
-    targetCameraPosition: POS.door,
-    targetLookAt: useWorkspace.getState().targetLookAt,
-    isMoving: false,
     reducedMotion: false,
+    isMoving: false,
+    targetCameraPosition: POS.door,
+    targetLookAt: useUIStore.getState().targetLookAt,
+  });
+  useCameraStore.setState({
+    targetCameraPosition: POS.door,
+    targetLookAt: useCameraStore.getState().targetLookAt,
   });
 });
 
 describe("UT-07 · audio respects soundOn", () => {
   it("creates no AudioContext while sound is off", () => {
-    useWorkspace.getState().go("wall");
-    useWorkspace.getState().openDevice("laptop");
-    useWorkspace.getState().closeDoor();
+    useUIStore.getState().go("wall");
+    useUIStore.getState().openDevice("laptop");
+    useUIStore.getState().closeDoor();
     expect(FakeAudioContext.instances).toHaveLength(0);
   });
 
   it("creates one shared AudioContext once sound is on", () => {
-    useWorkspace.getState().setSound(true);
+    useUIStore.getState().setSound(true);
     expect(FakeAudioContext.instances).toHaveLength(1);
 
-    useWorkspace.getState().go("wall");
-    useWorkspace.getState().openDevice("tv");
+    useUIStore.getState().go("wall");
+    useUIStore.getState().openDevice("tv");
     expect(FakeAudioContext.instances).toHaveLength(1);
   });
 
   it("playing device tones reuses the shared context without creating another", () => {
-    useWorkspace.getState().setSound(true);
+    useUIStore.getState().setSound(true);
 
-    useWorkspace.getState().openDevice("laptop");
-    useWorkspace.getState().navigateTab("tv", "experience");
+    useUIStore.getState().openDevice("laptop");
+    useUIStore.getState().navigateTab("tv", "experience");
     expect(FakeAudioContext.instances).toHaveLength(0);
   });
 });

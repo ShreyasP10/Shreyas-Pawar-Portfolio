@@ -21,7 +21,43 @@ export type TabletTab = "projects" | "journey";
 
 export type TvTab = "hackathons" | "achievements" | "experience" | "open-source" | "certs";
 
-interface WorkspaceState {
+interface CameraState {
+  targetCameraPosition: [number, number, number];
+  targetLookAt: [number, number, number];
+  setTargetPosition: (pos: [number, number, number]) => void;
+  setTargetLookAt: (look: [number, number, number]) => void;
+}
+
+export const POS: Record<NavTarget, [number, number, number]> = {
+  door: [3.6, 1.2, 1.6],
+  entry: [1.4, 1.0, -1.9],
+  wall: [0, 3.1, -4.5],
+  overview: [0.5, 2.0, 0.5],
+  laptop: [0, 1.1, -6.85],
+  tablet: [0.75, 1.15, -6.6],
+  phone: [-0.75, 1.05, -6.7],
+  tv: [2.0, 1.9, -1.5],
+};
+
+export const LOOK: Record<NavTarget, [number, number, number]> = {
+  door: [3.6, 1.5, -0.4],
+  entry: [0, 0.95, -6.5],
+  wall: [0, 3.1, -8.95],
+  overview: [0, 0.8, -7.0],
+  laptop: [0, 0.98, -7.55],
+  tablet: [0.75, 1.04, -7.25],
+  phone: [-0.75, 0.97, -7.3],
+  tv: [4.745, 1.9, -4.5],
+};
+
+export const useCameraStore = create<CameraState>((set) => ({
+  targetCameraPosition: POS.door,
+  targetLookAt: LOOK.door,
+  setTargetPosition: (pos) => set({ targetCameraPosition: pos }),
+  setTargetLookAt: (look) => set({ targetLookAt: look }),
+}));
+
+interface UIState {
   target: NavTarget;
   activeDevice: DeviceId | null;
   laptopTab: LaptopTab;
@@ -57,29 +93,7 @@ interface WorkspaceState {
   setIsMoving: (value: boolean) => void;
 }
 
-export const POS: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.2, 1.6],
-  entry: [1.4, 1.0, -1.9],
-  wall: [0, 3.1, -4.5],
-  overview: [0.5, 2.0, 0.5],
-  laptop: [0, 1.1, -6.85],
-  tablet: [0.75, 1.15, -6.6],
-  phone: [-0.75, 1.05, -6.7],
-  tv: [2.0, 1.9, -1.5],
-};
-
-export const LOOK: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.5, -0.4],
-  entry: [0, 0.95, -6.5],
-  wall: [0, 3.1, -8.95],
-  overview: [0, 0.8, -7.0],
-  laptop: [0, 0.98, -7.55],
-  tablet: [0.75, 1.04, -7.25],
-  phone: [-0.75, 0.97, -7.3],
-  tv: [4.745, 1.9, -4.5],
-};
-
-export const useWorkspace = create<WorkspaceState>((set, get) => ({
+export const useUIStore = create<UIState>((set, get) => ({
   target: "door",
   activeDevice: null,
   laptopTab: "home",
@@ -108,6 +122,7 @@ export const useWorkspace = create<WorkspaceState>((set, get) => ({
       settingsOpen: false,
       lastInteraction: Date.now(),
       freeCam: false,
+      isMoving: true,
       targetCameraPosition: POS[target],
       targetLookAt: LOOK[target],
     });

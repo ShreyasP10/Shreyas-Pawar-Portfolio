@@ -1,9 +1,9 @@
 "use client";
 
-import { useWorkspace } from "./store";
+import { useUIStore } from "./store";
 
 export function Lights() {
-  const reducedMotion = useWorkspace((s) => s.reducedMotion);
+  const reducedMotion = useUIStore((s) => s.reducedMotion);
 
   return (
     <>

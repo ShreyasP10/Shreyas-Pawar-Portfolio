@@ -5,7 +5,7 @@ import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { TOUCH, Vector3 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { useWorkspace, LOOK } from "./store";
+import { useUIStore, LOOK } from "./store";
 
 export const freeControlsRef: { current: OrbitControlsImpl | null } = { current: null };
 
@@ -18,8 +18,8 @@ const CAM_BOUNDS = { minX: -4.85, maxX: 4.85, minY: 0.35, maxY: 5.5, minZ: -8.75
 const TARGET_BOUNDS = { minX: -4.8, maxX: 4.8, minY: 0.3, maxY: 5.2, minZ: -8.7, maxZ: 0.0 };
 
 export function FreeCam() {
-  const freeCam = useWorkspace((s) => s.freeCam);
-  const target = useWorkspace((s) => s.target);
+  const freeCam = useUIStore((s) => s.freeCam);
+  const target = useUIStore((s) => s.target);
   const ref = useRef<OrbitControlsImpl>(null);
 
   useEffect(() => {

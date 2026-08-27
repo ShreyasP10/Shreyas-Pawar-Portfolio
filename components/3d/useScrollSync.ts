@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useWorkspace, type NavTarget } from "./store";
+import { useUIStore, type NavTarget } from "./store";
 
 const SECTION_TO_TARGET: Record<string, NavTarget> = {
   hero: "door",
@@ -15,9 +15,9 @@ const SECTION_TO_TARGET: Record<string, NavTarget> = {
 };
 
 export function useScrollSync() {
-  const go = useWorkspace((s) => s.go);
-  const target = useWorkspace((s) => s.target);
-  const isMoving = useWorkspace((s) => s.isMoving);
+  const go = useUIStore((s) => s.go);
+  const target = useUIStore((s) => s.target);
+  const isMoving = useUIStore((s) => s.isMoving);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const currentTargetRef = useRef(target);
   const isSyncingRef = useRef(false);
