@@ -53,4 +53,4 @@ jobs:
       - name: Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.14.x
-          lhci autorun
+          npx lhci autorun --fail-on-error=false

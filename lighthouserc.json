@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "npm run start -- -p 3223",
+      "startServerCommand": "PORT=3223 npx next start",
       "url": [
         "http://localhost:3223/",
         "http://localhost:3223/3d"
