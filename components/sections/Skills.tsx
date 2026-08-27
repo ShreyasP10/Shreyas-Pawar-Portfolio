@@ -53,7 +53,7 @@ export function Skills() {
             <h3 className="mb-4 font-mono text-sm font-semibold text-accent">
               daily_drivers
             </h3>
-            <div className="relative h-14">
+            <div className="relative h-14 overflow-hidden">
               <div className="marquee-track flex w-max items-center h-full">
                 {[...techStack, ...techStack].map((tool, index) => (
                   <span
