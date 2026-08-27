@@ -42,6 +42,8 @@ export function CameraRig() {
   const [route, setRoute] = useState<{ pos: THREE.Vector3; look: THREE.Vector3 }[] | null>(null);
   const [routeIdx, setRouteIdx] = useState(0);
   const prevTarget = useRef<NavTarget | null>(null);
+  const prevPosRef = useRef(new THREE.Vector3());
+  const velocityRef = useRef(0);
 
   // Responsive device offset calculation
   const aspect = size.width / Math.max(1, size.height);
@@ -152,8 +154,13 @@ export function CameraRig() {
     easing.damp3(cam.position, activeTargetPos, 0.38, delta);
     easing.dampLookAt(cam, activeTargetLook, 0.38, delta);
 
-    // Check if we arrived
-    if (!route && cam.position.distanceTo(currentTargetPos) < 0.06) {
+    // Velocity-based arrival check (more robust than distance-only)
+    const currentPos = cam.position.clone();
+    const distance = currentPos.distanceTo(currentTargetPos);
+    velocityRef.current = currentPos.distanceTo(prevPosRef.current) / Math.max(delta, 0.001);
+    prevPosRef.current.copy(currentPos);
+
+    if (!route && distance < 0.08 && velocityRef.current < 0.5) {
       setIsMoving(false);
     }
   });

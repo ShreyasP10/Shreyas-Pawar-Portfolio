@@ -145,9 +145,13 @@ export function HUD() {
         <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] text-[#8f8c99] backdrop-blur-xl">
           SP·3D
         </div>
-        {freeCam && (
+        {freeCam ? (
           <div className="rounded-full border border-[#ffd700]/40 bg-[#ffd700]/10 px-3 py-1.5 font-mono text-[8px] tracking-[0.2em] text-[#ffd700] backdrop-blur-xl">
             FREE LOOK (F)
+          </div>
+        ) : (
+          <div className="rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-[8px] tracking-[0.2em] text-[#7dd3fc]/60 backdrop-blur-xl">
+            Press F for Free Look
           </div>
         )}
       </div>

@@ -5,12 +5,12 @@ import type { NavTarget } from "@/components/3d/store";
 const EXPECTED: NavTarget[] = [
   "door",
   "entry",
-  "wall",
-  "overview",
-  "tv",
   "laptop",
   "tablet",
   "phone",
+  "tv",
+  "overview",
+  "wall",
 ];
 
 describe("UT-05 · scroll/view SEQUENCE", () => {

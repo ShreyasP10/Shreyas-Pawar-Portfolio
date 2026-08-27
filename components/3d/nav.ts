@@ -7,10 +7,10 @@ import type { NavTarget } from "./store";
 export const SEQUENCE: NavTarget[] = [
   "door",
   "entry",
-  "wall",
-  "overview",
-  "tv",
   "laptop",
   "tablet",
   "phone",
+  "tv",
+  "overview",
+  "wall",
 ];

@@ -39,6 +39,18 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
     };
   }, []);
 
+  const handleHoverStart = () => {
+    setHovered(true);
+    document.body.style.cursor = "pointer";
+  };
+
+  const handleHoverEnd = () => {
+    setHovered(false);
+    document.body.style.cursor = "auto";
+  };
+
+  
+
   useFrame((_, delta) => {
     if (!groupRef.current) return;
     targetScale.current = THREE.MathUtils.damp(
@@ -66,13 +78,11 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
-        setHovered(true);
-        document.body.style.cursor = "pointer";
+        handleHoverStart();
       }}
       onPointerOut={(e) => {
         e.stopPropagation();
-        setHovered(false);
-        document.body.style.cursor = "auto";
+        handleHoverEnd();
       }}
     >
       {children}

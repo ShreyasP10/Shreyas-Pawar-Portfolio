@@ -12,9 +12,10 @@ export const freeControlsRef: { current: OrbitControlsImpl | null } = { current:
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 const offset = new Vector3();
 
-// Room interior: walls at x ±4.7, back wall z -8.9, door plane z 0, floor 0, ceiling ~6.
-const CAM_BOUNDS = { minX: -4.55, maxX: 4.55, minY: 0.35, maxY: 4.2, minZ: -8.85, maxZ: 0.2 };
-const TARGET_BOUNDS = { minX: -4.5, maxX: 4.5, minY: 0.3, maxY: 4.0, minZ: -8.8, maxZ: 0.0 };
+// Room interior: walls at x ±4.95 (5.05±0.1), back wall z -8.95 (-9.05+0.1),
+// door plane z 0.05, floor y 0.05 (0.1 thick), ceiling y 6.0 (6.05-0.1).
+const CAM_BOUNDS = { minX: -4.85, maxX: 4.85, minY: 0.35, maxY: 5.5, minZ: -8.75, maxZ: 0.05 };
+const TARGET_BOUNDS = { minX: -4.8, maxX: 4.8, minY: 0.3, maxY: 5.2, minZ: -8.7, maxZ: 0.0 };
 
 export function FreeCam() {
   const freeCam = useWorkspace((s) => s.freeCam);
