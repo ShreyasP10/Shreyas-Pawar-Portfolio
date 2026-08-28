@@ -60,12 +60,17 @@ export function FreeCam() {
     <OrbitControls
       ref={ref}
       enabled={freeCam}
-      enableZoom={false}
+      enableZoom
       enablePan={false}
+      minDistance={0.6}
+      maxDistance={10}
+      minPolarAngle={0.25}
+      maxPolarAngle={Math.PI / 2 - 0.08}
       enableDamping
-      dampingFactor={0.08}
-      rotateSpeed={0.6}
-      touches={{ ONE: TOUCH.PAN, TWO: TOUCH.DOLLY_PAN }}
+      dampingFactor={0.06}
+      rotateSpeed={0.45}
+      zoomSpeed={0.7}
+      touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_PAN }}
     />
   );
 }

@@ -55,15 +55,15 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
     if (!groupRef.current) return;
     targetScale.current = THREE.MathUtils.damp(
       targetScale.current,
-      hovered ? 1.05 : 1,
-      10,
+      hovered ? 1.025 : 1,
+      12,
       delta
     );
     groupRef.current.scale.setScalar(targetScale.current);
     if (glowRef.current && ringMatRef.current) {
-      glowTarget.current = THREE.MathUtils.damp(glowTarget.current, hovered ? 1 : 0, 8, delta);
-      glowRef.current.intensity = 3.2 * glowTarget.current;
-      if (ringMatRef.current) ringMatRef.current.opacity = 0.22 * glowTarget.current;
+      glowTarget.current = THREE.MathUtils.damp(glowTarget.current, hovered ? 1 : 0, 10, delta);
+      glowRef.current.intensity = 2.0 * glowTarget.current;
+      if (ringMatRef.current) ringMatRef.current.opacity = 0.18 * glowTarget.current;
     }
   });
 
@@ -105,8 +105,8 @@ function Hoverable({ device, label, position, rotation, floorOffset = 0, showRin
         </mesh>
       )}
       {hovered && (
-        <Html center position={[0, 1.1, 0]} zIndexRange={[50, 0]}>
-          <div className="whitespace-nowrap rounded border border-[#ffd700]/40 bg-black/70 px-3 py-1 font-mono text-[11px] tracking-[0.2em] text-[#ffd700] backdrop-blur">
+        <Html center position={[0, 1.05, 0]} zIndexRange={[50, 0]}>
+          <div className="whitespace-nowrap rounded-full bg-white px-3 py-1 font-mono text-[10px] font-bold tracking-[0.15em] text-black shadow-lg">
             {label}
           </div>
         </Html>
@@ -120,7 +120,7 @@ export function Devices() {
 
   return (
     <group>
-      <Hoverable device="laptop" label="LAPTOP — PRIMARY HUB · CODE & PROJECTS" position={[0, 0.8273, -7.4]} floorOffset={-0.8273}>
+      <Hoverable device="laptop" label="Laptop" position={[0, 0.8273, -7.4]} floorOffset={-0.8273}>
         <group position={[0, 0.018, 0]} scale={0.6}>
           <LaptopModel />
           <group position={[0, 0.03, -0.52]} rotation={[-0.35, 0, 0]}>
@@ -133,7 +133,7 @@ export function Devices() {
         </group>
       </Hoverable>
 
-      <Hoverable device="tablet" label="TABLET — EXPERIENCE DASHBOARD" position={[0.75, 0.8273, -7.3]} floorOffset={-0.8273}>
+      <Hoverable device="tablet" label="Tablet" position={[0.75, 0.8273, -7.3]} floorOffset={-0.8273}>
         <group position={[0, 0.06, 0]} scale={0.6}>
           <TabletModel />
           <group rotation={[-0.24, -Math.PI / 4, 0]}>
@@ -146,7 +146,7 @@ export function Devices() {
         </group>
       </Hoverable>
 
-      <Hoverable device="phone" label="PHONE — CONTACT" position={[-0.75, 0.8273, -7.35]} floorOffset={-0.8273}>
+      <Hoverable device="phone" label="Phone" position={[-0.75, 0.8273, -7.35]} floorOffset={-0.8273}>
         <group scale={0.55}>
           <PhoneModel />
           <group rotation={[-0.22, Math.PI / 4, 0]}>
@@ -178,7 +178,7 @@ function TvWall() {
     <group>
       <Hoverable
         device="tv"
-        label={tvFullscreen ? "EXIT FULLSCREEN" : "TV — SHOWCASE"}
+        label={tvFullscreen ? "Exit" : "TV"}
         position={[4.8, 1.9, -4.5]}
         rotation={[0, -Math.PI / 2, 0]}
         showRing={false}

@@ -6,14 +6,14 @@ import { SEQUENCE } from "./nav";
 import { TvScreen } from "./Screens";
 
 const VIEW_LABELS: Record<string, string> = {
-  door: "DOOR — ENTRY POINT",
-  entry: "ROOM ENTRY — THE DESK",
-  wall: "WALL — LANDING",
-  overview: "OVERVIEW — THE WORKSPACE",
-  laptop: "LAPTOP — PRIMARY HUB",
-  tablet: "TABLET — EXPERIENCE DASHBOARD",
-  phone: "PHONE — CONTACT",
-  tv: "TV — SHOWCASE",
+  door: "DOOR",
+  entry: "DESK",
+  wall: "WALL",
+  overview: "OVERVIEW",
+  laptop: "LAPTOP",
+  tablet: "TABLET",
+  phone: "PHONE",
+  tv: "TV",
 };
 
 function Toggle({
@@ -77,51 +77,42 @@ export function LandingOverlay() {
   const loading = useUIStore((s) => s.loading);
   const go = useUIStore((s) => s.go);
   const openDoor = useUIStore((s) => s.openDoor);
-  const soundOn = useUIStore((s) => s.soundOn);
 
   const visible = (target === "door" || target === "entry") && !loading;
   const atDoor = target === "door";
 
   return (
     <div
-      className={`pointer-events-none fixed inset-0 z-[55] flex flex-col items-center justify-end pb-[16vh] transition-all duration-1000 ${
-        visible ? "opacity-100" : "opacity-0"
+      className={`pointer-events-none fixed inset-0 z-[55] flex flex-col items-center justify-end pb-[14vh] transition-all duration-700 ${
+        visible ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div className="px-6 text-center">
-        <div
-          className="mb-5 font-mono tracking-[0.45em] text-[#7dd3fc]"
-          style={{ fontSize: "11px", textShadow: "0 0 18px rgba(125,211,252,0.7)" }}
-        >
-          {atDoor ? "SHREYAS PAWAR — SOFTWARE STUDIO" : "YOU'VE ENTERED THE WORKSPACE — TAKE A SEAT"}
-        </div>
+        <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-white/60">
+          {atDoor ? "SHREYAS PAWAR" : "WELCOME IN"}
+        </p>
+        <h2 className="mb-6 text-2xl font-black tracking-tighter text-white sm:text-3xl">
+          {atDoor ? "Step inside the workspace" : "Take a look around"}
+        </h2>
         {atDoor ? (
           <button
             onClick={() => {
               openDoor();
               go("entry");
             }}
-            className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[#ffd700] px-7 py-3 font-mono text-[11px] font-bold tracking-[0.25em] text-black transition-all hover:bg-[#ffdf33] hover:shadow-[0_0_30px_rgba(255,215,0,0.4)]"
           >
-            OPEN THE DOOR
-            <span className="transition-transform group-hover:translate-x-1">→</span>
+            ENTER <span>→</span>
           </button>
         ) : (
           <button
-            onClick={() => go("wall")}
-            className="pointer-events-auto group inline-flex items-center gap-2 rounded-full border border-[#ffd700] bg-[#ffd700]/10 px-8 py-3 font-mono text-[12px] tracking-[0.3em] text-[#ffd700] transition-all hover:bg-[#ffd700] hover:text-black hover:shadow-[0_0_40px_rgba(255,215,0,0.5)]"
+            onClick={() => go("overview")}
+            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 font-mono text-[11px] font-bold tracking-[0.25em] text-black transition-all hover:bg-zinc-100"
           >
-            VIEW INTRODUCTION
-            <span className="transition-transform group-hover:translate-x-1">→</span>
+            EXPLORE <span>→</span>
           </button>
         )}
-        <div className="mt-4 font-mono text-[9px] tracking-[0.3em] text-[#5f5c69]">
-          {atDoor
-            ? "THE DOOR OPENS AUTOMATICALLY — OR SCROLL TO EXPLORE"
-            : soundOn
-              ? "SOUND ON — CLICK DEVICES TO EXPLORE"
-              : "CLICK DEVICES TO EXPLORE"}
-        </div>
+        <p className="mt-4 font-mono text-[9px] tracking-[0.2em] text-white/40">Scroll • Click • Drag</p>
       </div>
     </div>
   );
@@ -132,28 +123,24 @@ export function HUD() {
   const loading = useUIStore((s) => s.loading);
   const freeCam = useUIStore((s) => s.freeCam);
 
+  if (loading) return null;
+
   return (
-    <div
-      className={`pointer-events-none fixed inset-x-0 top-0 z-[50] flex items-center justify-between px-5 py-4 transition-opacity duration-700 ${
-        loading ? "opacity-0" : "opacity-100"
-      }`}
-    >
-      <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.3em] text-[#ffd700] backdrop-blur-xl">
-        {VIEW_LABELS[target] ?? target.toUpperCase()}
-      </div>
-      <div className="hidden sm:flex items-center gap-2">
-        <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] text-[#8f8c99] backdrop-blur-xl">
-          SP·3D
-        </div>
-        {freeCam ? (
-          <div className="rounded-full border border-[#ffd700]/40 bg-[#ffd700]/10 px-3 py-1.5 font-mono text-[8px] tracking-[0.2em] text-[#ffd700] backdrop-blur-xl">
-            FREE LOOK (F)
-          </div>
-        ) : (
-          <div className="rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-[8px] tracking-[0.2em] text-[#7dd3fc]/60 backdrop-blur-xl">
-            Press F for Free Look
-          </div>
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-[50] flex items-center justify-between px-4 py-3 sm:px-5">
+      <div className="flex items-center gap-2">
+        <span className="rounded-full bg-white px-3 py-1.5 font-mono text-[10px] font-bold tracking-[0.2em] text-black">
+          {VIEW_LABELS[target] ?? target.toUpperCase()}
+        </span>
+        {freeCam && (
+          <span className="hidden sm:inline-flex rounded-full bg-[#ffd700] px-3 py-1.5 font-mono text-[9px] font-bold tracking-[0.2em] text-black">
+            FREE CAM
+          </span>
         )}
+      </div>
+      <div className="hidden sm:flex items-center gap-2 text-[9px] tracking-[0.2em] text-white/40">
+        <span>SP</span>
+        <span className="h-1 w-1 rounded-full bg-white/20" />
+        <span>{freeCam ? "DRAG TO LOOK • F TO EXIT" : "F • FREE LOOK"}</span>
       </div>
     </div>
   );
@@ -166,15 +153,13 @@ export function HelpBar() {
   if (loading) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-4 right-5 z-[50] hidden items-center gap-3 xl:flex">
-      <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.2em] text-[#8f8c99] backdrop-blur-xl">
-        SCROLL TO EXPLORE · ← → DEVICES · DRAG TO LOOK · F: FREE LOOK
-      </div>
-      {activeDevice && (
-        <div className="rounded-full border border-[#ffd700]/40 bg-black/40 px-4 py-1.5 font-mono text-[9px] tracking-[0.2em] text-[#ffd700] backdrop-blur-xl">
-          ESC TO CLOSE
-        </div>
-      )}
+    <div className="pointer-events-none fixed bottom-3 left-1/2 z-[50] flex -translate-x-1/2 items-center gap-2">
+      <span className="hidden sm:inline-flex rounded-full bg-black/60 px-3 py-1.5 font-mono text-[9px] tracking-[0.2em] text-white/60 backdrop-blur">
+        {activeDevice ? "ESC to close" : "Scroll • Click devices • Drag"}
+      </span>
+      <span className="sm:hidden rounded-full bg-black/60 px-3 py-1.5 font-mono text-[9px] tracking-[0.2em] text-white/60 backdrop-blur">
+        {activeDevice ? "Tap ESC" : "Swipe • Tap"}
+      </span>
     </div>
   );
 }
@@ -199,9 +184,10 @@ export function QuickNav() {
     { id: "tv", label: "TV" },
   ];
 
+  // Simplified mobile-only nav - desktop uses Sidebar
   return (
-    <div className="fixed bottom-4 left-1/2 z-[50] flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/15 bg-black/70 p-1 shadow-2xl backdrop-blur-xl">
-      {stations.map((s) => {
+    <div className="fixed bottom-3 left-1/2 z-[50] flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/10 bg-black/80 p-1 backdrop-blur-xl sm:hidden">
+      {stations.slice(2).map((s) => {
         const isActive = target === s.id;
         return (
           <button
@@ -213,10 +199,8 @@ export function QuickNav() {
                 openDevice(s.id);
               }
             }}
-            className={`rounded-full px-2.5 py-1 font-mono text-[8.5px] font-bold tracking-[0.14em] transition-all ${
-              isActive
-                ? "bg-[#ffd700] text-black shadow-[0_0_12px_rgba(255,215,0,0.6)]"
-                : "text-[#a8a5b0] hover:bg-white/10 hover:text-white"
+            className={`rounded-full px-3 py-1.5 font-mono text-[9px] font-bold tracking-[0.12em] transition-all ${
+              isActive ? "bg-white text-black" : "text-white/60 hover:text-white"
             }`}
           >
             {s.label}

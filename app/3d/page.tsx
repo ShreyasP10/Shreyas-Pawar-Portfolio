@@ -8,9 +8,8 @@ import {
   HUD,
   LandingOverlay,
   LoadingScreen,
-  ScrollRail,
-  SettingsModal,
   QuickNav,
+  SettingsModal,
   TvFullscreenOverlay,
 } from "@/components/3d/Overlays";
 import { useUIStore, type NavTarget } from "@/components/3d/store";
@@ -120,7 +119,6 @@ export default function WorkspacePage() {
       </div>
       <HUD />
       <Sidebar />
-      <ScrollRail />
       <QuickNav />
       <HelpBar />
       <LandingOverlay />

@@ -29,25 +29,25 @@ interface CameraState {
 }
 
 export const POS: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.2, 1.6],
-  entry: [1.4, 1.0, -1.9],
-  wall: [0, 3.1, -4.5],
-  overview: [0.5, 2.0, 0.5],
-  laptop: [0, 1.1, -6.85],
-  tablet: [0.75, 1.15, -6.6],
-  phone: [-0.75, 1.05, -6.7],
-  tv: [2.0, 1.9, -1.5],
+  door: [3.6, 1.45, 2.4],
+  entry: [1.6, 1.35, -0.6],
+  wall: [0, 2.6, -2.2],
+  overview: [0, 3.4, 1.0],
+  laptop: [0, 1.55, -5.2],
+  tablet: [0.95, 1.45, -5.0],
+  phone: [-0.95, 1.35, -5.2],
+  tv: [1.4, 1.95, -0.8],
 };
 
 export const LOOK: Record<NavTarget, [number, number, number]> = {
-  door: [3.6, 1.5, -0.4],
-  entry: [0, 0.95, -6.5],
-  wall: [0, 3.1, -8.95],
-  overview: [0, 0.8, -7.0],
-  laptop: [0, 0.98, -7.55],
-  tablet: [0.75, 1.04, -7.25],
-  phone: [-0.75, 0.97, -7.3],
-  tv: [4.745, 1.9, -4.5],
+  door: [3.6, 1.45, 0.4],
+  entry: [0, 1.05, -5.8],
+  wall: [0, 1.85, -8.9],
+  overview: [0, 0.9, -4.2],
+  laptop: [0, 1.05, -6.95],
+  tablet: [0.95, 1.02, -6.9],
+  phone: [-0.95, 1.0, -6.95],
+  tv: [4.85, 1.85, -4.5],
 };
 
 export const useCameraStore = create<CameraState>((set) => ({
