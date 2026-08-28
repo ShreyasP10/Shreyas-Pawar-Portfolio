@@ -58,8 +58,8 @@ function Effects() {
   const maxTextures = useThree((s) => s.gl.capabilities.maxTextures);
   const limited = maxTextures <= 16;
   return (
-    <EffectComposer multisampling={limited ? 2 : 0} enableNormalPass={false}>
-      <SSAO radius={limited ? 0.04 : 0.06} intensity={limited ? 6 : 10} luminanceInfluence={0.45} samples={limited ? 8 : 10} distanceScaling />
+    <EffectComposer multisampling={limited ? 2 : 0} enableNormalPass>
+      <SSAO radius={limited ? 0.04 : 0.06} intensity={limited ? 6 : 10} luminanceInfluence={0.45} samples={limited ? 8 : 10} distanceThreshold={0.15} distanceFalloff={0.2} rangeThreshold={0.02} rangeFalloff={0.01} />
       <Bloom intensity={0.22} luminanceThreshold={1.15} mipmapBlur radius={0.6} />
       <Vignette eskil={false} offset={0.22} darkness={0.55} />
     </EffectComposer>
