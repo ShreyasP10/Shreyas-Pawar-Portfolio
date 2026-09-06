@@ -106,7 +106,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   reducedMotion: false,
   settingsOpen: false,
   loading: true,
-  lastInteraction: Date.now(),
+  lastInteraction: 0,
   doorOpen: false,
   isMoving: false,
   targetCameraPosition: POS.door,
