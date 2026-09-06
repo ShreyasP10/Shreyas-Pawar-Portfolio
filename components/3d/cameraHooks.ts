@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/immutability */
 
 import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -84,7 +85,7 @@ export function useCameraDamping() {
     const needsDoorRoute = isOutsidePrev !== isOutsideNext;
     if (needsDoorRoute && !doorOpen) openDoor();
 
-    let finalPos: [number, number, number] = [...targetPos] as [number, number, number];
+    const finalPos: [number, number, number] = [...targetPos] as [number, number, number];
     const finalLook: [number, number, number] = [...targetLook] as [number, number, number];
 
     if (target === "laptop" || target === "tablet" || target === "phone" || target === "tv") {

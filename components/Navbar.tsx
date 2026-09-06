@@ -8,6 +8,7 @@ const links = [
   { href: "#hackathons", label: "Hackathons" },
   { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
+  { href: "#leetcode", label: "LeetCode" },
   { href: "#journey", label: "Journey" },
   { href: "#contact", label: "Contact" },
 ];

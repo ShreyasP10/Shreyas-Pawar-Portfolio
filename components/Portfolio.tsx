@@ -13,6 +13,7 @@ import { FAQ } from "./sections/FAQ";
 import { FeaturedProjects } from "./sections/FeaturedProjects";
 import { Hackathons } from "./sections/Hackathons";
 import { Journey } from "./sections/Journey";
+import { LeetCodeAnalytics } from "./sections/LeetCodeAnalytics";
 import { OpenSource } from "./sections/OpenSource";
 import { Skills } from "./sections/Skills";
 
@@ -29,6 +30,7 @@ export function Portfolio() {
         <Hackathons />
         <Experience />
         <Skills />
+        <LeetCodeAnalytics />
         <Journey />
         <OpenSource />
         <Certifications />
