@@ -21,23 +21,30 @@ export function Hero() {
 
   useEffect(() => {
     if (!nameRef.current) return;
-    const letters = nameRef.current.querySelectorAll(".hero-letter");
-    animate(letters, {
+    const letters = nameRef.current.querySelectorAll(".hero-letter span");
+    // Ensure letters are visible even if anime fails - fallback after 1.2s
+    const fallback = setTimeout(() => {
+      letters.forEach((el) => {
+        (el as HTMLElement).style.transform = "translateY(0%)";
+        (el as HTMLElement).style.opacity = "1";
+      });
+    }, 1200);
+    (animate as unknown as (a: unknown, b: unknown) => { then?: unknown })(letters, {
       y: ["110%", "0%"],
       opacity: [0, 1],
       duration: 700,
       delay: stagger(28, { from: "first" }),
       ease: "outExpo",
     });
-    // subtle line draw for subheading
     const sub = document.querySelectorAll(".hero-sub");
-    animate(sub, {
+    (animate as unknown as (a: unknown, b: unknown) => unknown)(sub, {
       y: [16, 0],
       opacity: [0, 1],
       duration: 600,
       delay: stagger(60, { from: "first" }),
       ease: "outCubic",
     });
+    return () => clearTimeout(fallback);
   }, []);
 
   const { scrollY } = useScroll();
