@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { animate, stagger } from "animejs";
+import { animate, createTimeline, stagger } from "animejs";
 
 export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "lg"; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -9,18 +9,24 @@ export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const letters = el.querySelectorAll(".sp-letter");
-    // V4 logo style: stagger from center, inOutQuint, loop alternate
-    const anim = (animate as unknown as (a: unknown, b: unknown) => { pause: () => void })(letters, {
-      y: [-4, 4],
-      rotate: [-3, 3],
-      scale: [1, 1.08],
-      duration: 900,
-      delay: stagger(80, { from: "center" }),
-      ease: "inOutQuint",
+    const letters = el.querySelectorAll<HTMLElement>(".sp-letter");
+    const sEl = letters[0] as HTMLElement;
+    const pEl = letters[1] as HTMLElement;
+    if (!sEl || !pEl) return;
+
+    // Requested cycle: S big / P small (1s) → equal → S small / P big (1s) → equal — loop
+    const tl: any = createTimeline({
       loop: true,
-      alternate: true,
-    } as unknown as Record<string, unknown>);
+      defaults: { ease: "inOutQuint" } as unknown as Record<string, unknown>,
+    });
+    tl.add(sEl, { scale: 1.35, duration: 550 });
+    tl.add(pEl, { scale: 0.78, duration: 550 }, 0);
+    tl.add(sEl, { scale: 1, duration: 400 }, "+=450");
+    tl.add(pEl, { scale: 1, duration: 400 }, "<");
+    tl.add(sEl, { scale: 0.78, duration: 550 }, "+=300");
+    tl.add(pEl, { scale: 1.35, duration: 550 }, "<");
+    tl.add(sEl, { scale: 1, duration: 400 }, "+=450");
+    tl.add(pEl, { scale: 1, duration: 400 }, "<");
 
     const grid = el.querySelectorAll(".sp-dot");
     const gridAnim = (animate as unknown as (a: unknown, b: unknown) => { pause: () => void })(grid, {
@@ -35,7 +41,7 @@ export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "
 
     return () => {
       try {
-        (anim as unknown as { pause: () => void })?.pause();
+        (tl as unknown as { pause: () => void }).pause();
         (gridAnim as unknown as { pause: () => void })?.pause();
       } catch {}
     };
