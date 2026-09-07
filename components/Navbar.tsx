@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { SpLogo } from "./SpLogo";
 
 const links = [
   { href: "#projects", label: "Projects" },
@@ -72,8 +73,11 @@ export function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#top" className="font-mono text-lg font-bold text-accent">
-          ShreyasPawar<span className="text-white">.Dev</span>
+        <a href="#top" className="flex items-center gap-2 font-mono text-lg font-bold text-accent">
+          <SpLogo size="sm" />
+          <span>
+            ShreyasPawar<span className="text-white">.Dev</span>
+          </span>
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useUIStore } from "./store";
+import { SpLogo } from "../SpLogo";
 
 interface MenuItem {
   id: string;
@@ -170,13 +171,8 @@ export function Sidebar() {
   return (
     <div className="fixed left-3 top-1/2 z-[60] hidden -translate-y-1/2 flex-col items-center gap-2 sm:flex">
       <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-black/60 p-1.5 backdrop-blur-xl">
-        <Link
-          href="/"
-          className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-black"
-          aria-label="Home"
-          title="Portfolio"
-        >
-          <span className="text-[11px] font-black">SP</span>
+        <Link href="/" aria-label="Home" title="Portfolio" className="flex justify-center">
+          <SpLogo size="sm" />
         </Link>
 
         <div className="my-1 h-px bg-white/10" />

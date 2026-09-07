@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useUIStore } from "./store";
 import { SEQUENCE } from "./nav";
 import { TvScreen } from "./Screens";
+import { SpLogo } from "../SpLogo";
 
 const VIEW_LABELS: Record<string, string> = {
   door: "DOOR",
@@ -59,9 +60,7 @@ export function LoadingScreen() {
         loading ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#ffd700]/30 bg-[#ffd700]/5">
-        <span className="animate-pulse text-xl font-black text-[#ffd700]">SP</span>
-      </div>
+      <SpLogo size="lg" />
       <div className="mt-5 h-1 w-40 overflow-hidden rounded-full bg-white/10">
         <div className="animate-loader h-full w-1/2 rounded-full bg-[#ffd700]" />
       </div>
