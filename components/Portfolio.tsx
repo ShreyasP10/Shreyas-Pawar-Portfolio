@@ -16,6 +16,7 @@ import { Journey } from "./sections/Journey";
 import { LeetCodeAnalytics } from "./sections/LeetCodeAnalytics";
 import { OpenSource } from "./sections/OpenSource";
 import { Skills } from "./sections/Skills";
+import { AnimeRevealProvider } from "./AnimeReveal";
 
 export function Portfolio() {
   return (
@@ -23,6 +24,7 @@ export function Portfolio() {
       <AmbientGlow />
       <ScrollProgress />
       <GoldenParticles />
+      <AnimeRevealProvider />
       <Navbar />
       <main id="main" className="relative z-10">
         <Hero />

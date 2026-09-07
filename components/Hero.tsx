@@ -1,10 +1,13 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { animate, stagger } from "animejs";
 import { useFetch } from "@/lib/useFetch";
 import { stats, profile } from "@/lib/data";
 import { CountUp } from "./CountUp";
 import { GitHubIcon, LinkedInIcon, MailIcon } from "./icons";
+import { AnimeGrid } from "./AnimeGrid";
 
 export function Hero() {
   const { data: githubStats } = useFetch<{ followers: number }>(
@@ -13,7 +16,30 @@ export function Hero() {
   const { data: leetcodeStats } = useFetch<{ ranking: number; solved: number }>(
     "/api/leetcode-stats"
   );
-  
+
+  const nameRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (!nameRef.current) return;
+    const letters = nameRef.current.querySelectorAll(".hero-letter");
+    animate(letters, {
+      y: ["110%", "0%"],
+      opacity: [0, 1],
+      duration: 700,
+      delay: stagger(28, { from: "first" }),
+      ease: "outExpo",
+    });
+    // subtle line draw for subheading
+    const sub = document.querySelectorAll(".hero-sub");
+    animate(sub, {
+      y: [16, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay: stagger(60, { from: "first" }),
+      ease: "outCubic",
+    });
+  }, []);
+
   const { scrollY } = useScroll();
   const yParallax = useTransform(scrollY, [0, 500], [0, -100]);
   const opacityParallax = useTransform(scrollY, [0, 300], [1, 0]);
@@ -23,14 +49,18 @@ export function Hero() {
       id="top"
       className="relative flex min-h-screen flex-col justify-center overflow-hidden px-4 pb-16 pt-28 sm:px-6"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 45% at 30% 20%, rgba(255,215,0,0.07), transparent 70%), radial-gradient(ellipse 50% 40% at 75% 60%, rgba(255,215,0,0.04), transparent 70%)",
-        }}
-      />
+      <div className="pointer-events-none absolute inset-0">
+        <AnimeGrid />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 45% at 30% 20%, rgba(255,215,0,0.07), transparent 70%), radial-gradient(ellipse 50% 40% at 75% 60%, rgba(255,215,0,0.04), transparent 70%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/60" />
+      </div>
 
       <div className="relative mx-auto w-full max-w-6xl">
         <motion.p
@@ -43,40 +73,33 @@ export function Hero() {
         </motion.p>
 
         <motion.h1
+          ref={nameRef}
           style={{ y: yParallax, opacity: opacityParallax }}
           className="flex flex-wrap max-w-5xl text-6xl font-black leading-[0.95] tracking-tighter text-white sm:text-8xl lg:text-9xl overflow-hidden py-2"
         >
           {profile.name.split("").map((char, index) => (
-            <motion.span
-              key={index}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.1 + index * 0.03,
-                ease: [0.33, 1, 0.68, 1],
-              }}
-              className={char === " " ? "w-[0.3em]" : "inline-block"}
-            >
-              {char}
-            </motion.span>
+            <span key={index} className={`hero-letter inline-block overflow-hidden ${char === " " ? "w-[0.3em]" : ""}`}>
+              <span className="inline-block" style={{ display: "inline-block", transform: "translateY(110%)" }}>
+                {char === " " ? "\u00A0" : char}
+              </span>
+            </span>
           ))}
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-5 max-w-3xl font-mono text-lg font-semibold leading-snug text-accent sm:text-2xl"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="hero-sub mt-5 max-w-3xl font-mono text-lg font-semibold leading-snug text-accent sm:text-2xl"
         >
           {profile.subheading}
         </motion.p>
 
         <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="hero-sub mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg"
         >
           Data Science {"&"} DSA. I build ML and mobile solutions for real-world
           use cases — from encrypted chat platforms and satellite-imagery AI
