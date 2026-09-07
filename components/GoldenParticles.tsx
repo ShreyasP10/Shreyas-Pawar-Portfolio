@@ -13,7 +13,7 @@ interface Particle {
   twinklePhase: number;
 }
 
-export function GoldenParticles({ count = 60 }: { count?: number }) {
+export function GoldenParticles({ count = 32 }: { count?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

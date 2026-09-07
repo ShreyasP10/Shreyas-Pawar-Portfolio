@@ -5,81 +5,87 @@ import { animate, stagger } from "animejs";
 
 export function AnimeGrid() {
   const gridRef = useRef<HTMLDivElement>(null);
-  const cols = 32;
-  const rows = 18;
+  const cols = 20;
+  const rows = 12;
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
     const grid = gridRef.current;
     if (!grid) return;
 
     const cells = grid.querySelectorAll(".grid-cell");
 
-    // Initial subtle stagger in
+    // Initial stagger in - GPU friendly
     animate(cells, {
-      opacity: [0, 0.12],
+      opacity: [0, 0.14],
       scale: [0, 1],
-      delay: stagger(8, { grid: [cols, rows], from: "center" }),
-      duration: 600,
+      delay: stagger(12, { grid: [cols, rows], from: "center" }),
+      duration: 500,
       ease: "outCubic",
     });
 
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = grid.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * cols;
-      const y = ((e.clientY - rect.top) / rect.height) * rows;
-      const idx = Math.floor(y) * cols + Math.floor(x);
+    let raf = 0;
+    let lastX = -1;
+    let lastY = -1;
 
-      (animate as unknown as (a: unknown, b: unknown) => unknown)(cells, {
-        scale: (el: Element, i: number) => {
-          const col = i % cols;
-          const row = Math.floor(i / cols);
-          const dist = Math.hypot(col - x, row - y);
-          return dist < 6 ? 1.6 - dist * 0.12 : 1;
-        },
-        opacity: (el: Element, i: number) => {
-          const col = i % cols;
-          const row = Math.floor(i / cols);
-          const dist = Math.hypot(col - x, row - y);
-          return dist < 6 ? 0.9 - dist * 0.1 : 0.12;
-        },
-        backgroundColor: (el: Element, i: number) => {
-          const col = i % cols;
-          const row = Math.floor(i / cols);
-          const dist = Math.hypot(col - x, row - y);
-          return dist < 3 ? "#ffd700" : "rgba(255,255,255,0.18)";
-        },
-        duration: 400,
-        ease: "outCubic",
-        delay: stagger(20, { grid: [cols, rows], from: idx }),
+    const onPointerMove = (e: PointerEvent) => {
+      lastX = ((e.clientX - grid.getBoundingClientRect().left) / grid.clientWidth) * cols;
+      lastY = ((e.clientY - grid.getBoundingClientRect().top) / grid.clientHeight) * rows;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const x = lastX;
+        const y = lastY;
+        const idx = Math.floor(y) * cols + Math.floor(x);
+        (animate as unknown as (a: unknown, b: unknown) => unknown)(cells, {
+          scale: (el: Element, i: number) => {
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            const dist = Math.hypot(col - x, row - y);
+            return dist < 4 ? 1.5 - dist * 0.14 : 1;
+          },
+          opacity: (el: Element, i: number) => {
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            const dist = Math.hypot(col - x, row - y);
+            return dist < 4 ? 0.85 - dist * 0.12 : 0.14;
+          },
+          duration: 320,
+          ease: "outCubic",
+          delay: stagger(14, { grid: [cols, rows], from: idx }),
+        });
       });
     };
 
     const onLeave = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
       animate(cells, {
         scale: 1,
-        opacity: 0.12,
-        backgroundColor: "rgba(255,255,255,0.18)",
-        duration: 700,
+        opacity: 0.14,
+        duration: 600,
         ease: "outCubic",
-        delay: stagger(10, { grid: [cols, rows], from: "center" }),
+        delay: stagger(12, { grid: [cols, rows], from: "center" }),
       });
     };
 
-    grid.addEventListener("pointermove", onPointerMove);
-    grid.addEventListener("pointerleave", onLeave);
+    grid.addEventListener("pointermove", onPointerMove, { passive: true });
+    grid.addEventListener("pointerleave", onLeave, { passive: true });
 
-    // Auto pulse like animejs.com
+    // Subtle auto pulse - lighter
     const pulse = animate(cells, {
-      scale: [1, 1.08, 1],
-      opacity: [0.12, 0.18, 0.12],
-      delay: stagger(30, { grid: [cols, rows], from: "center" }),
-      duration: 1400,
+      scale: [1, 1.06, 1],
+      opacity: [0.14, 0.18, 0.14],
+      delay: stagger(40, { grid: [cols, rows], from: "center" }),
+      duration: 2200,
       ease: "inOutSine",
       loop: true,
       alternate: true,
     });
 
     return () => {
+      cancelAnimationFrame(raf);
       grid.removeEventListener("pointermove", onPointerMove);
       grid.removeEventListener("pointerleave", onLeave);
       try {
@@ -92,19 +98,20 @@ export function AnimeGrid() {
     <div
       ref={gridRef}
       aria-hidden
-      className="pointer-events-auto absolute inset-0 grid opacity-40"
+      className="pointer-events-auto absolute inset-0 grid opacity-30 will-change-transform"
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
-        gap: "6px",
-        padding: "12px",
+        gap: "8px",
+        padding: "16px",
+        transform: "translateZ(0)",
       }}
     >
       {Array.from({ length: cols * rows }).map((_, i) => (
         <div
           key={i}
-          className="grid-cell h-1.5 w-1.5 justify-self-center self-center rounded-[2px] bg-white/20 sm:h-2 sm:w-2"
-          style={{ opacity: 0 }}
+          className="grid-cell h-2 w-2 justify-self-center self-center rounded-[2px] bg-white/20 will-change-transform"
+          style={{ opacity: 0, transform: "translateZ(0)" }}
         />
       ))}
     </div>
