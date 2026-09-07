@@ -14,19 +14,24 @@ export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "
     const pEl = letters[1] as HTMLElement;
     if (!sEl || !pEl) return;
 
-    // Requested cycle: S big / P small (1s) → equal → S small / P big (1s) → equal — loop
+    // Smooth cycle: S big / P small (1s) → equal → S small / P big (1s) → equal — loop
     const tl: any = createTimeline({
       loop: true,
-      defaults: { ease: "inOutQuint" } as unknown as Record<string, unknown>,
+      defaults: { ease: "inOutSine" } as unknown as Record<string, unknown>,
     });
-    tl.add(sEl, { scale: 1.35, duration: 550 });
-    tl.add(pEl, { scale: 0.78, duration: 550 }, 0);
-    tl.add(sEl, { scale: 1, duration: 400 }, "+=450");
-    tl.add(pEl, { scale: 1, duration: 400 }, "<");
-    tl.add(sEl, { scale: 0.78, duration: 550 }, "+=300");
-    tl.add(pEl, { scale: 1.35, duration: 550 }, "<");
-    tl.add(sEl, { scale: 1, duration: 400 }, "+=450");
-    tl.add(pEl, { scale: 1, duration: 400 }, "<");
+    // Ensure GPU layer
+    sEl.style.willChange = "transform";
+    pEl.style.willChange = "transform";
+    sEl.style.transformOrigin = "center";
+    pEl.style.transformOrigin = "center";
+    tl.add(sEl, { scale: 1.32, duration: 500 });
+    tl.add(pEl, { scale: 0.82, duration: 500 }, 0);
+    tl.add(sEl, { scale: 1, duration: 350 }, "+=500");
+    tl.add(pEl, { scale: 1, duration: 350 }, "<");
+    tl.add(sEl, { scale: 0.82, duration: 500 }, "+=250");
+    tl.add(pEl, { scale: 1.32, duration: 500 }, "<");
+    tl.add(sEl, { scale: 1, duration: 350 }, "+=500");
+    tl.add(pEl, { scale: 1, duration: 350 }, "<");
 
     const grid = el.querySelectorAll(".sp-dot");
     const gridAnim = (animate as unknown as (a: unknown, b: unknown) => { pause: () => void })(grid, {
