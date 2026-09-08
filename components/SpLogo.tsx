@@ -15,6 +15,7 @@ export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "
     if (!sEl || !pEl) return;
 
     // Smooth cycle: S big / P small (1s) → equal → S small / P big (1s) → equal — loop
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tl: any = createTimeline({
       loop: true,
       defaults: { ease: "inOutSine" } as unknown as Record<string, unknown>,
