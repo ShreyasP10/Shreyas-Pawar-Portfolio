@@ -141,7 +141,14 @@ export function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setOpen(false);
+                      const id = link.href.slice(1);
+                      const el = document.getElementById(id);
+                      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                      else window.location.hash = link.href;
+                    }}
                     className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
                       active === link.href
                         ? "font-semibold text-accent"

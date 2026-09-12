@@ -433,7 +433,9 @@ export function PhoneScreen({ active }: { active?: boolean }) {
                 href={s.url}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center rounded border border-white/10 py-1 font-mono text-[4.5px] font-bold text-white transition-transform hover:scale-105"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="flex items-center justify-center rounded border border-white/10 py-1 font-mono text-[4.5px] font-bold text-white transition-transform hover:scale-105 active:scale-95"
                 style={{ backgroundColor: s.bg }}
               >
                 {s.label}
@@ -446,7 +448,9 @@ export function PhoneScreen({ active }: { active?: boolean }) {
             href="/resume/Shreyas%20Pawar%20Resume.pdf"
             target="_blank"
             rel="noreferrer"
-            className="block rounded bg-[#ffd700] py-1 text-center font-mono text-[4.5px] font-bold tracking-wider text-black transition-transform hover:scale-105"
+            onClick={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="block rounded bg-[#ffd700] py-1 text-center font-mono text-[4.5px] font-bold tracking-wider text-black transition-transform hover:scale-105 active:scale-95"
           >
             RESUME PDF ↓
           </a>
