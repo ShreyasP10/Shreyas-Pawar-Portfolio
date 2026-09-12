@@ -84,23 +84,23 @@ export function LeetCodeAnalytics() {
                   </a>
                 </div>
 
-                <div className="mt-6 grid grid-cols-3 gap-3 border-y border-white/10 py-4 sm:gap-6">
-                  <div>
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-muted">RANK</p>
-                    <p className="mt-1 text-xl font-bold text-white">{formatRank(data.ranking)}</p>
-                    <p className="text-[11px] text-muted">Global · all-time</p>
+                <div className="mt-6 grid grid-cols-3 gap-2 border-y border-white/10 py-4 sm:gap-6">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[9px] tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">RANK</p>
+                    <p className="mt-1 truncate text-base font-bold text-white sm:text-xl">{formatRank(data.ranking)}</p>
+                    <p className="truncate text-[10px] text-muted sm:text-[11px]">Global · all-time</p>
                   </div>
-                  <div>
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-muted">30-DAY SUBMISSIONS</p>
-                    <p className="mt-1 text-xl font-bold text-accent">{totalLast30}</p>
-                    <p className="text-[11px] text-muted">{avgDaily} / day · peak {peak}</p>
+                  <div className="min-w-0">
+                    <p className="font-mono text-[9px] tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">30-DAY SUBS</p>
+                    <p className="mt-1 text-base font-bold text-accent sm:text-xl">{totalLast30}</p>
+                    <p className="truncate text-[10px] text-muted sm:text-[11px]">{avgDaily} / day · peak {peak}</p>
                   </div>
-                  <div>
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-muted">CONTESTS</p>
-                    <p className="mt-1 text-xl font-bold text-white">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[9px] tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">CONTESTS</p>
+                    <p className="mt-1 text-base font-bold text-white sm:text-xl">
                       {data.contestRanking?.attendedContestsCount ?? 0}
                     </p>
-                    <p className="text-[11px] text-muted">
+                    <p className="truncate text-[10px] text-muted sm:text-[11px]">
                       {data.contestRanking?.rating ? `Rating ${Math.round(data.contestRanking.rating)}` : "No contests yet"}
                     </p>
                   </div>
@@ -113,9 +113,9 @@ export function LeetCodeAnalytics() {
                     <p className="font-mono text-[10px] tracking-[0.2em] text-muted">IMPRESSIONS ANALOGY</p>
                   </div>
 
-                  <div className="h-[220px] w-full rounded-xl border border-white/10 bg-[#0a0a0f] p-2 sm:p-4">
+                  <div className="h-[200px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0f] p-2 sm:h-[220px] sm:p-4">
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                      <AreaChart data={chartData} margin={{ top: 10, right: 5, left: -15, bottom: 0 }}>
                         <defs>
                           <linearGradient id="lcFill" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#ffd700" stopOpacity={0.35} />
@@ -148,23 +148,7 @@ export function LeetCodeAnalytics() {
                     </div>
                   )}
 
-                  {data.contestHistory.length > 0 && (
-                    <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                      <p className="font-mono text-xs font-semibold text-white">Contest rating over time</p>
-                      <p className="mt-1 font-mono text-[11px] text-muted">{data.contestHistory.length} contests attended</p>
-                      <div className="mt-3 h-[160px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={data.contestHistory} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
-                            <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
-                            <XAxis dataKey="date" tick={{ fill: "#8f8c99", fontSize: 9 }} axisLine={false} tickLine={false} interval={2} />
-                            <YAxis tick={{ fill: "#8f8c99", fontSize: 9 }} axisLine={false} tickLine={false} width={36} />
-                            <Tooltip contentStyle={{ background: "#121218", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12 }} />
-                            <Area type="monotone" dataKey="rating" stroke="#7dd3fc" strokeWidth={2} fill="rgba(125,211,252,0.15)" dot={false} />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </Reveal>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { animate, stagger } from "animejs";
 import { useFetch } from "@/lib/useFetch";
@@ -82,14 +82,21 @@ export function Hero() {
         <motion.h1
           ref={nameRef}
           style={{ y: yParallax, opacity: opacityParallax }}
-          className="flex flex-wrap max-w-5xl text-6xl font-black leading-[0.95] tracking-tighter text-white sm:text-8xl lg:text-9xl overflow-hidden py-2"
+          className="max-w-5xl text-6xl font-black leading-[0.95] tracking-tighter text-white sm:text-8xl lg:text-9xl overflow-hidden py-2"
         >
-          {profile.name.split("").map((char, index) => (
-            <span key={index} className={`hero-letter inline-block overflow-hidden ${char === " " ? "w-[0.3em]" : ""}`}>
-              <span className="inline-block" style={{ display: "inline-block", transform: "translateY(110%)" }}>
-                {char === " " ? "\u00A0" : char}
+          {profile.name.split(" ").map((word, wordIdx) => (
+            <React.Fragment key={wordIdx}>
+              <span className="inline-block whitespace-nowrap">
+                {word.split("").map((char, charIdx) => (
+                  <span key={`${wordIdx}-${charIdx}`} className="hero-letter inline-block overflow-hidden">
+                    <span className="inline-block" style={{ display: "inline-block", transform: "translateY(110%)" }}>
+                      {char}
+                    </span>
+                  </span>
+                ))}
               </span>
-            </span>
+              {wordIdx < profile.name.split(" ").length - 1 && <span className="inline-block w-[0.3em]">&nbsp;</span>}
+            </React.Fragment>
           ))}
         </motion.h1>
 
