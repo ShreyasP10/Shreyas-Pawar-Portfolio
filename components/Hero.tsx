@@ -82,11 +82,11 @@ export function Hero() {
         <motion.h1
           ref={nameRef}
           style={{ y: yParallax, opacity: opacityParallax }}
-          className="max-w-5xl text-6xl font-black leading-[0.95] tracking-tighter text-white sm:text-8xl lg:text-9xl overflow-hidden py-2"
+          className="max-w-5xl break-keep text-5xl font-black leading-[0.95] tracking-tighter text-white [word-break:keep-all] sm:text-8xl lg:text-9xl overflow-hidden py-2"
         >
           {profile.name.split(" ").map((word, wordIdx) => (
             <React.Fragment key={wordIdx}>
-              <span className="inline-block whitespace-nowrap">
+              <span className="inline-block whitespace-nowrap break-keep [word-break:keep-all] [overflow-wrap:normal]">
                 {word.split("").map((char, charIdx) => (
                   <span key={`${wordIdx}-${charIdx}`} className="hero-letter inline-block overflow-hidden">
                     <span className="inline-block" style={{ display: "inline-block", transform: "translateY(110%)" }}>
