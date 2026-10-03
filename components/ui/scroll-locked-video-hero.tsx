@@ -162,6 +162,7 @@ export default function MusicHero({
   }, [activeIndex, tracks])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAnnouncement(isPlaying ? "Playing" : "Paused")
   }, [isPlaying])
 

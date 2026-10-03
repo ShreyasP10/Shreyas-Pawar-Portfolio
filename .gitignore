@@ -29,6 +29,18 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+dev-server.log
+*.log
+
+# local-only notes & tooling
+myinfo.txt
+Document.txt
+.idea/
+test-results/
+
+# project docs (kept locally, not versioned)
+/docs/
+docs
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -42,9 +54,3 @@ next-env.d.ts
 
 # visitor logs
 /data/
-
-
-myinfo.txt
-Document.txt
-/docs/
-docs

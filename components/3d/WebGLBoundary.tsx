@@ -140,7 +140,7 @@ export class WebGLBoundary extends Component<Props, State> {
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
             <a
-              href="/resume/Shreyas%20Pawar%20Resume.pdf"
+              href="/resume/ShreyasPawar_Resume.pdf"
               target="_blank"
               rel="noreferrer"
               className="rounded-full bg-[#ffd700] px-5 py-2 font-mono text-[11px] font-bold tracking-[0.15em] text-black transition-transform hover:scale-105"

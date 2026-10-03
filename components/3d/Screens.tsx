@@ -445,7 +445,7 @@ export function PhoneScreen({ active }: { active?: boolean }) {
 
           {/* Download Resume Button */}
           <a
-            href="/resume/Shreyas%20Pawar%20Resume.pdf"
+            href="/resume/ShreyasPawar_Resume.pdf"
             target="_blank"
             rel="noreferrer"
             onClick={(e) => e.stopPropagation()}
