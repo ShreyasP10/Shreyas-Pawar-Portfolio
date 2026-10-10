@@ -41,7 +41,7 @@ export function Footer() {
               rel="noopener noreferrer"
               aria-label={label}
               title={label}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-muted transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_16px_rgba(255,215,0,0.25)]"
             >
               <Icon className="h-4 w-4" />
             </a>
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
 
         <p className="text-xs text-muted">
-          © {new Date().getFullYear()} Shreyas Pawar · Built with Next.js
+          © {new Date().getFullYear()} Shreyas Pawar · Built with Next.js · Updated Sep 2026
         </p>
       </div>
     </footer>
