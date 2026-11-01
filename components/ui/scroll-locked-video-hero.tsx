@@ -102,6 +102,9 @@ function playWheelClick(ctx: AudioContext, velocity: number) {
   tick(now, 0.11 + strength * 0.07)
 }
 
+const BASE_ROTATE_Y = -13
+const BASE_ROTATE_X = 5
+
 export default function MusicHero({
   title = "THE SOUNDTRACK TO EVERY STEP",
   videoSrc = DEFAULT_VIDEO,
@@ -166,7 +169,7 @@ export default function MusicHero({
     setAnnouncement(isPlaying ? "Playing" : "Paused")
   }, [isPlaying])
 
-  function getCtx(): AudioContext | null {
+  const getCtx = useCallback((): AudioContext | null => {
     try {
       if (!audioCtxRef.current) {
         const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
@@ -176,13 +179,13 @@ export default function MusicHero({
     } catch {
       return null
     }
-  }
-  function fireClick(velocity: number) {
+  }, [])
+  const fireClick = useCallback((velocity: number) => {
     const ctx = getCtx()
     if (!ctx) return
     if (ctx.state === "suspended") ctx.resume().then(() => playWheelClick(ctx, velocity)).catch(() => {})
     else playWheelClick(ctx, velocity)
-  }
+  }, [getCtx])
 
   useEffect(() => {
     const unlock = () => {
@@ -204,7 +207,7 @@ export default function MusicHero({
       window.removeEventListener("keydown", unlock)
       window.removeEventListener("wheel", unlock)
     }
-  }, [sound])
+  }, [sound, getCtx])
 
   useEffect(() => {
     let rafId = 0
@@ -261,7 +264,7 @@ export default function MusicHero({
     }
     rafId = requestAnimationFrame(physics)
     return () => cancelAnimationFrame(rafId)
-  }, [])
+  }, [fireClick])
 
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
@@ -304,10 +307,7 @@ export default function MusicHero({
       window.removeEventListener("touchmove", onTouchMove)
       window.removeEventListener("touchend", onTouchEnd)
     }
-  }, [])
-
-  const BASE_ROTATE_Y = -13
-  const BASE_ROTATE_X = 5
+  }, [getCtx])
 
   const onCardMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (isCoarsePointer || theme === "minimal") return
@@ -490,7 +490,6 @@ export default function MusicHero({
 
           <MobileTrackList
             listViewportRef={listViewportRef}
-            rowRefs={rowRefs}
             setRowRef={setRowRef}
             tracks={tracks}
             activeIndex={activeIndex}
@@ -1179,14 +1178,12 @@ function TrackRow({
 
 function MobileTrackList({
   listViewportRef,
-  rowRefs,
   setRowRef,
   tracks,
   activeIndex,
   isPlaying,
 }: {
   listViewportRef: React.RefObject<HTMLDivElement | null>
-  rowRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
   setRowRef: (i: number) => (el: HTMLDivElement | null) => void
   tracks: Track[]
   activeIndex: number

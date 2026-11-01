@@ -173,6 +173,8 @@ export function Contact() {
                     type="text"
                     required
                     minLength={2}
+                    maxLength={80}
+                    autoComplete="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name"
@@ -184,6 +186,8 @@ export function Contact() {
                   <input
                     type="email"
                     required
+                    maxLength={254}
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
@@ -196,6 +200,7 @@ export function Contact() {
                 <textarea
                   required
                   minLength={10}
+                  maxLength={5000}
                   rows={5}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -213,12 +218,12 @@ export function Contact() {
               </button>
 
               {status.type === "success" && (
-                <p className="text-sm font-semibold text-accent">
+                <p role="status" aria-live="polite" className="text-sm font-semibold text-accent">
                   {status.text}
                 </p>
               )}
               {status.type === "error" && (
-                <p className="text-sm font-semibold text-red-400">
+                <p role="alert" className="text-sm font-semibold text-red-400">
                   {status.text}
                 </p>
               )}

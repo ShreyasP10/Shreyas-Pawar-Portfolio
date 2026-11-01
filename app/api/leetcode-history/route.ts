@@ -64,8 +64,6 @@ export async function GET() {
           return { date, count };
         })
         .sort((a, b) => a.date.localeCompare(b.date));
-      // Keep last 90 days
-      calendar = calendar.slice(-90);
     } catch {
       calendar = [];
     }
@@ -83,12 +81,10 @@ export async function GET() {
 
     // Build daily submissions for graph: fill gaps with 0 for last 90 days for LinkedIn-style view
     const last90: CalendarPoint[] = [];
-    const today = new Date();
+    const now = Date.now();
     const map = new Map(calendar.map((p) => [p.date, p.count]));
     for (let i = 89; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - i);
-      const date = d.toISOString().slice(0, 10);
+      const date = new Date(now - i * 86_400_000).toISOString().slice(0, 10);
       last90.push({ date, count: map.get(date) ?? 0 });
     }
 

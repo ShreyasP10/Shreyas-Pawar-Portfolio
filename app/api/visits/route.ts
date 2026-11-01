@@ -1,29 +1,61 @@
 import { mkdir, readFile, appendFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { NextResponse } from "next/server";
+import { getClientIp, rateLimit } from "@/lib/rateLimit";
 
 const VISITS_DIR = process.env.VERCEL ? "/tmp" : join(process.cwd(), "data");
 const VISITS_FILE = join(VISITS_DIR, "visits.jsonl");
+const MAX_FIELD_LENGTH = 200;
+const MAX_USER_AGENT_LENGTH = 300;
+
+function safePath(value: unknown): string {
+  if (typeof value !== "string") return "/";
+  const withoutQuery = value.split(/[?#]/)[0]?.trim() ?? "";
+  if (!withoutQuery.startsWith("/")) return "/";
+  return withoutQuery.slice(0, MAX_FIELD_LENGTH);
+}
+
+function safeReferrer(value: unknown): string {
+  if (typeof value !== "string" || value.length === 0) return "";
+  try {
+    return new URL(value).origin.slice(0, MAX_FIELD_LENGTH);
+  } catch {
+    return "";
+  }
+}
+
+function hashIp(ip: string): string {
+  return createHash("sha256").update(ip).digest("hex").slice(0, 16);
+}
 
 export async function POST(request: Request) {
-  let body: { path?: string; referrer?: string } = {};
+  const ip = getClientIp(request);
+  const limit = rateLimit(`visits:${ip}`, 120, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
+  let body: { path?: unknown; referrer?: unknown } = {};
   try {
     body = await request.json();
   } catch {
     // ignore malformed bodies
   }
 
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    request.headers.get("x-real-ip") ??
-    "unknown";
-  const userAgent = request.headers.get("user-agent") ?? "unknown";
+  const userAgent = (request.headers.get("user-agent") ?? "unknown").slice(
+    0,
+    MAX_USER_AGENT_LENGTH
+  );
 
   const entry = JSON.stringify({
     time: new Date().toISOString(),
-    path: body.path ?? "/",
-    referrer: body.referrer ?? "",
-    ip,
+    path: safePath(body.path),
+    referrer: safeReferrer(body.referrer),
+    ip: hashIp(ip),
     userAgent,
   });
 
@@ -31,15 +63,24 @@ export async function POST(request: Request) {
     await mkdir(VISITS_DIR, { recursive: true });
     await appendFile(VISITS_FILE, `${entry}\n`, "utf8");
   } catch {
-    // file may be read-only (Vercel) — entry is still logged below
+    // file may be read-only (Vercel) - entry is still logged below
   }
 
-  console.log("[visit]", entry);
+  console.log("[visit]", { path: safePath(body.path) });
 
   return NextResponse.json({ success: true });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const ip = getClientIp(request);
+  const limit = rateLimit(`visits-read:${ip}`, 60, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
   try {
     const raw = await readFile(VISITS_FILE, "utf8");
     const rows: Record<string, unknown>[] = [];

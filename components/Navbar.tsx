@@ -35,6 +35,23 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onResize = () => {
+      if (window.innerWidth >= 768) setOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("resize", onResize);
+    };
+  }, [open]);
+
+  useEffect(() => {
     const elements = links
       .map((link) => document.getElementById(link.href.slice(1)))
       .filter((el): el is HTMLElement => el !== null);
@@ -72,7 +89,7 @@ export function Navbar() {
           : "border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <nav aria-label="Primary" className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a href="#top" className="flex items-center gap-2 font-mono text-lg font-bold text-accent">
           <SpLogo size="sm" />
           <span>
@@ -83,7 +100,11 @@ export function Navbar() {
         <ul className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className={linkClasses(link.href)}>
+              <a
+                href={link.href}
+                className={linkClasses(link.href)}
+                aria-current={active === link.href ? "location" : undefined}
+              >
                 {link.label}
               </a>
             </li>
@@ -141,13 +162,17 @@ export function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
+                    aria-current={active === link.href ? "location" : undefined}
                     onClick={(e) => {
                       e.preventDefault();
                       setOpen(false);
+                      document.body.style.overflow = "";
                       const id = link.href.slice(1);
-                      const el = document.getElementById(id);
-                      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-                      else window.location.hash = link.href;
+                      requestAnimationFrame(() => {
+                        const el = document.getElementById(id);
+                        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        else window.location.hash = link.href;
+                      });
                     }}
                     className={`block rounded-lg px-3 py-2.5 text-sm transition-colors ${
                       active === link.href

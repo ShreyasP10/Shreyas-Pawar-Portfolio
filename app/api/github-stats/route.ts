@@ -6,6 +6,10 @@ const FALLBACK_FOLLOWERS = 19;
 export async function GET() {
   try {
     const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "shreyas-pawar-portfolio",
+      },
       next: { revalidate: 3600 },
     });
 

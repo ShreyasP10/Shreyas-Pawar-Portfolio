@@ -51,4 +51,4 @@ AI-powered crop disease detection platform with an Android app (Java + Kotlin), 
 
 <br/>
 
-> **About this repository:** This is the source code for my personal portfolio website, built with Next.js 15, Tailwind CSS, Framer Motion, and React Three Fiber.
+> **About this repository:** This is the source code for my personal portfolio website, built with Next.js 16, Tailwind CSS, Framer Motion, and React Three Fiber.

@@ -1,39 +1,71 @@
 import { NextResponse } from "next/server";
 import type { ContactMessagePayload } from "@/lib/types";
+import { getClientIp, rateLimit } from "@/lib/rateLimit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_BODY_BYTES = 16_384;
+const MAX_NAME = 80;
+const MAX_EMAIL = 254;
+const MAX_MESSAGE = 5_000;
 
-function validationError(message: string): NextResponse {
-  return NextResponse.json({ success: false, error: message }, { status: 400 });
+function validationError(message: string, status = 400): NextResponse {
+  return NextResponse.json({ success: false, error: message }, { status });
 }
 
 export async function POST(request: Request) {
-  let body: Partial<ContactMessagePayload>;
+  const ip = getClientIp(request);
+  const limit = rateLimit(`contact:${ip}`, 10, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { success: false, error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
 
+  const contentType = request.headers.get("content-type");
+  if (contentType && !contentType.toLowerCase().includes("application/json")) {
+    return validationError("Content-Type must be application/json", 415);
+  }
+
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (contentLength > MAX_BODY_BYTES) {
+    return validationError("Request body too large", 413);
+  }
+
+  const raw = await request.text();
+  if (raw.length > MAX_BODY_BYTES) {
+    return validationError("Request body too large", 413);
+  }
+
+  let body: Partial<ContactMessagePayload> & { honeypot?: string };
   try {
-    body = await request.json();
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return validationError("Invalid JSON body");
+    }
+    body = parsed as Partial<ContactMessagePayload> & { honeypot?: string };
   } catch {
     return validationError("Invalid JSON body");
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : "";
-  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
-  const honeypot = (body as { honeypot?: string }).honeypot;
+  const honeypot = typeof body.honeypot === "string" ? body.honeypot : "";
 
   // Bot detection via honeypot
   if (honeypot) {
     return NextResponse.json({ success: true, message: "Message received" });
   }
 
-  if (name.length < 2) {
-    return validationError("Name must be at least 2 characters");
+  if (name.length < 2 || name.length > MAX_NAME) {
+    return validationError(`Name must be between 2 and ${MAX_NAME} characters`);
   }
-  if (!EMAIL_REGEX.test(email)) {
+  if (email.length > MAX_EMAIL || !EMAIL_REGEX.test(email)) {
     return validationError("A valid email address is required");
   }
-  if (message.length < 10) {
-    return validationError("Message must be at least 10 characters");
+  if (message.length < 10 || message.length > MAX_MESSAGE) {
+    return validationError(`Message must be between 10 and ${MAX_MESSAGE} characters`);
   }
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -129,7 +161,8 @@ export async function POST(request: Request) {
       );
     }
   } else {
-    console.log("[contact]", { name, email, message });
+    // Avoid logging personal data; the mailto fallback carries the message.
+    console.log("[contact] message received (mailto fallback, RESEND_API_KEY not set)");
     const mailto = `mailto:${recipient}?subject=${encodeURIComponent(
       `Portfolio message from ${name}`
     )}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;

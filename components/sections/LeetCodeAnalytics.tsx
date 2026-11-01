@@ -23,8 +23,9 @@ function formatRank(n: number) {
 }
 
 function shortDate(d: string) {
-  const dt = new Date(d);
-  return `${dt.getMonth() + 1}/${dt.getDate()}`;
+  const [, month, day] = d.split("-");
+  if (!month || !day) return d;
+  return `${Number(month)}/${Number(day)}`;
 }
 
 export function LeetCodeAnalytics() {

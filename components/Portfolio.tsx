@@ -1,3 +1,4 @@
+import { MotionConfig } from "framer-motion";
 import { BackToTop } from "./BackToTop";
 import { GoldenParticles } from "./GoldenParticles";
 import { AmbientGlow } from "./AmbientGlow";
@@ -20,28 +21,30 @@ import { AnimeRevealProvider } from "./AnimeReveal";
 
 export function Portfolio() {
   return (
-    <div className="relative">
-      <AmbientGlow />
-      <ScrollProgress />
-      <GoldenParticles />
-      <AnimeRevealProvider />
-      <Navbar />
-      <main id="main" className="relative z-10">
-        <Hero />
-        <FeaturedProjects />
-        <Hackathons />
-        <Experience />
-        <Skills />
-        <LeetCodeAnalytics />
-        <Journey />
-        <OpenSource />
-        <Certifications />
-        <FAQ />
-        <Contact />
-        <DownloadResume />
-      </main>
-      <Footer />
-      <BackToTop />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative">
+        <AmbientGlow />
+        <ScrollProgress />
+        <GoldenParticles />
+        <AnimeRevealProvider />
+        <Navbar />
+        <main id="main" className="relative z-10">
+          <Hero />
+          <FeaturedProjects />
+          <Hackathons />
+          <Experience />
+          <Skills />
+          <LeetCodeAnalytics />
+          <Journey />
+          <OpenSource />
+          <Certifications />
+          <FAQ />
+          <Contact />
+          <DownloadResume />
+        </main>
+        <Footer />
+        <BackToTop />
+      </div>
+    </MotionConfig>
   );
 }

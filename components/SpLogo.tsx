@@ -9,6 +9,7 @@ export function SpLogo({ size = "md", className = "" }: { size?: "sm" | "md" | "
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const letters = el.querySelectorAll<HTMLElement>(".sp-letter");
     const sEl = letters[0] as HTMLElement;
     const pEl = letters[1] as HTMLElement;

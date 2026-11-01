@@ -5,6 +5,7 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
+  useReducedMotion,
   useSpring,
   useTransform,
 } from "framer-motion";
@@ -16,6 +17,7 @@ interface TiltCardProps {
 
 export function TiltCard({ children, className }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
 
@@ -33,6 +35,7 @@ export function TiltCard({ children, className }: TiltCardProps) {
   const spotlight = useMotionTemplate`radial-gradient(150px circle at ${spotlightX}% ${spotlightY}%, rgba(255,215,0,0.15), transparent 65%)`;
 
   function handleMove(event: React.MouseEvent<HTMLDivElement>) {
+    if (reduceMotion) return;
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     mx.set((event.clientX - rect.left) / rect.width);
@@ -49,14 +52,20 @@ export function TiltCard({ children, className }: TiltCardProps) {
       ref={ref}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      style={
+        reduceMotion
+          ? undefined
+          : { rotateX, rotateY, transformStyle: "preserve-3d" }
+      }
       className={`group relative h-full ${className ?? ""}`}
     >
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{ background: spotlight }}
-      />
+      {!reduceMotion && (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: spotlight }}
+        />
+      )}
       <div className="relative h-full" style={{ transform: "translateZ(28px)" }}>
         {children}
       </div>

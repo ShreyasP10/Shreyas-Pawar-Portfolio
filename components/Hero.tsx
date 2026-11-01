@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { animate, stagger } from "animejs";
 import { useFetch } from "@/lib/useFetch";
 import { stats, profile } from "@/lib/data";
@@ -22,6 +22,13 @@ export function Hero() {
   useEffect(() => {
     if (!nameRef.current) return;
     const letters = nameRef.current.querySelectorAll(".hero-letter span");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      letters.forEach((el) => {
+        (el as HTMLElement).style.transform = "translateY(0%)";
+        (el as HTMLElement).style.opacity = "1";
+      });
+      return;
+    }
     // Ensure letters are visible even if anime fails - fallback after 1.2s
     const fallback = setTimeout(() => {
       letters.forEach((el) => {
@@ -48,8 +55,11 @@ export function Hero() {
   }, []);
 
   const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 500], [0, -100]);
-  const opacityParallax = useTransform(scrollY, [0, 300], [1, 0]);
+  const shouldReduceMotion = useReducedMotion();
+  const parallaxY = useTransform(scrollY, [0, 500], [0, -100]);
+  const parallaxOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const yParallax = shouldReduceMotion ? 0 : parallaxY;
+  const opacityParallax = shouldReduceMotion ? 1 : parallaxOpacity;
 
   return (
     <section
@@ -89,7 +99,7 @@ export function Hero() {
               <span className="inline-block whitespace-nowrap break-keep [word-break:keep-all] [overflow-wrap:normal]">
                 {word.split("").map((char, charIdx) => (
                   <span key={`${wordIdx}-${charIdx}`} className="hero-letter inline-block overflow-hidden">
-                    <span className="inline-block" style={{ display: "inline-block", transform: "translateY(110%)" }}>
+                    <span className="inline-block">
                       {char}
                     </span>
                   </span>

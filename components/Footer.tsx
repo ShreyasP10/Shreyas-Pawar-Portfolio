@@ -20,7 +20,7 @@ export function Footer() {
     },
     {
       label: "LeetCode",
-      href: "https://leetcode.com/u/ShreyasP10",
+      href: "https://leetcode.com/u/ShreyasPawar10/",
       Icon: LeetCodeIcon,
     },
   ];
@@ -49,7 +49,7 @@ export function Footer() {
         </div>
 
         <p className="text-xs text-muted">
-          © {new Date().getFullYear()} Shreyas Pawar · Built with Next.js · Updated Sep 2026
+          © {new Date().getFullYear()} Shreyas Pawar · Built with Next.js · Updated Nov 2026
         </p>
       </div>
     </footer>

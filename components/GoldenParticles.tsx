@@ -57,6 +57,11 @@ export function GoldenParticles({ count = 32 }: { count?: number }) {
     };
 
     const draw = (time: number) => {
+      if (document.hidden) {
+        rafId = 0;
+        return;
+      }
+
       context.clearRect(0, 0, width, height);
 
       for (const p of particles) {
@@ -86,15 +91,24 @@ export function GoldenParticles({ count = 32 }: { count?: number }) {
     if (reducedMotion) {
       draw(0);
       cancelAnimationFrame(rafId);
+      rafId = 0;
     } else {
       rafId = requestAnimationFrame(draw);
     }
 
+    const onVisibility = () => {
+      if (!document.hidden && !reducedMotion && !rafId) {
+        rafId = requestAnimationFrame(draw);
+      }
+    };
+
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [count]);
 

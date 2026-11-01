@@ -18,7 +18,10 @@ export function CustomCursor() {
   const smoothY = useSpring(cursorY, springConfig);
 
   useLayoutEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion || window.matchMedia("(pointer: coarse)").matches) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouch(true);
       return;

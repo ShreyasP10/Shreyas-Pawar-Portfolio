@@ -35,6 +35,7 @@ dev-server.log
 # local-only notes & tooling
 myinfo.txt
 Document.txt
+ShreyasPawar.txt
 .idea/
 test-results/
 

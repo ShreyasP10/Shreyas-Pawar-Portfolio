@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { VisitTracker } from "@/components/VisitTracker";
+import { CustomCursor } from "@/components/CustomCursor";
 import "./globals.css";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://shreyas-pawar-portfolio.vercel.app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,6 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Shreyas Pawar | Developer Portfolio",
   description:
     "Data Science & DSA | Built ML & Mobile Solutions for Real-World Use Cases. Portfolio of Shreyas Pawar — projects, experience and contact.",
@@ -28,6 +33,8 @@ export const metadata: Metadata = {
     "Flutter",
   ],
   authors: [{ name: "Shreyas Pawar", url: "https://github.com/ShreyasP10" }],
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
   openGraph: {
     title: "Shreyas Pawar | Developer Portfolio",
     description:
@@ -35,6 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Shreyas Pawar Portfolio",
+    url: "/",
   },
   twitter: {
     card: "summary_large_image",
@@ -44,7 +52,10 @@ export const metadata: Metadata = {
   },
 };
 
-import { CustomCursor } from "@/components/CustomCursor";
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  colorScheme: "dark",
+};
 
 export default function RootLayout({
   children,

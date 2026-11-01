@@ -5,6 +5,8 @@ import { animate, onScroll, stagger } from "animejs";
 
 export function AnimeRevealProvider() {
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     // Animate sections like animejs.com scroll demos
     // Targets [data-anime] if present, otherwise all main sections
     let els = document.querySelectorAll<HTMLElement>("[data-anime]");

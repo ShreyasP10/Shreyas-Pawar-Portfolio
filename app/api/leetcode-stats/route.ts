@@ -24,7 +24,7 @@ export async function GET() {
   try {
     const res = await fetch("https://leetcode.com/graphql", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Referer: "https://leetcode.com" },
       body: JSON.stringify({ query, variables: { username: LEETCODE_USERNAME } }),
       next: { revalidate: 3600 },
     });

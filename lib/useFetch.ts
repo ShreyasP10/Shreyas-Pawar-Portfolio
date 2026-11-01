@@ -15,9 +15,10 @@ export function useFetch<T>(url: string | null): FetchState<T> {
   useEffect(() => {
     if (!url) return;
 
+    const controller = new AbortController();
     let cancelled = false;
 
-    fetch(url)
+    fetch(url, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Request failed: ${res.status}`);
@@ -28,13 +29,15 @@ export function useFetch<T>(url: string | null): FetchState<T> {
         if (!cancelled) setData(result);
       })
       .catch((err: unknown) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Unknown error");
+        if (cancelled || (err instanceof DOMException && err.name === "AbortError")) {
+          return;
         }
+        setError(err instanceof Error ? err.message : "Unknown error");
       });
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [url]);
 

@@ -35,7 +35,9 @@ export function FAQ() {
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${index}`}
                     aria-expanded={isOpen}
+                    aria-controls={`faq-panel-${index}`}
                     onClick={() => setOpen(isOpen ? null : index)}
                     className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left"
                   >
@@ -43,6 +45,7 @@ export function FAQ() {
                       {faq.question}
                     </span>
                     <motion.span
+                      aria-hidden="true"
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.2 }}
                       className="shrink-0 text-xl leading-none text-accent"
@@ -53,6 +56,9 @@ export function FAQ() {
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
+                        id={`faq-panel-${index}`}
+                        role="region"
+                        aria-labelledby={`faq-trigger-${index}`}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
