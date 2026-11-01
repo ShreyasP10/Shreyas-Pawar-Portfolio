@@ -12,7 +12,7 @@ type HistoryResponse = {
   ranking: number;
   solved: { all: number; easy: number; medium: number; hard: number };
   streak: number;
-  last30: { date: string; count: number }[];
+  last90: { date: string; count: number }[];
   contestHistory: { title: string; rating: number; ranking: number; date: string }[];
   contestRanking: { attendedContestsCount: number; rating: number; globalRanking: number } | null;
 };
@@ -31,12 +31,12 @@ export function LeetCodeAnalytics() {
   const { data, error } = useFetch<HistoryResponse>("/api/leetcode-history");
 
   const chartData = useMemo(() => {
-    if (!data?.last30) return [];
-    return data.last30.map((p) => ({ ...p, label: shortDate(p.date) }));
+    if (!data?.last90) return [];
+    return data.last90.map((p) => ({ ...p, label: shortDate(p.date) }));
   }, [data]);
 
-  const totalLast30 = useMemo(() => chartData.reduce((s, p) => s + p.count, 0), [chartData]);
-  const avgDaily = chartData.length ? (totalLast30 / chartData.length).toFixed(1) : "0";
+  const totalLast90 = useMemo(() => chartData.reduce((s, p) => s + p.count, 0), [chartData]);
+  const avgDaily = chartData.length ? (totalLast90 / chartData.length).toFixed(1) : "0";
   const peak = chartData.length ? Math.max(...chartData.map((p) => p.count)) : 0;
 
   return (
@@ -91,8 +91,8 @@ export function LeetCodeAnalytics() {
                     <p className="truncate text-[10px] text-muted sm:text-[11px]">Global · all-time</p>
                   </div>
                   <div className="min-w-0">
-                    <p className="font-mono text-[9px] tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">30-DAY SUBS</p>
-                    <p className="mt-1 text-base font-bold text-accent sm:text-xl">{totalLast30}</p>
+                    <p className="font-mono text-[9px] tracking-[0.15em] text-muted sm:text-[10px] sm:tracking-[0.2em]">90-DAY SUBS</p>
+                    <p className="mt-1 text-base font-bold text-accent sm:text-xl">{totalLast90}</p>
                     <p className="truncate text-[10px] text-muted sm:text-[11px]">{avgDaily} / day · peak {peak}</p>
                   </div>
                   <div className="min-w-0">
@@ -109,7 +109,7 @@ export function LeetCodeAnalytics() {
                 {/* Graph — LinkedIn impression style */}
                 <div className="mt-6">
                   <div className="mb-2 flex items-center justify-between">
-                    <p className="font-mono text-xs font-semibold text-white">Daily submissions — last 30 days</p>
+                    <p className="font-mono text-xs font-semibold text-white">Daily submissions — last 90 days</p>
                     <p className="font-mono text-[10px] tracking-[0.2em] text-muted">IMPRESSIONS ANALOGY</p>
                   </div>
 
@@ -123,7 +123,7 @@ export function LeetCodeAnalytics() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
-                        <XAxis dataKey="label" tick={{ fill: "#8f8c99", fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
+                        <XAxis dataKey="label" tick={{ fill: "#8f8c99", fontSize: 10 }} axisLine={false} tickLine={false} interval={6} />
                         <YAxis tick={{ fill: "#8f8c99", fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} width={28} />
                         <Tooltip
                           contentStyle={{ background: "#121218", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#fff" }}

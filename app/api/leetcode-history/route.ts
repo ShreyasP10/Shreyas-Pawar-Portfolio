@@ -81,15 +81,15 @@ export async function GET() {
 
     const contestRanking = json.data?.userContestRanking ?? null;
 
-    // Build daily submissions for graph: fill gaps with 0 for last 30 days for LinkedIn-style view
-    const last30: CalendarPoint[] = [];
+    // Build daily submissions for graph: fill gaps with 0 for last 90 days for LinkedIn-style view
+    const last90: CalendarPoint[] = [];
     const today = new Date();
     const map = new Map(calendar.map((p) => [p.date, p.count]));
-    for (let i = 29; i >= 0; i--) {
+    for (let i = 89; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
       const date = d.toISOString().slice(0, 10);
-      last30.push({ date, count: map.get(date) ?? 0 });
+      last90.push({ date, count: map.get(date) ?? 0 });
     }
 
     return NextResponse.json({
@@ -99,7 +99,7 @@ export async function GET() {
       solved,
       streak,
       calendar,
-      last30,
+      last90,
       contestHistory,
       contestRanking,
     });
